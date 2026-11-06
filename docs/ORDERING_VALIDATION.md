@@ -25,3 +25,7 @@ Verified in the in-app browser at desktop size and 390px mobile width:
 9. No browser console errors were observed in this run.
 
 The module stores only in-memory demo state; refreshing the page starts a fresh demo. The basket remains available when switching between journeys within the page. The original Gemini photography is retained.
+
+## Navigation and glass revision — 7 November 2026
+
+Re-ran all 27 automated tests and backend TypeScript checking successfully. Verified the hamburger menu on desktop and at 390px in both appearances, navigation and journey selection, automatic menu dismissal, Escape closure with aria-expanded reset and focus returned to the menu button, and basket retention when changing appearance. The mobile document remained 390px wide. The glass treatment uses translucent backgrounds, backdrop blur, saturation and specular borders, with a reduced-transparency fallback.

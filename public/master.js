@@ -44,7 +44,32 @@ import { MENU, DemoOrder } from "./order-model.mjs";
     const principal = share === "half" ? 21250 : 42500;
     return { principal, tip: Math.round((principal * tip) / 100) };
   };
+  const navigation = $("#navigationDialog");
+  function closeNavigation() {
+    if (navigation.open) navigation.close();
+  }
+  $("#menuToggle").addEventListener("click", () => {
+    navigation.showModal();
+    $("#menuToggle").setAttribute("aria-expanded", "true");
+  });
+  $("#closeNavigation").addEventListener("click", closeNavigation);
+  navigation.addEventListener("close", () =>
+    $("#menuToggle").setAttribute("aria-expanded", "false"),
+  );
+  navigation.addEventListener("click", (event) => {
+    if (event.target !== navigation) return;
+    const rect = navigation.getBoundingClientRect();
+    if (
+      event.clientX < rect.left ||
+      event.clientX > rect.right ||
+      event.clientY < rect.top ||
+      event.clientY > rect.bottom
+    )
+      closeNavigation();
+  });
   function show(index) {
+    closeNavigation();
+    $("#headerChapter").textContent = titles[index];
     slide = index;
     $$(".slide").forEach((s, i) => (s.hidden = i !== index));
     $$("[data-slide]").forEach((b, i) => {
@@ -73,6 +98,7 @@ import { MENU, DemoOrder } from "./order-model.mjs";
   document.addEventListener("keydown", (e) => {
     if (
       $("#readinessDialog").open ||
+      navigation.open ||
       /INPUT|SELECT|TEXTAREA|BUTTON/.test(document.activeElement.tagName)
     )
       return;
@@ -90,13 +116,16 @@ import { MENU, DemoOrder } from "./order-model.mjs";
     document.documentElement.dataset.theme = dark
       ? "titanium-dark"
       : "sequoia-light";
-    $("#theme").textContent = dark ? "☀" : "☾";
+    $("#themeLabel").textContent = dark
+      ? "Light appearance"
+      : "Dark appearance";
     $("#theme").setAttribute(
       "aria-label",
       dark ? "Switch to light mode" : "Switch to dark mode",
     );
   });
   $("#present").addEventListener("click", async () => {
+    closeNavigation();
     try {
       if (document.fullscreenElement) await document.exitFullscreen();
       else await document.documentElement.requestFullscreen();
@@ -106,6 +135,8 @@ import { MENU, DemoOrder } from "./order-model.mjs";
   });
 
   function updateJourney() {
+    $("#journeyLabel").textContent =
+      journey === "order" ? "Order & pay" : "Pay existing bill";
     $$("[data-journey]").forEach((b) => {
       const active = b.dataset.journey === journey;
       b.classList.toggle("ios-segmented__btn--active", active);
@@ -145,6 +176,7 @@ import { MENU, DemoOrder } from "./order-model.mjs";
   $$("[data-journey]").forEach((b) =>
     b.addEventListener("click", () => {
       journey = b.dataset.journey;
+      show(1);
       renderPhone();
       $("#phoneContent").scrollTop = 0;
     }),
