@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+  <head>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Groundwork QR Pay — an interactive product presentation and persistent integration sandbox for South African restaurants."
+    />
+    <title>Groundwork · From table to settled</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="#overview"
+        ><span class="brandmark">g.</span>groundwork<span class="edition"
+          >QR PAY / 02</span
+        ></a
+      >
+      <nav aria-label="Main navigation">
+        <button data-view="overview" class="active">The idea</button
+        ><button data-view="demo">Live demo</button
+        ><button data-view="build">Under the hood</button>
+      </nav>
+      <div class="header-tools">
+        <div class="theme-switch" role="group" aria-label="Appearance">
+          <button data-theme-choice="light" aria-label="Light appearance">
+            ☀</button
+          ><button data-theme-choice="dark" aria-label="Dark appearance">
+            ☾</button
+          ><button data-theme-choice="system" aria-label="System appearance">
+            Auto
+          </button>
+        </div>
+        <button class="outline small" id="present">Present ↗</button>
+      </div>
+    </header>
+    <div class="environment">
+      <span
+        ><i id="connectionDot"></i
+        ><b id="connection">Connecting to backend…</b></span
+      ><span>Sandbox · ZAR · no live payments</span>
+    </div>
+    <main>
+      <section class="view active" id="overview"><div class="sectionhead"><div><p class="eyebrow">TITANIUM SEQUOIA MASTER</p><h2>Groundwork integration sandbox</h2></div><a class="outline" href="/">Open the master design →</a></div><p>The working payment integration is available in Live demo.</p><button class="primary" data-open-demo>Open live demo →</button><div id="story" hidden><div id="storyGraphic"></div><h3 id="storyTitle"></h3><p id="storyCopy"></p><p id="storyWho"></p><p id="storyCallout"></p></div><button id="explain" hidden></button></section>
+      <section class="view" id="demo">
+        <div class="sectionhead">
+          <div>
+            <p class="eyebrow">A REAL BACKEND. SIMULATED MONEY.</p>
+            <h2>Watch a payment move.</h2>
+          </div>
+          <div class="actions">
+            <button class="outline small" id="refresh">Refresh data ↻</button
+            ><button class="outline small" id="newVisit">
+              New table visit
+            </button>
+          </div>
+        </div>
+        <p class="demo-intro">
+          The guest pays on the left. The middle shows what happens. The
+          restaurant sees the result on the right.
+        </p>
+        <div id="demoGate" class="gate" hidden>
+          <h3>Run the backend to try the live flow.</h3>
+          <p>
+            This hosted page explains the product. The persistent sandbox runs
+            with the included backend on your computer.
+          </p>
+          <code>npm install &nbsp; → &nbsp; npm start</code>
+          <p>Open http://127.0.0.1:4310, then choose Live demo.</p>
+          <button class="outline" data-view="overview">
+            Explore the visual walkthrough
+          </button>
+        </div>
+        <div id="demoContent">
+          <div class="demo-grid">
+            <div class="phone-col">
+              <div class="col-label">
+                <span>01 / THE GUEST</span><span>No sign-up</span>
+              </div>
+              <div class="phone">
+                <div class="phone-screen">
+                  <div class="phone-top">
+                    <span>9:41</span><span class="island"></span><b>▰</b>
+                  </div>
+                  <div class="venue-header">
+                    <div class="venue-emblem">O</div>
+                    <div>
+                      <h3>The Olive Room</h3>
+                      <p>Table 07 · Illustrative restaurant</p>
+                    </div>
+                  </div>
+                  <div id="guestBody">
+                    <div class="loading">Loading table…</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="rail-col">
+              <div class="col-label"><span>02 / THE CONNECTION</span></div>
+              <div class="pipeline" id="pipeline"></div>
+              <div class="control-card">
+                <span class="eyebrow">TRY THE EXCEPTIONS</span
+                ><label for="scenario">What should happen?</label
+                ><select id="scenario">
+                  <option value="success">Payment succeeds</option>
+                  <option value="pending">
+                    Provider confirmation is delayed
+                  </option>
+                  <option value="failed">Payment is declined</option>
+                  <option value="pos_down">
+                    Payment succeeds, POS is offline
+                  </option>
+                  <option value="timeout_after_write">
+                    POS saves, then connection drops
+                  </option>
+                  <option value="mismatch">
+                    Provider amount does not match
+                  </option>
+                </select>
+                <p>
+                  These controls change the mock integration. They never move
+                  real money.
+                </p>
+              </div>
+              <div class="helper">
+                <b>Why two confirmations?</b>
+                <p>
+                  A successful payment and an updated till are different events.
+                  We show both so staff can handle any gap.
+                </p>
+              </div>
+            </div>
+            <div class="desk-col">
+              <div class="col-label">
+                <span>03 / THE RESTAURANT</span><span>Merchant view</span>
+              </div>
+              <div id="merchantBody" class="desk"></div>
+            </div>
+          </div>
+          <div class="bottom-grid">
+            <section class="ledger">
+              <div class="smallhead">
+                <h3>Payment ledger</h3>
+                <a
+                  class="textbutton"
+                  href="/api/merchant/reconciliation.csv"
+                  id="csv"
+                  >Export CSV ↓</a
+                >
+              </div>
+              <div id="ledgerBody"></div>
+            </section>
+            <section class="timeline">
+              <div class="smallhead">
+                <h3>Behind the scenes</h3>
+                <span>Durable event trail</span>
+              </div>
+              <div id="events"></div>
+            </section>
+          </div>
+          <section class="qr-section">
+            <div>
+              <p class="eyebrow">THE TABLE CONNECTION</p>
+              <h3>One printed code.<br />A new visit for every sitting.</h3>
+              <p>
+                Rotation revokes old scans. Existing guests remain bound to
+                their original visit.
+              </p>
+              <button class="outline small" id="rotate">
+                Rotate table 07 code
+              </button>
+              <p class="micro">
+                Phone access requires a reachable APP_ORIGIN. Localhost QR codes
+                open only on this computer.
+              </p>
+            </div>
+            <div id="qr"></div>
+          </section>
+        </div>
+      </section>
+      <section class="view" id="build">
+        <div class="sectionhead">
+          <div>
+            <p class="eyebrow">WHAT EXISTS. WHAT COMES NEXT.</p>
+            <h2>A clear path to a real pilot.</h2>
+          </div>
+          <p>
+            Working software and partner approvals<br />are shown separately.
+          </p>
+        </div>
+        <div class="architecture">
+          <div class="arch-node">
+            <span>GUEST</span><strong>Mobile browser</strong>
+            <p>Scoped table session<br />Bill & payment status</p>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node featured">
+            <span>GROUNDWORK</span><strong>API + database</strong>
+            <p>Bill reservations<br />Payment ledger + retry jobs</p>
+          </div>
+          <div class="arch-arrow">⇄</div>
+          <div class="arch-stack">
+            <div class="arch-node">
+              <span>PAYMENT ADAPTER</span><strong>Mock / Paystack test</strong>
+              <p>Hosted checkout + verification</p>
+            </div>
+            <div class="arch-node">
+              <span>POS ADAPTER</span><strong>Mock / partner gates</strong>
+              <p>One confirmed external payment</p>
+            </div>
+          </div>
+        </div>
+        <div class="build-grid">
+          <article>
+            <span class="tag green">IMPLEMENTED</span>
+            <h3>The backend foundation</h3>
+            <ul>
+              <li>Persistent PostgreSQL-compatible storage</li>
+              <li>Atomic bill-share reservations</li>
+              <li>Idempotent checkout requests</li>
+              <li>Durable verification & POS retry jobs</li>
+              <li>Scoped guest and operator sessions</li>
+              <li>QR creation, rotation & visit expiry</li>
+              <li>Reconciliation export & refund requests</li>
+            </ul>
+            <p class="micro">
+              Embedded PostgreSQL for local use. Regular PostgreSQL connection
+              supported; deployment requires its own validation.
+            </p>
+            <a href="/openapi.json" target="_blank"
+              >API operation reference ↗</a
+            >
+          </article>
+          <article>
+            <span class="tag amber">ADAPTER BUILT / ACCESS NEEDED</span>
+            <h3>Paystack test integration</h3>
+            <p>
+              Server-created hosted checkout, server-side verification, signed
+              webhook ingress and duplicate-event handling.
+            </p>
+            <div class="gate-list">
+              <span>Official API contract implemented <b>✓</b></span
+              ><span>Mocked transport tests <b>✓</b></span
+              ><span>Merchant test credentials <b>Needed</b></span
+              ><span>Live sandbox transaction <b>Not run</b></span>
+            </div>
+            <a
+              href="https://paystack.com/docs/payments/accept-payments/"
+              target="_blank"
+              rel="noreferrer"
+              >Official integration docs ↗</a
+            >
+          </article>
+          <article>
+            <span class="tag amber">PARTNER DEPENDENCY</span>
+            <h3>Pilot & GAAP</h3>
+            <p>
+              Adapter boundaries and capability gates are ready. No undocumented
+              vendor calls are implemented.
+            </p>
+            <ul>
+              <li>Written API access and exact POS version</li>
+              <li>Sandbox and external payment-write scope</li>
+              <li>Fees, certification and support owner</li>
+              <li>Verified native check reconciliation</li>
+            </ul>
+            <div class="actions">
+              <a
+                href="https://pilot.co.za/integrations/"
+                target="_blank"
+                rel="noreferrer"
+                >Pilot ↗</a
+              ><a
+                href="https://gaap.co.za/3rd-party-integration/"
+                target="_blank"
+                rel="noreferrer"
+                >GAAP ↗</a
+              >
+            </div>
+          </article>
+        </div>
+        <div class="roadmap">
+          <div>
+            <span class="road-dot done"></span><b>01 · Working sandbox</b>
+            <p>Prove payments and failure recovery.</p>
+          </div>
+          <div>
+            <span class="road-dot"></span><b>02 · Partner validation</b>
+            <p>One POS version and merchant test account.</p>
+          </div>
+          <div>
+            <span class="road-dot"></span><b>03 · Controlled pilot</b>
+            <p>Measure adoption, cash-up and support.</p>
+          </div>
+          <div>
+            <span class="road-dot"></span><b>04 · Ordering</b>
+            <p>Only after the payment flow is proven.</p>
+          </div>
+        </div>
+        <div class="readiness">
+          <b>Before taking real money</b>
+          <p>
+            Production identity and MFA, approved POS integration, PSP merchant
+            arrangements, privacy/legal review, security testing, backups and
+            operational sign-off remain required. Refund requests are recorded
+            for review; this build does not execute refunds.
+          </p>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <a class="brand" href="#overview"
+        ><span class="brandmark">g.</span>groundwork</a
+      ><span
+        >Built for South African hospitality.<br />Product demonstration ·
+        November 2026</span
+      ><span>Keep the POS.<br />Improve the experience.</span>
+    </footer>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <dialog id="login">
+      <form method="dialog">
+        <h3>Open the sandbox</h3>
+        <p id="loginCopy">
+          Enter the operator access key configured on the server.
+        </p>
+        <label
+          >Access key<input type="password" id="accessKey" autocomplete="off"
+        /></label>
+        <div class="actions">
+          <button type="button" class="primary" id="loginSubmit">Connect</button
+          ><button class="outline">Cancel</button>
+        </div>
+      </form>
+    </dialog>
+    <script src="/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,95 @@
+// 1. packages/ui/src/styles/_tokens.scss
+// "Titanium Sequoia" Dual-Mode Hybrid Design Tokens (Zero Tailwind)
+// Includes:
+//   1) LIGHT MODE (Default): [data-theme="sequoia-light"] ("Silver Sequoia Frost")
+//   2) DARK MODE:            [data-theme="titanium-dark"] ("Dark Titanium Sequoia")
+
+:root,
+[data-theme="sequoia-light"] {
+  color-scheme: light;
+
+  // Canvas & Daylight Radial Mesh
+  --sys-bg-canvas: #F2F4F8;
+  --sys-bg-mesh:
+    radial-gradient(circle at 14% 16%, rgba(16, 185, 129, 0.13), transparent 42%),
+    radial-gradient(circle at 86% 20%, rgba(10, 132, 255, 0.14), transparent 46%),
+    radial-gradient(circle at 52% 84%, rgba(212, 197, 177, 0.28), transparent 50%),
+    linear-gradient(180deg, #F7F9FC 0%, #E8ECF3 100%);
+
+  // Silver Brushed Titanium + macOS Sequoia Daylight Frosted Glass
+  --sys-bg-elevated: #FFFFFF;
+  --sys-bg-bento-tile: rgba(255, 255, 255, 0.72);
+  --sys-bg-grouped: rgba(228, 233, 242, 0.78);
+  --sys-glass-surface: rgba(255, 255, 255, 0.78);
+  --sys-glass-strong: rgba(255, 255, 255, 0.92);
+
+  // 0.5px Machined Silver Hairlines & Crisp Inner White Specular Highlights
+  --sys-glass-specular: rgba(255, 255, 255, 0.90);
+  --sys-hairline: rgba(15, 23, 42, 0.08);
+  --sys-hairline-strong: rgba(15, 23, 42, 0.14);
+
+  // Deep Obsidian Typography
+  --sys-label-primary: #111215;
+  --sys-label-secondary: #5A606D;
+  --sys-label-tertiary: #8C93A0;
+  --sys-titanium-champagne: #6E604F;
+
+  // Ink-Black Apple Pay Primary CTA in Light Mode
+  --sys-accent-primary: #111215;
+  --sys-accent-primary-fg: #FFFFFF;
+  --sys-accent-blue: #0066CC;
+
+  // Semantic POS States
+  --sys-green: #059669;
+  --sys-amber: #D97706;
+  --sys-red: #DC2626;
+}
+
+[data-theme="titanium-dark"] {
+  color-scheme: dark;
+
+  // Deep Brushed Dark Titanium + Ambient Radial Mesh
+  --sys-bg-canvas: #0B0C0E;
+  --sys-bg-mesh:
+    radial-gradient(circle at 14% 16%, rgba(16, 185, 129, 0.15), transparent 40%),
+    radial-gradient(circle at 86% 20%, rgba(10, 132, 255, 0.17), transparent 44%),
+    radial-gradient(circle at 52% 84%, rgba(212, 197, 177, 0.11), transparent 48%),
+    linear-gradient(180deg, #0D0F13 0%, #090A0D 100%);
+
+  // Translucent Dark Sequoia Glass
+  --sys-bg-elevated: rgba(24, 26, 32, 0.72);
+  --sys-bg-bento-tile: rgba(36, 39, 48, 0.56);
+  --sys-bg-grouped: rgba(16, 18, 23, 0.76);
+  --sys-glass-surface: rgba(24, 26, 32, 0.72);
+  --sys-glass-strong: rgba(28, 31, 39, 0.86);
+
+  // 0.5px Machined Titanium Rim Speculars
+  --sys-glass-specular: rgba(255, 255, 255, 0.14);
+  --sys-hairline: rgba(255, 255, 255, 0.11);
+  --sys-hairline-strong: rgba(212, 197, 177, 0.28);
+
+  // Optical Typography
+  --sys-label-primary: #F5F5F7;
+  --sys-label-secondary: #A1A1AA;
+  --sys-label-tertiary: #6E6E77;
+  --sys-titanium-champagne: #D4C5B1;
+
+  // Crisp White Apple Pay Primary CTA in Dark Mode
+  --sys-accent-primary: #F5F5F7;
+  --sys-accent-primary-fg: #0B0C0E;
+  --sys-accent-blue: #0A84FF;
+
+  // Semantic POS States
+  --sys-green: #10B981;
+  --sys-amber: #F59E0B;
+  --sys-red: #FF453A;
+}
+
+$font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", system-ui, sans-serif;
+$font-mono: "SF Mono", "JetBrains Mono", monospace;
+$ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+$radius-squircle-xl: 28px;
+$radius-squircle-lg: 22px;
+$radius-squircle-md: 16px;
+$radius-squircle-sm: 12px;
+$radius-pill: 9999px;

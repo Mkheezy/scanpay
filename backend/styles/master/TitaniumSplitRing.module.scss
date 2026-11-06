@@ -1,0 +1,49 @@
+// 5. packages/ui/src/components/TitaniumSplitRing/TitaniumSplitRing.module.scss
+@use "../../styles/tokens" as *;
+@use "../../styles/mixins" as *;
+
+.splitRingContainer {
+  @include titanium-bento-card($radius-squircle-xl);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+
+  &__ambientGlow {
+    position: absolute;
+    width: 190px;
+    height: 190px;
+    top: 18px;
+    border-radius: 50%;
+    background: conic-gradient(from 90deg, #10B981, #0A84FF, #D4C5B1, #F59E0B, #10B981);
+    filter: blur(34px);
+    opacity: 0.42;
+    pointer-events: none;
+  }
+
+  &__bentoTrio {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  &__bentoCell {
+    background: var(--sys-bg-bento-tile);
+    border: 0.5px solid var(--sys-hairline);
+    border-radius: 10px;
+    padding: 6px 8px;
+    text-align: center;
+    box-shadow: inset 0 0.5px 0 0 var(--sys-glass-specular);
+  }
+
+  &__centerZar {
+    @include zar-tabular;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--sys-label-primary);
+  }
+}

@@ -1,0 +1,44 @@
+// 9. packages/ui/src/components/PrintableQrStand/PrintableQrStand.module.scss
+// High-Contrast A6 / A7 Physical Table Stand with 4-Module Quiet Zone
+@use "../../styles/tokens" as *;
+
+.qrStandPlaque {
+  background: #FFFFFF;
+  color: #090A0D;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  border: 1.5px solid #D4C5B1;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+
+  &__venueHeader {
+    font-family: $font-sans;
+    font-size: 0.625rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__tableTitle {
+    font-family: $font-sans;
+    font-size: 0.875rem;
+    font-weight: 800;
+    margin-top: 4px;
+  }
+
+  &__opaqueRoute {
+    font-family: $font-mono;
+    font-size: 0.625rem;
+    color: #52525B;
+  }
+}
+
+@media print {
+  .qrStandPlaque {
+    width: 105mm;
+    height: 148mm;
+    box-shadow: none;
+    border: 1px solid #000000;
+    page-break-inside: avoid;
+  }
+}

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Groundwork · Mock hosted checkout</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main class="checkout-page">
+      <a class="brand" href="/sandbox.html#demo"
+        ><span class="brandmark">g.</span>groundwork</a
+      >
+      <p class="eyebrow" style="margin-top: 35px">
+        SIMULATED PROVIDER CHECKOUT
+      </p>
+      <h1>The Olive Room</h1>
+      <div class="checkout-amount" id="checkoutAmount">…</div>
+      <p id="checkoutBreakdown"></p>
+      <label style="font-size: 11px" for="checkoutOutcome"
+        >Demonstration outcome</label
+      ><select id="checkoutOutcome">
+        <option value="success">Payment succeeds</option>
+        <option value="pending">Confirmation delayed</option>
+        <option value="failed">Payment declined</option>
+        <option value="pos_down">Payment succeeds, POS offline</option>
+        <option value="timeout_after_write">
+          POS saves, then connection drops
+        </option>
+        <option value="mismatch">Provider amount mismatch</option>
+      </select>
+      <p>
+        No card details are collected here. This screen changes the mock
+        provider’s state. The backend independently verifies that state before
+        recording payment.
+      </p>
+      <button class="primary" id="complete" disabled>
+        Simulate payment <span>→</span></button
+      ><a class="outline" id="return">Return without paying</a>
+      <p class="micro">
+        Leaving checkout does not cancel the reservation. The server must
+        confirm the provider’s status before releasing it.
+      </p>
+      <p id="checkoutError" class="error-text" role="alert"></p>
+    </main>
+    <script src="/checkout.js"></script>
+  </body>
+</html>

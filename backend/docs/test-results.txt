@@ -1,0 +1,95 @@
+TAP version 13
+# Subtest: equal shares preserve every cent
+ok 1 - equal shares preserve every cent
+  ---
+  duration_ms: 3236.825041
+  ...
+# Subtest: idempotent checkout returns one intent and rejects changed payload
+ok 2 - idempotent checkout returns one intent and rejects changed payload
+  ---
+  duration_ms: 130.6935
+  ...
+# Subtest: two concurrent guests cannot reserve more than the remaining bill
+ok 3 - two concurrent guests cannot reserve more than the remaining bill
+  ---
+  duration_ms: 109.003625
+  ...
+# Subtest: duplicate events are recorded once and stale pending cannot downgrade verified funds
+ok 4 - duplicate events are recorded once and stale pending cannot downgrade verified funds
+  ---
+  duration_ms: 167.80275
+  ...
+# Subtest: POS offline retains verified funds and repair posts exactly once
+ok 5 - POS offline retains verified funds and repair posts exactly once
+  ---
+  duration_ms: 139.524792
+  ...
+# Subtest: timeout after POS write uses read-back before retry
+ok 6 - timeout after POS write uses read-back before retry
+  ---
+  duration_ms: 433.487792
+  ...
+# Subtest: mismatched amount stays reserved and cannot post
+ok 7 - mismatched amount stays reserved and cannot post
+  ---
+  duration_ms: 78.26975
+  ...
+# Subtest: bill changed after checkout causes review instead of POS posting
+ok 8 - bill changed after checkout causes review instead of POS posting
+  ---
+  duration_ms: 72.36875
+  ...
+# Subtest: timer expiry does not release unknown funds; confirmed failure releases once; late success requires review
+ok 9 - timer expiry does not release unknown funds; confirmed failure releases once; late success requires review
+  ---
+  duration_ms: 89.50725
+  ...
+# Subtest: guest payment access and tenant dashboard are isolated
+ok 10 - guest payment access and tenant dashboard are isolated
+  ---
+  duration_ms: 74.340834
+  ...
+# Subtest: QR rotation revokes old scans and new visits reject old guest bills
+ok 11 - QR rotation revokes old scans and new visits reject old guest bills
+  ---
+  duration_ms: 19.154
+  ...
+# Subtest: refund requests remain distinct from completed refunds
+ok 12 - refund requests remain distinct from completed refunds
+  ---
+  duration_ms: 67.566709
+  ...
+# Subtest: durable jobs and reservations survive closing and reopening database
+ok 13 - durable jobs and reservations survive closing and reopening database
+  ---
+  duration_ms: 518.908125
+  ...
+# Subtest: Paystack raw-body signatures reject tampering, stale timestamps and invalid legacy hex
+ok 14 - Paystack raw-body signatures reject tampering, stale timestamps and invalid legacy hex
+  ---
+  duration_ms: 4.148375
+  ...
+# Subtest: Paystack test adapter constructs official requests and refuses live keys
+ok 15 - Paystack test adapter constructs official requests and refuses live keys
+  ---
+  duration_ms: 47.899417
+  ...
+# Subtest: unapproved POS adapters fail closed
+ok 16 - unapproved POS adapters fail closed
+  ---
+  duration_ms: 0.516542
+  ...
+# Subtest: HTTP session, origin, merchant authorization and fresh quote checks
+ok 17 - HTTP session, origin, merchant authorization and fresh quote checks
+  ---
+  duration_ms: 304.048334
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6927.30775

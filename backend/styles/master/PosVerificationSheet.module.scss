@@ -1,0 +1,38 @@
+// 7. packages/ui/src/components/PosVerificationSheet/PosVerificationSheet.module.scss
+@use "../../styles/tokens" as *;
+@use "../../styles/mixins" as *;
+
+.verificationHero {
+  @include titanium-bento-card($radius-squircle-xl);
+  padding: 20px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+
+  &__orb {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 1.45rem;
+    font-weight: 700;
+  }
+}
+
+.timelineSheet {
+  @include titanium-bento-card($radius-squircle-lg);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+
+  &__node {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    font-size: 0.78rem;
+  }
+}

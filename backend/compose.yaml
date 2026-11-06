@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: groundwork
+      POSTGRES_USER: groundwork
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    volumes:
+      - database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U groundwork"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  app:
+    build: .
+    ports:
+      - "127.0.0.1:4310:4310"
+    environment:
+      DATABASE_URL: postgresql://groundwork:${POSTGRES_PASSWORD}@postgres:5432/groundwork
+      APP_ORIGIN: http://127.0.0.1:4310
+      DEMO_ACCESS_KEY: ${DEMO_ACCESS_KEY:?Set DEMO_ACCESS_KEY}
+      PAYMENT_PROVIDER: mock
+    depends_on:
+      postgres:
+        condition: service_healthy
+volumes:
+  database:

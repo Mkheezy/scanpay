@@ -1,0 +1,1232 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Groundwork QR Pay Sandbox API",
+    "version": "0.2.0",
+    "description": "Persistent QR Pay sandbox. Mock POS and payment providers by default. Paystack is test-only. Merchant endpoints require operator scope; mock controls are disabled for Paystack."
+  },
+  "servers": [
+    {
+      "url": "/api"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "session": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "gw_session"
+      }
+    }
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Check backend and storage health",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/capabilities": {
+      "get": {
+        "summary": "Inspect adapter readiness",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/demo/start": {
+      "post": {
+        "summary": "Create a mock demo operator session",
+        "security": [],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Groundwork",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "accessKey": {
+                    "type": "string"
+                  }
+                },
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/merchant/login": {
+      "post": {
+        "summary": "Create a sandbox operator session",
+        "security": [],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Groundwork",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "accessKey": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "accessKey"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/tables/{code}/claim": {
+      "post": {
+        "summary": "Claim an active table visit",
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Groundwork",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/bill": {
+      "get": {
+        "summary": "Read the scoped current bill",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/payments": {
+      "post": {
+        "summary": "Reserve a share and initialize checkout",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Groundwork",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "1"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9-]{8,100}$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "enum": [
+                      "full",
+                      "equal",
+                      "custom"
+                    ]
+                  },
+                  "amountCents": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100000000
+                  },
+                  "people": {
+                    "type": "integer",
+                    "minimum": 2,
+                    "maximum": 12
+                  },
+                  "tipPercent": {
+                    "enum": [
+                      0,
+                      10,
+                      12,
+                      15
+                    ]
+                  },
+                  "revision": {
+                    "type": "integer"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "tipPercent",
+                  "revision"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/payments/{id}": {
+      "get": {
+        "summary": "Read the originating session payment",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/payments/{id}/verify": {
+      "post": {
+        "summary": "Queue server-side verification",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Groundwork",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/webhooks/paystack": {
+      "post": {
+        "summary": "Authenticate and persist a provider event",
+        "security": [],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Paystack-Signature",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Required in timestamped mode; legacy mode explicitly uses x-paystack-signature instead."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "event",
+                  "data"
+                ],
+                "properties": {
+                  "event": {
+                    "type": "string"
+                  },
+                  "data": {
+                    "type": "object",
+                    "required": [
+                      "reference"
+                    ],
+                    "properties": {
+                      "reference": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "integer"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/merchant/dashboard": {
+      "get": {
+        "summary": "Read venue payments, jobs and audit events",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/merchant/reconciliation.csv": {
+      "get": {
+        "summary": "Export the venue ledger",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/merchant/payments/{id}/retry": {
+      "post": {
+        "summary": "Retry reconciliation; investigation-only mismatches remain blocked",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Groundwork",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/merchant/payments/{id}/refund-request": {
+      "post": {
+        "summary": "Record a refund-review request without executing a refund",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Groundwork",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 300
+                  }
+                },
+                "required": [
+                  "reason"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/merchant/tables": {
+      "get": {
+        "summary": "List venue tables",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/merchant/tables/{id}/qr.svg": {
+      "get": {
+        "summary": "Generate a real table QR SVG",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "image/svg+xml": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/merchant/tables/{id}/rotate": {
+      "post": {
+        "summary": "Revoke and replace the printed table code",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Groundwork",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/demo/payments/{id}/outcome": {
+      "post": {
+        "summary": "Change mock provider outcome and ingest its event",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Groundwork",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "outcome": {
+                    "enum": [
+                      "success",
+                      "pending",
+                      "failed",
+                      "pos_down",
+                      "timeout_after_write",
+                      "mismatch"
+                    ]
+                  }
+                },
+                "required": [
+                  "outcome"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/demo/payments/{id}/repair": {
+      "post": {
+        "summary": "Restore the mock connection and retry",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Groundwork",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    },
+    "/demo/new-visit": {
+      "post": {
+        "summary": "Start a new visit after unresolved payments are cleared",
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Groundwork",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "1"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful sandbox operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Missing session or signature"
+          },
+          "403": {
+            "description": "Scope, role, origin or capability denied"
+          },
+          "409": {
+            "description": "Conflicting request or stale state"
+          },
+          "503": {
+            "description": "Integration not configured"
+          }
+        }
+      }
+    }
+  }
+}

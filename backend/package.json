@@ -1,0 +1,35 @@
+{
+  "name": "groundwork-platform",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node --import tsx src/server.ts",
+    "start": "node --import tsx src/server.ts",
+    "worker": "node --import tsx src/worker.ts",
+    "test": "tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm test",
+    "build:styles": "sass styles/style.scss public/style.css --no-source-map"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.3.14",
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "qrcode": "^1.5.4",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/node": "^22.19.0",
+    "@types/pg": "^8.15.6",
+    "@types/qrcode": "^1.5.5",
+    "prettier": "^3.9.10",
+    "sass": "1.93.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}

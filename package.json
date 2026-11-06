@@ -1,0 +1,13 @@
+{
+  "name": "groundwork-titanium-sequoia-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-demo.mjs",
+    "check": "node --check public/master.js && node --check scripts/build-demo.mjs"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}

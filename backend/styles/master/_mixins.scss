@@ -1,0 +1,40 @@
+// 2. packages/ui/src/styles/_mixins.scss
+// Sequoia Vibrancy Glass, Machined Titanium Rim Speculars, and Tabular ZAR Math
+
+@use "tokens" as *;
+
+@mixin sequoia-vibrancy-glass($blur: 28px) {
+  background: var(--sys-glass-surface);
+  backdrop-filter: saturate(190%) blur($blur);
+  -webkit-backdrop-filter: saturate(190%) blur($blur);
+  border: 0.5px solid var(--sys-hairline-strong);
+  box-shadow: inset 0 0.5px 0 0 var(--sys-glass-specular);
+}
+
+@mixin titanium-bento-card($radius: $radius-squircle-lg) {
+  background: var(--sys-bg-elevated);
+  backdrop-filter: saturate(190%) blur(24px);
+  -webkit-backdrop-filter: saturate(190%) blur(24px);
+  border-radius: $radius;
+  border: 0.5px solid var(--sys-hairline-strong);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.65), inset 0 0.5px 0 0 var(--sys-glass-specular);
+  transition: transform 0.28s $ease-spring, box-shadow 0.28s $ease-spring;
+}
+
+@mixin zar-tabular {
+  font-family: $font-sans;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.025em;
+  -webkit-font-smoothing: antialiased;
+}
+
+@mixin spring-press {
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s $ease-spring, opacity 0.2s ease;
+
+  &:active:not(:disabled) {
+    transform: scale(0.96);
+    opacity: 0.88;
+  }
+}
