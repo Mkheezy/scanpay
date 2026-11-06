@@ -1,6 +1,6 @@
 # Groundwork — Titanium Sequoia Master demo
 
-Deployable presentation using the supplied Gemini design: original typography, photographs, light/dark modes, three guest phone screens, merchant portal, and SCSS explorer.
+Stakeholder presentation using the Titanium Sequoia visual system. Five guided chapters: opportunity, interactive guest payment, restaurant operations, business hypothesis, and a controlled pilot funding conversation. The original design-system explorer is retained at /design-reference.html.
 
 ## Deploy on Vercel
 
@@ -31,3 +31,7 @@ The Vercel deployment is an interactive visual presentation. Menu orders, Apple 
 The backend is included but is excluded from the static deployment. Its local PGlite storage and continuous worker are not configured as Vercel Functions. To publish its real sandbox separately, configure persistent PostgreSQL or a persistent local volume, the worker, APP_ORIGIN, and DEMO_ACCESS_KEY; see backend/docs and backend/.env.example. Do not upload .env, database contents or node_modules.
 
 The supplied master had an unfinished JavaScript function and missing sample table controls. Those are repaired. Inline event handlers were moved to master.js to preserve a self-only script security policy. The visual design remains the supplied master.
+
+## Presenting to stakeholders
+
+Use the chapter navigation or Next button. In Experience, open the table bill, choose a share and tip, then simulate payment. Continue to the restaurant view and show the Till offline outcome. Finish with the pricing hypothesis and staged pilot ask. The readiness dialog distinguishes existing backend work from unvalidated integrations. No traction, investment amount or proven financial return is claimed.
