@@ -34,4 +34,8 @@ The supplied master had an unfinished JavaScript function and missing sample tab
 
 ## Presenting to stakeholders
 
-Use the chapter navigation or Next button. In Experience, open the table bill, choose a share and tip, then simulate payment. Continue to the restaurant view and show the Till offline outcome. Finish with the pricing hypothesis and staged pilot ask. The readiness dialog distinguishes existing backend work from unvalidated integrations. No traction, investment amount or proven financial return is claimed.
+Use the chapter navigation or Next button. In Experience, choose Order & pay to browse three menu items, customise the burger, change quantities, add a kitchen note and tip, and simulate submitting the order. The restaurant view receives the same itemised demo ticket. Choose Pay existing bill to try the separate split-payment journey. Continue to the restaurant view and show the Till offline outcome. Finish with the pricing hypothesis and staged pilot ask. The readiness dialog distinguishes existing backend work from unvalidated integrations. No traction, investment amount or proven financial return is claimed.
+
+## Tests
+
+`npm run check` validates JavaScript and runs 10 ordering tests. After `npm ci --prefix backend`, `npm run test:backend` runs the backend type check and its 17 tests. GitHub Actions runs both suites and the static build. See docs/ORDERING_VALIDATION.md for the browser verification and simulation limits.

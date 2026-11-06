@@ -1,11 +1,415 @@
-<!doctype html><html lang="en" data-theme="sequoia-light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Groundwork — A better end to every meal</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="/master.css"><link rel="stylesheet" href="/pitch.css"></head><body>
-<header class="pitch-header"><a class="hig-brand" href="#opportunity"><div class="hig-brand__glyph">GW</div><div><strong>Groundwork</strong><small>QR PAY · SOUTH AFRICA</small></div></a><div class="header-actions"><button class="quiet" id="theme" aria-label="Switch to dark mode">☾</button><button class="quiet" id="present">Present ↗</button></div></header>
-<nav class="pitch-nav" aria-label="Presentation chapters"><button data-slide="0">01 <span>Opportunity</span></button><button data-slide="1">02 <span>Experience</span></button><button data-slide="2">03 <span>Operations</span></button><button data-slide="3">04 <span>Business</span></button><button data-slide="4">05 <span>The pilot</span></button></nav>
-<main>
-<section class="slide" id="opportunity" aria-labelledby="opportunity-title"><div class="split-layout"><div class="chapter-copy"><p class="kicker">01 / THE OPPORTUNITY</p><h1 id="opportunity-title">The meal is finished.<br><span>The waiting shouldn’t be.</span></h1><p class="lead">Groundwork lets guests scan, split and pay from their phone—while the restaurant keeps its existing till.</p><button class="cta" data-go="1">Experience one payment <span>→</span></button><p class="subtle">No app download. No new till. Start with payment.</p></div><div class="opportunity-visual"><div class="moment"><span class="moment-index">TODAY</span><h3>“Could we get the bill?”</h3><div class="wait-steps"><span>Ask for bill</span><i>→</i><span>Wait for terminal</span><i>→</i><span>Work out the split</span></div></div><div class="moment future"><span class="moment-index">WITH GROUNDWORK</span><h3>Leave when you’re ready.</h3><div class="path"><div><b>01</b><strong>Scan</strong><small>Your table. Your bill.</small></div><div><b>02</b><strong>Choose</strong><small>Your share and tip.</small></div><div><b>03</b><strong>Pay</strong><small>Both sides confirmed.</small></div></div><div class="benefit"><span class="check">✓</span> A better guest experience, built around the restaurant.</div></div></div></div><div class="bottom-note"><strong>The first customer</strong><span>Independent and small-group restaurants on one supported POS in Gauteng.</span></div></section>
-<section class="slide" id="experience" aria-labelledby="experience-title" hidden><div class="split-layout experience-layout"><div class="chapter-copy"><p class="kicker">02 / THE GUEST EXPERIENCE</p><h2 id="experience-title">One table.<br>One simple payment.</h2><p class="lead">Follow a guest at The Olive Room, from the table code to a confirmed share of the bill.</p><ol class="demo-steps"><li data-step-marker="0"><span>1</span><div><b>Scan the table</b><p>The correct bill opens in the browser.</p></div></li><li data-step-marker="1"><span>2</span><div><b>Choose a share</b><p>Split the bill and add an optional tip.</p></div></li><li data-step-marker="2"><span>3</span><div><b>Get confirmation</b><p>Payment and till update are checked separately.</p></div></li></ol><button class="quiet" id="restart">↺ Restart walkthrough</button></div><div class="device-wrap"><div class="iphone-chassis"><div class="iphone-screen"><header class="ios-statusbar"><div class="ios-statusbar__top"><span>9:41</span><div class="dynamic-island"><span class="dynamic-island__dot"></span></div><span>5G</span></div><div class="ios-navbar"><span class="ios-navbar__brand">THE OLIVE ROOM</span><span class="ios-navbar__table-pill">Table 07</span></div></header><div id="phoneContent"></div></div></div><span class="device-caption">Interactive illustration · no real payment</span></div></div></section>
-<section class="slide" id="operations" aria-labelledby="operations-title" hidden><div class="section-intro"><p class="kicker">03 / THE RESTAURANT EXPERIENCE</p><h2 id="operations-title">Confidence on both sides of the table.</h2><p class="lead">A guest’s payment is only complete when the restaurant can account for it.</p></div><div class="operator-layout"><div class="operator-board"><div class="board-header"><div><small>THE OLIVE ROOM</small><h3>Table 07</h3></div><span class="settled-chip" id="opsBadge">ILLUSTRATIVE VIEW</span></div><div class="ops-metrics"><div><small>Bill payment</small><strong id="opsPrincipal">R212.50</strong></div><div><small>Optional tip</small><strong id="opsTip">R21.25</strong></div><div><small>Still on the table</small><strong id="opsRemaining">R212.50</strong></div></div><div class="confirmation"><span class="check">✓</span><div><b>Payment provider confirms funds</b><p>The amount and reference match.</p></div></div><div class="confirmation" id="posConfirmation"></div><div class="operator-action" id="opsAction"></div></div><div class="operations-copy"><h3>The till stays the source of truth.</h3><p>Groundwork connects the guest’s payment to the original restaurant bill. Staff see what settled and what needs attention.</p><div class="exception-choice"><span>Explore the outcome</span><div class="ios-segmented"><button class="ios-segmented__btn" data-outcome="normal">Normal payment</button><button class="ios-segmented__btn" data-outcome="offline">Till offline</button></div></div><p class="subtle">Simulated scenarios. Live vendor approval is still required.</p></div></div></section>
-<section class="slide" id="business" aria-labelledby="business-title" hidden><div class="section-intro"><p class="kicker">04 / THE BUSINESS</p><h2 id="business-title">Sell a better checkout.<br>Keep the restaurant’s systems.</h2><p class="lead">A venue subscription, introduced through a focused integration and a repeatable onboarding process.</p></div><div class="business-grid"><article class="pricing-card"><span class="kicker">ENTRY PRODUCT · QR PAY</span><div class="price">R349<span>/ venue / month</span></div><p>Waiter takes the order.<br>Guest pays from their phone.</p><span class="hypothesis">Pricing hypothesis · to validate in pilot</span></article><article class="business-card"><span class="number">01</span><h3>Win one integration</h3><p>Agree commercial terms and prove compatibility with one POS partner.</p></article><article class="business-card"><span class="number">02</span><h3>Prove value in service</h3><p>Measure guest adoption, payment time and staff intervention at two venues.</p></article><article class="business-card"><span class="number">03</span><h3>Repeat the rollout</h3><p>Use an established onboarding playbook to reach more venues on that POS.</p></article></div><div class="bottom-note"><strong>Expansion after proof</strong><span>QR ordering is a later phase. Provider fees, POS costs and taxes are separate; margins and willingness to pay remain unvalidated.</span></div></section>
-<section class="slide" id="pilot" aria-labelledby="pilot-title" hidden><div class="section-intro"><p class="kicker">05 / THE FUNDING CONVERSATION</p><h2 id="pilot-title">Fund the proof.<br>Then fund the rollout.</h2><p class="lead">Support a controlled pilot: one approved POS integration, one payment partner, and two restaurants.</p></div><div class="pilot-grid"><article class="pilot-card"><span class="phase">01 · ENABLE</span><h3>Secure the partners</h3><p>Confirm POS access, payment terms, pilot venues and the cost of delivery.</p><span class="gate-label">Gate: written scope and partner approval</span></article><article class="pilot-card"><span class="phase">02 · PROVE</span><h3>Run real service tests</h3><p>Validate partial payments, tips, reconciliation and recovery when the till is unavailable.</p><span class="gate-label">Gate: agreed acceptance tests pass</span></article><article class="pilot-card"><span class="phase">03 · DECIDE</span><h3>Measure the case to scale</h3><p>Track adoption, median payment time, matched payments and support effort per venue.</p><span class="gate-label">Gate: pilot evidence supports rollout</span></article></div><div class="funding-ask"><div><h3>The decision today</h3><p>Back partner discovery and a costed pilot plan. Agree the investment amount and success thresholds before launch.</p></div><button class="cta" id="readiness">What is built today? <span>↗</span></button></div></section>
-</main><footer class="presentation-footer"><span id="pageLabel">01 / 05 · Opportunity</span><div><button class="quiet" id="prev" aria-label="Previous chapter">←</button><button class="next" id="next">Guest experience →</button></div><span class="demo-label">Concept & sandbox · pre-pilot</span></footer>
-<dialog id="readinessDialog"><button class="quiet close" id="closeDialog" aria-label="Close readiness summary">×</button><p class="kicker">HONEST READINESS</p><h2>Built to demonstrate.<br>Next: prove it with partners.</h2><div class="readiness-row"><b>Working sandbox</b><p>Persistent bill-share reservations, payment verification, a merchant ledger and POS retries. Seventeen automated backend tests pass.</p></div><div class="readiness-row"><b>Implemented, not certified</b><p>The Paystack test adapter is written but has not been exercised with merchant sandbox credentials. Pilot and GAAP adapters remain disabled pending approved access.</p></div><div class="readiness-row"><b>Required before launch</b><p>Partner agreements, live integration testing, security and payment-model review, and pilot restaurant acceptance.</p></div><p class="subtle">This hosted walkthrough uses sample data. It is not connected to the operational backend.</p></dialog><script src="/master.js"></script></body></html>
+<!doctype html>
+<html lang="en" data-theme="sequoia-light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Groundwork — A better end to every meal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/master.css" />
+    <link rel="stylesheet" href="/pitch.css" />
+  </head>
+  <body>
+    <header class="pitch-header">
+      <a class="hig-brand" href="#opportunity"
+        ><div class="hig-brand__glyph">GW</div>
+        <div>
+          <strong>Groundwork</strong><small>ORDER & PAY · SOUTH AFRICA</small>
+        </div></a
+      >
+      <div class="header-actions">
+        <button class="quiet" id="theme" aria-label="Switch to dark mode">
+          ☾</button
+        ><button class="quiet" id="present">Present ↗</button>
+      </div>
+    </header>
+    <nav class="pitch-nav" aria-label="Presentation chapters">
+      <button data-slide="0">01 <span>Opportunity</span></button
+      ><button data-slide="1">02 <span>Experience</span></button
+      ><button data-slide="2">03 <span>Operations</span></button
+      ><button data-slide="3">04 <span>Business</span></button
+      ><button data-slide="4">05 <span>The pilot</span></button>
+    </nav>
+    <main>
+      <section
+        class="slide"
+        id="opportunity"
+        aria-labelledby="opportunity-title"
+      >
+        <div class="split-layout">
+          <div class="chapter-copy">
+            <p class="kicker">01 / THE OPPORTUNITY</p>
+            <h1 id="opportunity-title">
+              The meal is finished.<br /><span>The waiting shouldn’t be.</span>
+            </h1>
+            <p class="lead">
+              Groundwork lets guests order, split and pay from their phone—while
+              the restaurant keeps its existing till.
+            </p>
+            <button class="cta" data-go="1">
+              Try the guest experience <span>→</span>
+            </button>
+            <p class="subtle">
+              No app download. One connected table experience.
+            </p>
+          </div>
+          <div class="opportunity-visual">
+            <div class="moment">
+              <span class="moment-index">TODAY</span>
+              <h3>“Could we get the bill?”</h3>
+              <div class="wait-steps">
+                <span>Ask for bill</span><i>→</i><span>Wait for terminal</span
+                ><i>→</i><span>Work out the split</span>
+              </div>
+            </div>
+            <div class="moment future">
+              <span class="moment-index">WITH GROUNDWORK</span>
+              <h3>Leave when you’re ready.</h3>
+              <div class="path">
+                <div>
+                  <b>01</b><strong>Scan</strong
+                  ><small>Your table. Your bill.</small>
+                </div>
+                <div>
+                  <b>02</b><strong>Choose</strong
+                  ><small>Your share and tip.</small>
+                </div>
+                <div>
+                  <b>03</b><strong>Pay</strong
+                  ><small>Both sides confirmed.</small>
+                </div>
+              </div>
+              <div class="benefit">
+                <span class="check">✓</span> A better guest experience, built
+                around the restaurant.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-note">
+          <strong>The first customer</strong
+          ><span
+            >Independent and small-group restaurants on one supported POS in
+            Gauteng.</span
+          >
+        </div>
+      </section>
+      <section
+        class="slide"
+        id="experience"
+        aria-labelledby="experience-title"
+        hidden
+      >
+        <div class="split-layout experience-layout">
+          <div class="chapter-copy">
+            <p class="kicker">02 / THE GUEST EXPERIENCE</p>
+            <h2 id="experience-title">Your table.<br />Your choice.</h2>
+            <p class="lead">
+              Order from your phone, or settle a bill your waiter has already
+              opened. Try both journeys at The Olive Room.
+            </p>
+            <div
+              class="journey-switch ios-segmented"
+              role="group"
+              aria-label="Choose a guest journey"
+            >
+              <button
+                class="ios-segmented__btn"
+                data-journey="order"
+                aria-pressed="true"
+              >
+                Order &amp; pay</button
+              ><button
+                class="ios-segmented__btn"
+                data-journey="pay"
+                aria-pressed="false"
+              >
+                Pay existing bill
+              </button>
+            </div>
+            <ol class="demo-steps">
+              <li data-step-marker="0">
+                <span>1</span>
+                <div>
+                  <b>Scan the table</b>
+                  <p>The correct bill opens in the browser.</p>
+                </div>
+              </li>
+              <li data-step-marker="1">
+                <span>2</span>
+                <div>
+                  <b>Choose a share</b>
+                  <p>Split the bill and add an optional tip.</p>
+                </div>
+              </li>
+              <li data-step-marker="2">
+                <span>3</span>
+                <div>
+                  <b>Get confirmation</b>
+                  <p>Payment and till update are checked separately.</p>
+                </div>
+              </li>
+            </ol>
+            <button class="quiet" id="restart">↺ Restart walkthrough</button>
+          </div>
+          <div class="device-wrap">
+            <div class="iphone-chassis">
+              <div class="iphone-screen">
+                <header class="ios-statusbar">
+                  <div class="ios-statusbar__top">
+                    <span>9:41</span>
+                    <div class="dynamic-island">
+                      <span class="dynamic-island__dot"></span>
+                    </div>
+                    <span>5G</span>
+                  </div>
+                  <div class="ios-navbar">
+                    <span class="ios-navbar__brand">THE OLIVE ROOM</span
+                    ><span class="ios-navbar__table-pill">Table 07</span>
+                  </div>
+                </header>
+                <div id="phoneContent"></div>
+              </div>
+            </div>
+            <span class="device-caption"
+              >Interactive illustration · no real payment</span
+            >
+          </div>
+        </div>
+      </section>
+      <section
+        class="slide"
+        id="operations"
+        aria-labelledby="operations-title"
+        hidden
+      >
+        <div class="section-intro">
+          <p class="kicker">03 / THE RESTAURANT EXPERIENCE</p>
+          <h2 id="operations-title">Confidence on both sides of the table.</h2>
+          <p class="lead">
+            A guest’s payment is only complete when the restaurant can account
+            for it.
+          </p>
+        </div>
+        <div class="operator-layout">
+          <div class="operator-board">
+            <div class="board-header">
+              <div>
+                <small>THE OLIVE ROOM</small>
+                <h3>Table 07</h3>
+              </div>
+              <span class="settled-chip" id="opsBadge">ILLUSTRATIVE VIEW</span>
+            </div>
+            <div class="ops-metrics">
+              <div>
+                <small>Bill payment</small
+                ><strong id="opsPrincipal">R212.50</strong>
+              </div>
+              <div>
+                <small>Optional tip</small><strong id="opsTip">R21.25</strong>
+              </div>
+              <div>
+                <small>Still on the table</small
+                ><strong id="opsRemaining">R212.50</strong>
+              </div>
+            </div>
+            <div class="confirmation">
+              <span class="check">✓</span>
+              <div>
+                <b>Payment provider confirms funds</b>
+                <p>The amount and reference match.</p>
+              </div>
+            </div>
+            <div class="confirmation" id="posConfirmation"></div>
+            <div class="operator-action" id="opsAction"></div>
+            <div class="order-ticket" id="orderTicket" hidden></div>
+          </div>
+          <div class="operations-copy">
+            <h3>The till stays the source of truth.</h3>
+            <p>
+              Groundwork connects the guest’s payment to the original restaurant
+              bill. Staff see what settled and what needs attention.
+            </p>
+            <div class="exception-choice">
+              <span>Explore the outcome</span>
+              <div class="ios-segmented">
+                <button class="ios-segmented__btn" data-outcome="normal">
+                  Normal payment</button
+                ><button class="ios-segmented__btn" data-outcome="offline">
+                  Till offline
+                </button>
+              </div>
+            </div>
+            <p class="subtle">
+              Simulated scenarios. Live vendor approval is still required.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section
+        class="slide"
+        id="business"
+        aria-labelledby="business-title"
+        hidden
+      >
+        <div class="section-intro">
+          <p class="kicker">04 / THE BUSINESS</p>
+          <h2 id="business-title">
+            Sell a better checkout.<br />Keep the restaurant’s systems.
+          </h2>
+          <p class="lead">
+            A venue subscription, introduced through a focused integration and a
+            repeatable onboarding process.
+          </p>
+        </div>
+        <div class="business-grid">
+          <article class="pricing-card">
+            <span class="kicker">ENTRY PRODUCT · QR PAY</span>
+            <div class="price">R349<span>/ venue / month</span></div>
+            <p>Waiter takes the order.<br />Guest pays from their phone.</p>
+            <span class="hypothesis"
+              >Pricing hypothesis · to validate in pilot</span
+            >
+          </article>
+          <article class="business-card">
+            <span class="number">01</span>
+            <h3>Win one integration</h3>
+            <p>
+              Agree commercial terms and prove compatibility with one POS
+              partner.
+            </p>
+          </article>
+          <article class="business-card">
+            <span class="number">02</span>
+            <h3>Prove value in service</h3>
+            <p>
+              Measure guest adoption, payment time and staff intervention at two
+              venues.
+            </p>
+          </article>
+          <article class="business-card">
+            <span class="number">03</span>
+            <h3>Repeat the rollout</h3>
+            <p>
+              Use an established onboarding playbook to reach more venues on
+              that POS.
+            </p>
+          </article>
+        </div>
+        <div class="bottom-note">
+          <strong>Expansion after proof</strong
+          ><span
+            >The demo includes ordering; live ordering needs approved POS and
+            kitchen routing. Provider fees, POS costs and taxes are separate.
+            Pricing and margins remain unvalidated.</span
+          >
+        </div>
+      </section>
+      <section class="slide" id="pilot" aria-labelledby="pilot-title" hidden>
+        <div class="section-intro">
+          <p class="kicker">05 / THE FUNDING CONVERSATION</p>
+          <h2 id="pilot-title">Fund the proof.<br />Then fund the rollout.</h2>
+          <p class="lead">
+            Support a controlled pilot: one approved POS integration, one
+            payment partner, and two restaurants.
+          </p>
+        </div>
+        <div class="pilot-grid">
+          <article class="pilot-card">
+            <span class="phase">01 · ENABLE</span>
+            <h3>Secure the partners</h3>
+            <p>
+              Confirm POS access, payment terms, pilot venues and the cost of
+              delivery.
+            </p>
+            <span class="gate-label"
+              >Gate: written scope and partner approval</span
+            >
+          </article>
+          <article class="pilot-card">
+            <span class="phase">02 · PROVE</span>
+            <h3>Run real service tests</h3>
+            <p>
+              Validate partial payments, tips, reconciliation and recovery when
+              the till is unavailable.
+            </p>
+            <span class="gate-label">Gate: agreed acceptance tests pass</span>
+          </article>
+          <article class="pilot-card">
+            <span class="phase">03 · DECIDE</span>
+            <h3>Measure the case to scale</h3>
+            <p>
+              Track adoption, median payment time, matched payments and support
+              effort per venue.
+            </p>
+            <span class="gate-label"
+              >Gate: pilot evidence supports rollout</span
+            >
+          </article>
+        </div>
+        <div class="funding-ask">
+          <div>
+            <h3>The decision today</h3>
+            <p>
+              Back partner discovery and a costed pilot plan. Agree the
+              investment amount and success thresholds before launch.
+            </p>
+          </div>
+          <button class="cta" id="readiness">
+            What is built today? <span>↗</span>
+          </button>
+        </div>
+      </section>
+    </main>
+    <footer class="presentation-footer">
+      <span id="pageLabel">01 / 05 · Opportunity</span>
+      <div>
+        <button class="quiet" id="prev" aria-label="Previous chapter">←</button
+        ><button class="next" id="next">Guest experience →</button>
+      </div>
+      <span class="demo-label">Concept & sandbox · pre-pilot</span>
+    </footer>
+    <dialog id="readinessDialog">
+      <button
+        class="quiet close"
+        id="closeDialog"
+        aria-label="Close readiness summary"
+      >
+        ×
+      </button>
+      <p class="kicker">HONEST READINESS</p>
+      <h2>Built to demonstrate.<br />Next: prove it with partners.</h2>
+      <div class="readiness-row">
+        <b>Working sandbox</b>
+        <p>
+          Persistent bill-share reservations, payment verification, a merchant
+          ledger and POS retries. Seventeen automated backend tests pass.
+        </p>
+      </div>
+      <div class="readiness-row">
+        <b>Implemented, not certified</b>
+        <p>
+          The Paystack test adapter is written but has not been exercised with
+          merchant sandbox credentials. Pilot and GAAP adapters remain disabled
+          pending approved access.
+        </p>
+      </div>
+      <div class="readiness-row">
+        <b>Required before launch</b>
+        <p>
+          Partner agreements, live integration testing, security and
+          payment-model review, and pilot restaurant acceptance.
+        </p>
+      </div>
+      <p class="subtle">
+        This hosted walkthrough uses sample data. It is not connected to the
+        operational backend.
+      </p>
+    </dialog>
+    <script type="module" src="/master.js"></script>
+  </body>
+</html>

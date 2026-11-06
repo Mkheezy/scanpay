@@ -1,0 +1,22 @@
+name: Test demo and backend
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - name: Install backend test dependencies
+        run: npm ci --prefix backend
+      - name: Validate and test ordering demo
+        run: npm run check
+      - name: Typecheck and test payment backend
+        run: npm run test:backend
+      - name: Build Vercel presentation
+        run: npm run build
