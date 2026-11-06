@@ -431,6 +431,17 @@ export function createApp(service: Service, config: Config) {
     cookie(res, fresh.raw);
     res.json({ ok: true });
   });
+  // Keep provider returns on the payment screen when the home page is the pitch.
+  app.get(["/", "/index.html"], (req, res, next) => {
+    if (Object.hasOwn(req.query, "payment")) {
+      const query = req.originalUrl.slice(req.originalUrl.indexOf("?"));
+      return res.redirect(303, "/sandbox.html" + query + "#demo");
+    }
+    next();
+  });
+  app.get(["/design-reference.html", "/demo-info.html"], (_req, res) =>
+    res.redirect(302, "/"),
+  );
   app.use(express.static(fileURLToPath(new URL("../public", import.meta.url))));
   app.get("/t/:code", (_req, res) =>
     res.sendFile(

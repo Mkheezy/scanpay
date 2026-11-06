@@ -29,3 +29,11 @@ The module stores only in-memory demo state; refreshing the page starts a fresh 
 ## Navigation and glass revision — 7 November 2026
 
 Re-ran all 27 automated tests and backend TypeScript checking successfully. Verified the hamburger menu on desktop and at 390px in both appearances, navigation and journey selection, automatic menu dismissal, Escape closure with aria-expanded reset and focus returned to the menu button, and basket retention when changing appearance. The mobile document remained 390px wide. The glass treatment uses translucent backgrounds, backdrop blur, saturation and specular borders, with a reduced-transparency fallback.
+
+## Public UI audit — 7 November 2026
+
+Removed the legacy design-system showcase and its script from the web root. The static build explicitly ships six presentation assets; old reference and information URLs redirect to the presentation. Both backend copies now serve the same stakeholder home page. Payment returns still reach the payment console and table QR paths remain intact.
+
+All 30 automated tests pass: 10 ordering, 2 presentation packaging/parity and 18 backend tests. Backend TypeScript checking and static build pass. On desktop, reviewed all five chapters, navigation in both appearances and the plain-language readiness dialog. Completed a burger with double patty, two lemonades and a 12% tip: R330.00 + R39.60 = R369.60. The confirmation and kitchen ticket match, including the kitchen note. No design-spec labels appear in the public presentation.
+
+The freshly exported standalone HTML also rendered in a 390px-wide preview frame. Verified its menu and dark appearance; document width stayed at 390px. No console errors were observed in the desktop run.

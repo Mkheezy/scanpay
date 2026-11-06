@@ -25,5 +25,17 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/design-reference.html",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/demo-info.html",
+      "destination": "/",
+      "permanent": false
+    }
   ]
 }

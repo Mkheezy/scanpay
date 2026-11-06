@@ -1,2715 +1,486 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="sequoia-light">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Groundwork QR Order & Pay — Titanium Sequoia Light & Dark Design System</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-  <style>
-    /* ==========================================================================
-       1. TITANIUM SEQUOIA DUAL-MODE SYSTEM TOKENS (_tokens.scss)
-       Zero Tailwind. Pure CSS Custom Properties & Isolated Component BEM Classes.
-       Includes:
-         1) LIGHT MODE: "Silver Sequoia Frost" (data-theme="sequoia-light")
-         2) DARK MODE:  "Dark Titanium Sequoia" (data-theme="titanium-dark")
-       ========================================================================== */
-    :root,
-    [data-theme="sequoia-light"],
-    .theme-scope-light {
-      color-scheme: light;
-
-      --sys-bg-canvas: #F2F4F8;
-      --sys-bg-mesh:
-        radial-gradient(circle at 14% 16%, rgba(16, 185, 129, 0.13), transparent 42%),
-        radial-gradient(circle at 86% 20%, rgba(10, 132, 255, 0.14), transparent 46%),
-        radial-gradient(circle at 52% 84%, rgba(212, 197, 177, 0.28), transparent 50%),
-        linear-gradient(180deg, #F7F9FC 0%, #E8ECF3 100%);
-      --sys-screen-mesh:
-        radial-gradient(circle at 18% 12%, rgba(16, 185, 129, 0.14), transparent 48%),
-        radial-gradient(circle at 85% 32%, rgba(10, 132, 255, 0.14), transparent 52%),
-        radial-gradient(circle at 50% 90%, rgba(212, 197, 177, 0.24), transparent 55%),
-        #F2F4F8;
-
-      /* Silver Brushed Titanium + macOS Sequoia Daylight Frosted Glass */
-      --sys-bg-elevated: rgba(255, 255, 255, 0.84);
-      --sys-bg-bento-tile: rgba(255, 255, 255, 0.72);
-      --sys-bg-grouped: rgba(228, 233, 242, 0.78);
-      --sys-bg-subtle: rgba(15, 23, 42, 0.04);
-      --sys-glass-surface: rgba(255, 255, 255, 0.78);
-      --sys-glass-strong: rgba(255, 255, 255, 0.92);
-
-      /* 0.5px Machined Silver Hairlines & Pure White Inner Speculars */
-      --sys-glass-specular: rgba(255, 255, 255, 0.95);
-      --sys-hairline: rgba(15, 23, 42, 0.08);
-      --sys-hairline-strong: rgba(15, 23, 42, 0.14);
-
-      /* Deep Obsidian Optical Typography */
-      --sys-label-primary: #111215;
-      --sys-label-secondary: #5A606D;
-      --sys-label-tertiary: #8C93A0;
-      --sys-titanium-champagne: #6E604F;
-
-      /* Soft Daylight Shadows + Crisp White Specular Rim */
-      --sys-shadow-ambient:
-        0 14px 34px -8px rgba(15, 23, 42, 0.07),
-        0 2px 6px rgba(15, 23, 42, 0.03),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.92);
-      --sys-shadow-floating:
-        0 24px 52px -12px rgba(15, 23, 42, 0.16),
-        0 0 0 0.5px rgba(15, 23, 42, 0.10),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.96);
-      --sys-shadow-phone:
-        0 34px 68px -16px rgba(15, 23, 42, 0.20),
-        0 0 0 1px rgba(15, 23, 42, 0.12);
-
-      /* Ink-Black Apple Pay Primary CTA in Light Mode */
-      --sys-accent-primary: linear-gradient(180deg, #1E2028 0%, #111215 100%);
-      --sys-accent-primary-solid: #111215;
-      --sys-accent-primary-fg: #FFFFFF;
-      --sys-accent-blue: #0066CC;
-      --sys-accent-blue-tint: rgba(0, 102, 204, 0.11);
-
-      /* Strict Semantic States */
-      --sys-green: #059669;
-      --sys-green-tint: rgba(5, 150, 105, 0.12);
-      --sys-amber: #D97706;
-      --sys-amber-tint: rgba(217, 119, 6, 0.13);
-      --sys-red: #DC2626;
-      --sys-red-tint: rgba(220, 38, 38, 0.12);
-
-      /* Natural Silver Titanium Hardware Bezel */
-      --phone-bezel: linear-gradient(145deg, #E6E9EF 0%, #C9CED8 52%, #EFF1F6 100%);
-      --phone-frame-border: #B2B8C6;
-      --ring-glow-opacity: 0.22;
-    }
-
-    /* ==========================================================================
-       DARK MODE: "Dark Titanium Sequoia" (data-theme="titanium-dark")
-       ========================================================================== */
-    [data-theme="titanium-dark"],
-    .theme-scope-dark {
-      color-scheme: dark;
-
-      --sys-bg-canvas: #0B0C0E;
-      --sys-bg-mesh:
-        radial-gradient(circle at 14% 16%, rgba(16, 185, 129, 0.15), transparent 40%),
-        radial-gradient(circle at 86% 20%, rgba(10, 132, 255, 0.17), transparent 44%),
-        radial-gradient(circle at 52% 84%, rgba(212, 197, 177, 0.11), transparent 48%),
-        linear-gradient(180deg, #0D0F13 0%, #090A0D 100%);
-      --sys-screen-mesh:
-        radial-gradient(circle at 18% 12%, rgba(16, 185, 129, 0.17), transparent 46%),
-        radial-gradient(circle at 85% 32%, rgba(10, 132, 255, 0.18), transparent 50%),
-        radial-gradient(circle at 50% 90%, rgba(212, 197, 177, 0.12), transparent 52%),
-        #0B0C0E;
-
-      /* Translucent Dark Sequoia Glass over Brushed Dark Titanium */
-      --sys-bg-elevated: rgba(24, 26, 32, 0.72);
-      --sys-bg-bento-tile: rgba(36, 39, 48, 0.56);
-      --sys-bg-grouped: rgba(16, 18, 23, 0.76);
-      --sys-bg-subtle: rgba(255, 255, 255, 0.045);
-      --sys-glass-surface: rgba(24, 26, 32, 0.72);
-      --sys-glass-strong: rgba(28, 31, 39, 0.86);
-
-      /* Machined 0.5px Titanium Rim Specular Highlights */
-      --sys-glass-specular: rgba(255, 255, 255, 0.14);
-      --sys-hairline: rgba(255, 255, 255, 0.11);
-      --sys-hairline-strong: rgba(212, 197, 177, 0.28);
-
-      /* Optical Typography */
-      --sys-label-primary: #F5F5F7;
-      --sys-label-secondary: #A1A1AA;
-      --sys-label-tertiary: #6E6E77;
-      --sys-titanium-champagne: #D4C5B1;
-
-      /* Shadows */
-      --sys-shadow-ambient:
-        0 16px 36px -8px rgba(0, 0, 0, 0.72),
-        inset 0 0.5px 0 0 rgba(255, 255, 255, 0.14);
-      --sys-shadow-floating:
-        0 28px 60px -12px rgba(0, 0, 0, 0.92),
-        0 0 0 0.5px rgba(212, 197, 177, 0.26);
-      --sys-shadow-phone:
-        0 36px 72px -16px rgba(0, 0, 0, 0.92),
-        0 0 0 1px rgba(212, 197, 177, 0.24);
-
-      /* Crisp White Apple Pay Primary CTA in Dark Mode */
-      --sys-accent-primary: linear-gradient(180deg, #FFFFFF 0%, #E5E5EA 100%);
-      --sys-accent-primary-solid: #F5F5F7;
-      --sys-accent-primary-fg: #0B0C0E;
-      --sys-accent-blue: #0A84FF;
-      --sys-accent-blue-tint: rgba(10, 132, 255, 0.18);
-
-      /* Strict Semantic States */
-      --sys-green: #10B981;
-      --sys-green-tint: rgba(16, 185, 129, 0.18);
-      --sys-amber: #F59E0B;
-      --sys-amber-tint: rgba(245, 158, 11, 0.18);
-      --sys-red: #FF453A;
-      --sys-red-tint: rgba(255, 69, 58, 0.18);
-
-      /* Grade-5 Brushed Dark Titanium Hardware Bezel */
-      --phone-bezel: linear-gradient(145deg, #2D2C2A 0%, #17181C 52%, #33302C 100%);
-      --phone-frame-border: #524D46;
-      --ring-glow-opacity: 0.42;
-    }
-
-    :root {
-      --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, sans-serif;
-      --font-mono: "SF Mono", "JetBrains Mono", ui-monospace, monospace;
-      --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
-      --radius-squircle-xl: 28px;
-      --radius-squircle-lg: 22px;
-      --radius-squircle-md: 16px;
-      --radius-squircle-sm: 12px;
-      --radius-pill: 9999px;
-    }
-
-    /* ==========================================================================
-       2. GLOBAL RESET & TYPOGRAPHY (globals.scss)
-       ========================================================================== */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--sys-bg-canvas);
-      background-image: var(--sys-bg-mesh);
-      background-attachment: fixed;
-      color: var(--sys-label-primary);
-      font-family: var(--font-sans);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      line-height: 1.45;
-      transition: background-color 0.35s var(--ease-spring), color 0.35s var(--ease-spring);
-      padding-bottom: 72px;
-      min-height: 100vh;
-    }
-
-    button,
-    input {
-      font-family: inherit;
-    }
-
-    .zar-tabular {
-      font-variant-numeric: tabular-nums;
-      letter-spacing: -0.025em;
-    }
-
-    /* ==========================================================================
-       3. TOP SEQUOIA GLASS NAVIGATION BAR (GlassNavigationBar.module.scss)
-       ========================================================================== */
-    .hig-topbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--sys-glass-surface);
-      backdrop-filter: saturate(190%) blur(28px);
-      -webkit-backdrop-filter: saturate(190%) blur(28px);
-      border-bottom: 0.5px solid var(--sys-hairline-strong);
-      box-shadow: inset 0 -0.5px 0 0 var(--sys-glass-specular);
-      padding: 12px 24px;
-    }
-
-    .hig-topbar__inner {
-      max-width: 1460px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-
-    .hig-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .hig-brand__glyph {
-      width: 38px;
-      height: 38px;
-      border-radius: 11px;
-      background: var(--sys-accent-primary);
-      color: var(--sys-accent-primary-fg);
-      display: grid;
-      place-items: center;
-      font-weight: 700;
-      font-size: 0.9rem;
-      letter-spacing: -0.03em;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    }
-
-    .hig-brand__title {
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .hig-brand__badge {
-      font-size: 0.68rem;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: var(--radius-pill);
-      background: var(--sys-bg-bento-tile);
-      border: 0.5px solid var(--sys-hairline-strong);
-      color: var(--sys-titanium-champagne);
-    }
-
-    .hig-brand__subtitle {
-      font-size: 0.74rem;
-      color: var(--sys-label-secondary);
-    }
-
-    .hig-topbar__controls {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 12px;
-    }
-
-    /* Sequoia Translucent Sliding Pill Group */
-    .segmented-pill-bar {
-      display: inline-flex;
-      align-items: center;
-      background: var(--sys-bg-grouped);
-      backdrop-filter: saturate(180%) blur(20px);
-      padding: 3px;
-      border-radius: var(--radius-pill);
-      border: 0.5px solid var(--sys-hairline-strong);
-    }
-
-    .segmented-pill-bar__btn {
-      border: none;
-      background: transparent;
-      color: var(--sys-label-secondary);
-      font-size: 0.76rem;
-      font-weight: 500;
-      padding: 6px 13px;
-      border-radius: var(--radius-pill);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.22s var(--ease-spring);
-    }
-
-    .segmented-pill-bar__btn:hover {
-      color: var(--sys-label-primary);
-    }
-
-    .segmented-pill-bar__btn--active {
-      background: var(--sys-bg-elevated);
-      color: var(--sys-label-primary);
-      font-weight: 600;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22), inset 0 0.5px 0 0 var(--sys-glass-specular);
-      border: 0.5px solid var(--sys-hairline-strong);
-    }
-
-    .theme-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    /* ==========================================================================
-       4. WORKSPACE SHELL & GRADE-5 TITANIUM IPHONE 16 PRO FRAMES
-       ========================================================================== */
-    .hig-workspace {
-      max-width: 1460px;
-      margin: 28px auto 0;
-      padding: 0 24px;
-    }
-
-    .hig-tab-panel {
-      display: none;
-      animation: fadeSlideIn 0.32s var(--ease-spring);
-    }
-
-    .hig-tab-panel--active {
-      display: block;
-    }
-
-    @keyframes fadeSlideIn {
-      from {
-        opacity: 0;
-        transform: translateY(6px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .iphone-stage-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 30px;
-      align-items: start;
-    }
-
-    @media (max-width: 1260px) {
-      .iphone-stage-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 860px) {
-      .iphone-stage-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .iphone-column {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .iphone-column__caption {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 8px;
-    }
-
-    .iphone-column__tag {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--sys-label-secondary);
-      letter-spacing: -0.01em;
-    }
-
-    .iphone-column__code-btn {
-      border: none;
-      background: transparent;
-      color: var(--sys-titanium-champagne);
-      font-size: 0.74rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .iphone-column__code-btn:hover {
-      text-decoration: underline;
-    }
-
-    /* Machined Grade-5 Titanium iPhone 16 Pro Enclosure */
-    .iphone-chassis {
-      border-radius: 50px;
-      padding: 11px;
-      background: var(--phone-bezel);
-      border: 1.5px solid var(--phone-frame-border);
-      box-shadow: var(--sys-shadow-phone);
-      position: relative;
-    }
-
-    .iphone-screen {
-      background: var(--sys-screen-mesh);
-      border-radius: 40px;
-      min-height: 790px;
-      max-height: 790px;
-      overflow-y: auto;
-      overflow-x: hidden;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      border: 0.5px solid var(--sys-hairline-strong);
-      scrollbar-width: none;
-    }
-
-    .iphone-screen::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* Dynamic Island & Sequoia Frosted iOS Status Bar */
-    .ios-statusbar {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      padding: 12px 20px 10px;
-      background: var(--sys-glass-surface);
-      backdrop-filter: saturate(190%) blur(26px);
-      -webkit-backdrop-filter: saturate(190%) blur(26px);
-      border-bottom: 0.5px solid var(--sys-hairline);
-      box-shadow: inset 0 -0.5px 0 0 var(--sys-glass-specular);
-    }
-
-    .ios-statusbar__top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.72rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-
-    .dynamic-island {
-      width: 96px;
-      height: 22px;
-      border-radius: 999px;
-      background: #000000;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 9px;
-      box-shadow: inset 0 0 1.5px rgba(212, 197, 177, 0.35);
-    }
-
-    .dynamic-island__dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--sys-green);
-      box-shadow: 0 0 6px var(--sys-green);
-    }
-
-    .ios-navbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .ios-navbar__brand {
-      font-size: 0.76rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .ios-navbar__table-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: var(--sys-bg-bento-tile);
-      backdrop-filter: blur(12px);
-      padding: 4px 11px;
-      border-radius: var(--radius-pill);
-      font-size: 0.74rem;
-      font-weight: 600;
-      border: 0.5px solid var(--sys-hairline-strong);
-      color: var(--sys-titanium-champagne);
-    }
-
-    .ios-navbar__bag {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: var(--sys-accent-primary);
-      color: var(--sys-accent-primary-fg);
-      display: grid;
-      place-items: center;
-      font-size: 0.72rem;
-      font-weight: 700;
-    }
-
-    /* ==========================================================================
-       5. COMPONENT: MenuGlassBentoCard.module.scss (Frame 1 — Mode A)
-       ========================================================================== */
-    .ios-content-scroll {
-      padding: 16px 16px 110px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    /* Sequoia Micro-Bento Strip inside Guest Menu */
-    .sequoia-guest-bento-strip {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
-    .sequoia-mini-tile {
-      background: var(--sys-bg-bento-tile);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      border-radius: var(--radius-squircle-sm);
-      border: 0.5px solid var(--sys-hairline);
-      box-shadow: inset 0 0.5px 0 0 var(--sys-glass-specular);
-      padding: 8px 11px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .sequoia-mini-tile__label {
-      font-size: 0.63rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--sys-label-secondary);
-    }
-
-    .sequoia-mini-tile__value {
-      font-size: 0.76rem;
-      font-weight: 600;
-      color: var(--sys-label-primary);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .hero-dish-card {
-      background: var(--sys-bg-elevated);
-      backdrop-filter: saturate(190%) blur(28px);
-      -webkit-backdrop-filter: saturate(190%) blur(28px);
-      border-radius: var(--radius-squircle-xl);
-      border: 0.5px solid var(--sys-hairline-strong);
-      box-shadow: var(--sys-shadow-ambient);
-      overflow: hidden;
-      transition: transform 0.28s var(--ease-spring);
-    }
-
-    .hero-dish-card__media {
-      position: relative;
-      height: 198px;
-      width: 100%;
-      overflow: hidden;
-      background: #141416;
-    }
-
-    .hero-dish-card__img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s var(--ease-spring);
-    }
-
-    .hero-dish-card:hover .hero-dish-card__img {
-      transform: scale(1.03);
-    }
-
-    .hero-dish-card__price-tag {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(15, 17, 22, 0.76);
-      backdrop-filter: saturate(190%) blur(16px);
-      -webkit-backdrop-filter: saturate(190%) blur(16px);
-      color: #FFFFFF;
-      padding: 5px 12px;
-      border-radius: var(--radius-pill);
-      font-size: 0.82rem;
-      font-weight: 600;
-      border: 0.5px solid rgba(212, 197, 177, 0.35);
-    }
-
-    .hero-dish-card__body {
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 11px;
-    }
-
-    .hero-dish-card__title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      letter-spacing: -0.025em;
-      line-height: 1.2;
-    }
-
-    .hero-dish-card__desc {
-      font-size: 0.79rem;
-      color: var(--sys-label-secondary);
-      line-height: 1.4;
-    }
-
-    /* Tactile Sequoia Glass Modifier Rows */
-    .modifier-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      padding-top: 6px;
-      border-top: 0.5px solid var(--sys-hairline);
-    }
-
-    .modifier-pill {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 11px;
-      border-radius: var(--radius-squircle-sm);
-      background: var(--sys-bg-bento-tile);
-      border: 0.5px solid var(--sys-hairline);
-      font-size: 0.78rem;
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.18s var(--ease-spring);
-    }
-
-    .modifier-pill:active {
-      transform: scale(0.98);
-    }
-
-    .modifier-pill--selected {
-      background: var(--sys-accent-blue-tint);
-      border-color: var(--sys-accent-blue);
-      box-shadow: inset 0 0.5px 0 0 rgba(255, 255, 255, 0.25);
-    }
-
-    .modifier-pill__left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 500;
-    }
-
-    .ios-check-circle {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 1.5px solid var(--sys-label-tertiary);
-      display: grid;
-      place-items: center;
-      font-size: 0.65rem;
-      color: #FFFFFF;
-      transition: all 0.18s var(--ease-spring);
-    }
-
-    .modifier-pill--selected .ios-check-circle {
-      background: var(--sys-accent-blue);
-      border-color: var(--sys-accent-blue);
-    }
-
-    .dish-card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 4px;
-    }
-
-    .pos-origin-chip {
-      font-size: 0.66rem;
-      font-weight: 600;
-      color: var(--sys-green);
-      background: var(--sys-green-tint);
-      padding: 3px 9px;
-      border-radius: var(--radius-pill);
-      border: 0.5px solid rgba(16, 185, 129, 0.3);
-    }
-
-    .ios-stepper {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      background: var(--sys-bg-grouped);
-      padding: 3px;
-      border-radius: var(--radius-pill);
-      border: 0.5px solid var(--sys-hairline-strong);
-    }
-
-    .ios-stepper__btn {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      border: none;
-      background: var(--sys-bg-elevated);
-      color: var(--sys-label-primary);
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-      transition: transform 0.15s var(--ease-spring);
-    }
-
-    .ios-stepper__btn:active {
-      transform: scale(0.9);
-    }
-
-    .ios-stepper__qty {
-      font-size: 0.82rem;
-      font-weight: 600;
-      min-width: 15px;
-      text-align: center;
-    }
-
-    /* Compact Secondary Dish Row */
-    .compact-dish-card {
-      background: var(--sys-bg-elevated);
-      backdrop-filter: saturate(190%) blur(24px);
-      -webkit-backdrop-filter: saturate(190%) blur(24px);
-      border-radius: var(--radius-squircle-lg);
-      border: 0.5px solid var(--sys-hairline-strong);
-      padding: 13px;
-      display: grid;
-      grid-template-columns: 1fr 72px;
-      gap: 12px;
-      align-items: center;
-      box-shadow: var(--sys-shadow-ambient);
-    }
-
-    .compact-dish-card__thumb {
-      width: 72px;
-      height: 72px;
-      border-radius: 14px;
-      object-fit: cover;
-      border: 0.5px solid var(--sys-hairline);
-    }
-
-    /* Floating Sequoia Glass Apple Pay Dock (SequoiaFloatingDock.module.scss) */
-    .ios-floating-dock {
-      position: sticky;
-      bottom: 12px;
-      z-index: 25;
-      padding: 0 14px;
-      margin-top: auto;
-    }
-
-    .apple-pay-bar {
-      background: var(--sys-glass-strong);
-      backdrop-filter: saturate(200%) blur(28px);
-      -webkit-backdrop-filter: saturate(200%) blur(28px);
-      border: 0.5px solid var(--sys-hairline-strong);
-      box-shadow: var(--sys-shadow-floating), inset 0 0.5px 0 0 var(--sys-glass-specular);
-      border-radius: var(--radius-pill);
-      padding: 7px 8px 7px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .apple-pay-bar__meta {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .apple-pay-bar__label {
-      font-size: 0.66rem;
-      color: var(--sys-label-secondary);
-      font-weight: 500;
-    }
-
-    .apple-pay-bar__total {
-      font-size: 1.02rem;
-      font-weight: 700;
-    }
-
-    .apple-pay-cta {
-      height: 42px;
-      padding: 0 18px;
-      border-radius: var(--radius-pill);
-      border: 0.5px solid rgba(255, 255, 255, 0.35);
-      background: var(--sys-accent-primary);
-      color: var(--sys-accent-primary-fg);
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
-      transition: transform 0.18s var(--ease-spring);
-    }
-
-    .apple-pay-cta:active {
-      transform: scale(0.96);
-    }
-
-    /* ==========================================================================
-       6. COMPONENT: TitaniumSplitRing.module.scss (Frame 2 — Hybrid Split & Pay)
-       Fuses Titanium Pro Radial Ring with Sequoia Glass Bento Metric Sub-Tiles
-       ========================================================================== */
-    .wallet-ring-card {
-      background: var(--sys-bg-elevated);
-      backdrop-filter: saturate(190%) blur(28px);
-      -webkit-backdrop-filter: saturate(190%) blur(28px);
-      border-radius: var(--radius-squircle-xl);
-      border: 0.5px solid var(--sys-hairline-strong);
-      box-shadow: var(--sys-shadow-ambient);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .wallet-ring-card__glow {
-      position: absolute;
-      width: 190px;
-      height: 190px;
-      top: 18px;
-      border-radius: 50%;
-      background: conic-gradient(from 90deg, #10B981, #0A84FF, #D4C5B1, #F59E0B, #10B981);
-      filter: blur(34px);
-      opacity: var(--ring-glow-opacity);
-      pointer-events: none;
-    }
-
-    .wallet-ring-viewport {
-      position: relative;
-      width: 174px;
-      height: 174px;
-      display: grid;
-      place-items: center;
-      margin: 2px 0 10px;
-    }
-
-    .wallet-ring-svg {
-      width: 100%;
-      height: 100%;
-      transform: rotate(-90deg);
-    }
-
-    .wallet-ring-track {
-      fill: none;
-      stroke: var(--sys-bg-grouped);
-      stroke-width: 14;
-    }
-
-    .wallet-ring-settled {
-      fill: none;
-      stroke: var(--sys-green);
-      stroke-width: 14;
-      stroke-linecap: round;
-      transition: stroke-dashoffset 0.55s var(--ease-spring);
-    }
-
-    .wallet-ring-share {
-      fill: none;
-      stroke: url(#titaniumSequoiaGradient);
-      stroke-width: 14;
-      stroke-linecap: round;
-      transition: stroke-dashoffset 0.55s var(--ease-spring), stroke-dasharray 0.55s var(--ease-spring);
-    }
-
-    .wallet-ring-center {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 16px;
-    }
-
-    .wallet-ring-center__eyebrow {
-      font-size: 0.62rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--sys-titanium-champagne);
-    }
-
-    .wallet-ring-center__amount {
-      font-size: 1.45rem;
-      font-weight: 700;
-      margin: 1px 0;
-    }
-
-    .wallet-ring-center__sub {
-      font-size: 0.68rem;
-      color: var(--sys-label-secondary);
-    }
-
-    /* Sequoia 3-Column Bento Sub-Tiles inside Split Card */
-    .split-bento-trio {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-bottom: 10px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .split-bento-cell {
-      background: var(--sys-bg-bento-tile);
-      border: 0.5px solid var(--sys-hairline);
-      border-radius: 10px;
-      padding: 6px 8px;
-      text-align: center;
-      box-shadow: inset 0 0.5px 0 0 var(--sys-glass-specular);
-    }
-
-    .split-bento-cell__lbl {
-      font-size: 0.6rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: var(--sys-label-secondary);
-      display: block;
-    }
-
-    .split-bento-cell__val {
-      font-size: 0.76rem;
-      font-weight: 700;
-    }
-
-    /* Sliding Glass Segmented Control */
-    .ios-segmented {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      background: var(--sys-bg-grouped);
-      padding: 3px;
-      border-radius: var(--radius-squircle-sm);
-      border: 0.5px solid var(--sys-hairline-strong);
-    }
-
-    .ios-segmented__btn {
-      height: 30px;
-      border: none;
-      background: transparent;
-      border-radius: 9px;
-      font-size: 0.74rem;
-      font-weight: 500;
-      color: var(--sys-label-secondary);
-      cursor: pointer;
-      transition: all 0.2s var(--ease-spring);
-    }
-
-    .ios-segmented__btn--active {
-      background: var(--sys-bg-elevated);
-      color: var(--sys-label-primary);
-      font-weight: 600;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), inset 0 0.5px 0 0 var(--sys-glass-specular);
-    }
-
-    .split-math-banner {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 10px;
-      padding-top: 9px;
-      border-top: 0.5px solid var(--sys-hairline);
-      font-size: 0.73rem;
-    }
-
-    /* Check Line Items Card */
-    .wallet-check-list {
-      background: var(--sys-bg-elevated);
-      backdrop-filter: saturate(190%) blur(24px);
-      -webkit-backdrop-filter: saturate(190%) blur(24px);
-      border-radius: var(--radius-squircle-lg);
-      border: 0.5px solid var(--sys-hairline-strong);
-      overflow: hidden;
-      box-shadow: var(--sys-shadow-ambient);
-    }
-
-    .wallet-check-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 13px;
-      border-bottom: 0.5px solid var(--sys-hairline);
-      font-size: 0.78rem;
-      cursor: pointer;
-      transition: background-color 0.15s ease;
-    }
-
-    .wallet-check-row:last-child {
-      border-bottom: none;
-    }
-
-    .wallet-check-row--settled {
-      opacity: 0.48;
-      pointer-events: none;
-    }
-
-    .wallet-check-row__left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .settled-chip {
-      font-size: 0.62rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 2px 7px;
-      border-radius: var(--radius-pill);
-      background: var(--sys-green-tint);
-      color: var(--sys-green);
-      border: 0.5px solid rgba(16, 185, 129, 0.3);
-    }
-
-    /* Tip Pill Bar */
-    .wallet-tip-card {
-      background: var(--sys-bg-elevated);
-      backdrop-filter: saturate(190%) blur(24px);
-      -webkit-backdrop-filter: saturate(190%) blur(24px);
-      border-radius: var(--radius-squircle-lg);
-      border: 0.5px solid var(--sys-hairline-strong);
-      padding: 11px 13px;
-      box-shadow: var(--sys-shadow-ambient);
-    }
-
-    .wallet-tip-card__top {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.74rem;
-      font-weight: 600;
-      margin-bottom: 7px;
-    }
-
-    .wallet-tip-pills {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-    }
-
-    .wallet-tip-pill {
-      height: 32px;
-      border-radius: var(--radius-pill);
-      border: 0.5px solid var(--sys-hairline-strong);
-      background: var(--sys-bg-bento-tile);
-      color: var(--sys-label-primary);
-      font-size: 0.74rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.18s var(--ease-spring);
-    }
-
-    .wallet-tip-pill--active {
-      background: var(--sys-accent-blue);
-      color: #FFFFFF;
-      border-color: var(--sys-accent-blue);
-      box-shadow: 0 0 12px var(--sys-accent-blue-tint);
-    }
-
-    /* ==========================================================================
-       7. COMPONENT: PosVerificationSheet.module.scss (Frame 3 — 3-Stage Result)
-       ========================================================================== */
-    .result-hero-sheet {
-      background: var(--sys-bg-elevated);
-      backdrop-filter: saturate(190%) blur(28px);
-      -webkit-backdrop-filter: saturate(190%) blur(28px);
-      border-radius: var(--radius-squircle-xl);
-      border: 0.5px solid var(--sys-hairline-strong);
-      padding: 20px 16px;
-      text-align: center;
-      box-shadow: var(--sys-shadow-ambient);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .result-hero-sheet__orb {
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-size: 1.45rem;
-      font-weight: 700;
-      margin-bottom: 2px;
-      transition: all 0.3s var(--ease-spring);
-    }
-
-    .result-hero-sheet__orb--settled {
-      background: var(--sys-green-tint);
-      color: var(--sys-green);
-      border: 1px solid var(--sys-green);
-      box-shadow: 0 0 24px var(--sys-green-tint);
-    }
-
-    .result-hero-sheet__orb--pending {
-      background: var(--sys-amber-tint);
-      color: var(--sys-amber);
-      border: 1px solid var(--sys-amber);
-      box-shadow: 0 0 24px var(--sys-amber-tint);
-    }
-
-    .result-hero-sheet__orb--exception {
-      background: var(--sys-red-tint);
-      color: var(--sys-red);
-      border: 1px solid var(--sys-red);
-      box-shadow: 0 0 24px var(--sys-red-tint);
-    }
-
-    .timeline-card {
-      background: var(--sys-bg-elevated);
-      backdrop-filter: saturate(190%) blur(24px);
-      -webkit-backdrop-filter: saturate(190%) blur(24px);
-      border-radius: var(--radius-squircle-lg);
-      border: 0.5px solid var(--sys-hairline-strong);
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 13px;
-      box-shadow: var(--sys-shadow-ambient);
-    }
-
-    .timeline-node {
-      display: flex;
-      align-items: flex-start;
-      gap: 11px;
-      font-size: 0.78rem;
-    }
-
-    .timeline-node__badge {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-size: 0.7rem;
-      font-weight: 700;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .timeline-node__badge--done {
-      background: var(--sys-green);
-      color: #FFFFFF;
-    }
-
-    .timeline-node__badge--pending {
-      background: var(--sys-amber);
-      color: #000000;
-    }
-
-    .timeline-node__badge--exception {
-      background: var(--sys-red);
-      color: #FFFFFF;
-    }
-
-    .apple-receipt-sheet {
-      background: var(--sys-bg-bento-tile);
-      backdrop-filter: saturate(180%) blur(20px);
-      border-radius: var(--radius-squircle-lg);
-      border: 0.5px solid var(--sys-hairline-strong);
-      padding: 13px 15px;
-      font-size: 0.74rem;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      box-shadow: var(--sys-shadow-ambient);
-    }
-
-    .apple-receipt-sheet__row {
-      display: flex;
-      justify-content: space-between;
-      color: var(--sys-label-secondary);
-    }
-
-    .apple-receipt-sheet__row strong {
-      color: var(--sys-titanium-champagne);
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-    }
-
-    /* ==========================================================================
-       8. TAB 2: TITANIUM SEQUOIA MERCHANT PORTAL (MerchantSequoiaBento.module.scss)
-       ========================================================================== */
-    .sequoia-window {
-      background: var(--sys-glass-surface);
-      backdrop-filter: saturate(190%) blur(32px);
-      -webkit-backdrop-filter: saturate(190%) blur(32px);
-      border-radius: var(--radius-squircle-xl);
-      border: 0.5px solid var(--sys-hairline-strong);
-      box-shadow: var(--sys-shadow-floating), inset 0 0.5px 0 0 var(--sys-glass-specular);
-      display: grid;
-      grid-template-columns: 236px 1fr;
-      overflow: hidden;
-      min-height: 720px;
-    }
-
-    @media (max-width: 980px) {
-      .sequoia-window {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .sequoia-sidebar {
-      background: var(--sys-bg-grouped);
-      border-right: 0.5px solid var(--sys-hairline-strong);
-      padding: 20px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .traffic-lights {
-      display: flex;
-      gap: 8px;
-      padding: 4px 10px 18px;
-    }
-
-    .traffic-light {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-
-    .sequoia-nav-item {
-      border: none;
-      background: transparent;
-      color: var(--sys-label-secondary);
-      font-size: 0.82rem;
-      font-weight: 500;
-      padding: 9px 12px;
-      border-radius: 10px;
-      text-align: left;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: all 0.18s ease;
-    }
-
-    .sequoia-nav-item--active {
-      background: var(--sys-bg-elevated);
-      color: var(--sys-label-primary);
-      font-weight: 600;
-      border: 0.5px solid var(--sys-hairline-strong);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18), inset 0 0.5px 0 0 var(--sys-glass-specular);
-    }
-
-    .sequoia-main {
-      padding: 26px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .bento-metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    @media (max-width: 820px) {
-      .bento-metrics-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .bento-card {
-      background: var(--sys-bg-elevated);
-      backdrop-filter: saturate(190%) blur(24px);
-      -webkit-backdrop-filter: saturate(190%) blur(24px);
-      border-radius: var(--radius-squircle-lg);
-      border: 0.5px solid var(--sys-hairline-strong);
-      box-shadow: var(--sys-shadow-ambient);
-      padding: 18px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .bento-card__eyebrow {
-      font-size: 0.74rem;
-      font-weight: 600;
-      color: var(--sys-label-secondary);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .bento-card__metric {
-      font-size: 1.85rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-    }
-
-    .bento-middle-grid {
-      display: grid;
-      grid-template-columns: 1.35fr 1fr;
-      gap: 16px;
-    }
-
-    @media (max-width: 1080px) {
-      .bento-middle-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Interactive 12-Table Floor Map */
-    .table-map-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 11px;
-      margin-top: 6px;
-    }
-
-    @media (max-width: 640px) {
-      .table-map-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    .table-orb {
-      aspect-ratio: 1;
-      border-radius: 18px;
-      border: 1px solid var(--sys-hairline-strong);
-      background: var(--sys-bg-bento-tile);
-      color: var(--sys-label-primary);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.84rem;
-      transition: transform 0.2s var(--ease-spring), box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-
-    .table-orb:hover {
-      transform: translateY(-2px) scale(1.04);
-    }
-
-    .table-orb--selected {
-      outline: 2px solid var(--sys-titanium-champagne);
-      outline-offset: 2px;
-    }
-
-    .table-orb--paid {
-      background: var(--sys-green-tint);
-      border-color: var(--sys-green);
-      color: var(--sys-green);
-      box-shadow: 0 0 18px var(--sys-green-tint);
-    }
-
-    .table-orb--syncing {
-      background: var(--sys-amber-tint);
-      border-color: var(--sys-amber);
-      color: var(--sys-amber);
-      box-shadow: 0 0 18px var(--sys-amber-tint);
-    }
-
-    /* Printable A6 Table Stand Inspector Card (PrintableQrStand.module.scss) */
-    .qr-stand-inspector {
-      display: grid;
-      grid-template-columns: 112px 1fr;
-      gap: 16px;
-      align-items: center;
-      background: var(--sys-bg-bento-tile);
-      border-radius: var(--radius-squircle-md);
-      border: 0.5px solid var(--sys-hairline-strong);
-      padding: 14px;
-    }
-
-    .qr-stand-plaque {
-      background: #FFFFFF;
-      color: #090A0D;
-      border-radius: 12px;
-      padding: 8px;
-      text-align: center;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-      border: 1.5px solid #D4C5B1;
-    }
-
-    /* Reconciliation Table */
-    .hig-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-    }
-
-    .hig-table th,
-    .hig-table td {
-      padding: 10px 12px;
-      text-align: left;
-      border-bottom: 0.5px solid var(--sys-hairline);
-    }
-
-    .hig-table th {
-      font-size: 0.7rem;
-      color: var(--sys-label-secondary);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    /* ==========================================================================
-       9. TAB 3: MODULAR .module.scss CODE EXPLORER (9 FILES)
-       ========================================================================== */
-    .scss-workbench {
-      background: var(--sys-bg-elevated);
-      backdrop-filter: saturate(190%) blur(28px);
-      border-radius: var(--radius-squircle-xl);
-      border: 0.5px solid var(--sys-hairline-strong);
-      box-shadow: var(--sys-shadow-floating);
-      display: grid;
-      grid-template-columns: 330px 1fr;
-      overflow: hidden;
-      min-height: 660px;
-    }
-
-    @media (max-width: 900px) {
-      .scss-workbench {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .scss-file-list {
-      background: var(--sys-bg-grouped);
-      border-right: 0.5px solid var(--sys-hairline-strong);
-      padding: 18px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .scss-file-list__group {
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--sys-titanium-champagne);
-      padding: 8px 10px 4px;
-    }
-
-    .scss-file-btn {
-      border: none;
-      background: transparent;
-      color: var(--sys-label-secondary);
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      padding: 9px 12px;
-      border-radius: 10px;
-      text-align: left;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: all 0.15s ease;
-    }
-
-    .scss-file-btn:hover {
-      background: var(--sys-bg-bento-tile);
-      color: var(--sys-label-primary);
-    }
-
-    .scss-file-btn--active {
-      background: var(--sys-accent-blue);
-      color: #FFFFFF;
-      font-weight: 600;
-    }
-
-    .scss-viewer-pane {
-      background: #0B0C10;
-      color: #F5F5F7;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .scss-viewer-pane__bar {
-      padding: 14px 20px;
-      background: #13151C;
-      border-bottom: 1px solid rgba(212, 197, 177, 0.14);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-    }
-
-    .hig-action-btn {
-      border: 0.5px solid rgba(255, 255, 255, 0.25);
-      border-radius: var(--radius-pill);
-      padding: 7px 14px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-      background: var(--sys-accent-blue);
-      color: #FFFFFF;
-      transition: transform 0.15s var(--ease-spring);
-    }
-
-    .hig-action-btn--secondary {
-      background: rgba(212, 197, 177, 0.16);
-      color: var(--sys-label-primary);
-    }
-
-    .hig-action-btn:active {
-      transform: scale(0.96);
-    }
-
-    .scss-code-block {
-      padding: 22px;
-      font-family: var(--font-mono);
-      font-size: 0.79rem;
-      line-height: 1.65;
-      overflow-x: auto;
-      white-space: pre;
-      flex: 1;
-    }
-
-    /* ==========================================================================
-       10. SIDE-BY-SIDE LIGHT vs. DARK COMPARISON STAGE
-       ========================================================================== */
-    .compare-banner {
-      display: none;
-      margin-bottom: 22px;
-      padding: 14px 20px;
-      border-radius: var(--radius-squircle-lg);
-      background: var(--sys-glass-surface);
-      backdrop-filter: saturate(190%) blur(24px);
-      -webkit-backdrop-filter: saturate(190%) blur(24px);
-      border: 0.5px solid var(--sys-hairline-strong);
-      box-shadow: var(--sys-shadow-ambient);
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .compare-banner--visible {
-      display: flex;
-    }
-
-    .compare-split-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 28px;
-      align-items: start;
-    }
-
-    @media (max-width: 1100px) {
-      .compare-split-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .compare-theme-pane {
-      border-radius: 34px;
-      padding: 24px;
-      background-color: var(--sys-bg-canvas);
-      background-image: var(--sys-bg-mesh);
-      color: var(--sys-label-primary);
-      border: 1px solid var(--sys-hairline-strong);
-      box-shadow: var(--sys-shadow-floating);
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .compare-theme-pane__header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding-bottom: 12px;
-      border-bottom: 0.5px solid var(--sys-hairline-strong);
-    }
-
-    .compare-token-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .compare-token-pill {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      padding: 4px 9px;
-      border-radius: var(--radius-pill);
-      background: var(--sys-bg-bento-tile);
-      border: 0.5px solid var(--sys-hairline-strong);
-      color: var(--sys-label-primary);
-    }
-  </style>
-</head>
-<body>
-
-  <!-- ========================================================================
-       1. TITANIUM SEQUOIA FROSTED TOP CONTROL BAR (GlassNavigationBar)
-       ======================================================================== -->
-  <header class="hig-topbar">
-    <div class="hig-topbar__inner">
-      <div class="hig-brand">
-        <div class="hig-brand__glyph">GW</div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Groundwork — A better end to every meal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/master.css" />
+    <link rel="stylesheet" href="/pitch.css" />
+    <link rel="stylesheet" href="/glass.css" />
+  </head>
+  <body>
+    <header class="pitch-header">
+      <a class="hig-brand" href="#opportunity" aria-label="Groundwork home"
+        ><div class="hig-brand__glyph">GW</div>
+        <strong>Groundwork</strong></a
+      >
+      <span class="header-chapter" id="headerChapter">Opportunity</span>
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        aria-label="Open navigation menu"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        aria-controls="navigationDialog"
+      >
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M5 8h14M5 16h14"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+    </header>
+    <dialog
+      class="navigation-sheet"
+      id="navigationDialog"
+      aria-labelledby="navigationTitle"
+    >
+      <div class="sheet-heading">
         <div>
-          <div class="hig-brand__title">
-            <span>Groundwork QR Order &amp; Pay</span>
-            <span class="hig-brand__badge" id="activeThemeHeaderBadge">☀ Silver Sequoia Frost (Light)</span>
-          </div>
-          <div class="hig-brand__subtitle">Apple HIG Titanium + macOS Sequoia Vibrancy • Light &amp; Dark Modes • Zero Tailwind</div>
+          <p class="sheet-eyebrow">GROUNDWORK</p>
+          <h2 id="navigationTitle">Explore.</h2>
         </div>
-      </div>
-
-      <div class="hig-topbar__controls">
-        <!-- Prominent Sun / Moon / Side-by-Side Compare Switch -->
-        <div class="segmented-pill-bar" role="group" aria-label="Titanium Sequoia Mode Switcher">
-          <button class="segmented-pill-bar__btn segmented-pill-bar__btn--active" id="modeBtnLight" data-master-event-0="true">
-            <span>☀ Light Mode</span>
-            <span style="font-size:0.66rem; opacity:0.75;">(Silver Frost)</span>
-          </button>
-          <button class="segmented-pill-bar__btn" id="modeBtnDark" data-master-event-1="true">
-            <span>☾ Dark Mode</span>
-            <span style="font-size:0.66rem; opacity:0.75;">(Dark Titanium)</span>
-          </button>
-          <button class="segmented-pill-bar__btn" id="modeBtnCompare" data-master-event-2="true">
-            <span>◐ Side-by-Side Compare</span>
-          </button>
-        </div>
-
-        <!-- View Tabs -->
-        <div class="segmented-pill-bar" role="tablist">
-          <button class="segmented-pill-bar__btn segmented-pill-bar__btn--active" data-tab="guest" data-master-event-3="true">
-            1. Guest iOS (3 Screens)
-          </button>
-          <button class="segmented-pill-bar__btn" data-tab="compare" data-master-event-4="true">
-            2. Light vs. Dark Compare
-          </button>
-          <button class="segmented-pill-bar__btn" data-tab="sequoia" data-master-event-5="true">
-            3. Merchant Bento Portal
-          </button>
-          <button class="segmented-pill-bar__btn" data-tab="scss" data-master-event-6="true">
-            4. .module.scss Files (9)
-          </button>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- ========================================================================
-       MAIN WORKSPACE
-       ======================================================================== -->
-  <main class="hig-workspace">
-    <div class="compare-banner compare-banner--visible" aria-label="Preview status">
-      <div style="font-size:0.8rem;line-height:1.5"><strong>Titanium Sequoia Master · design preview</strong><br><span style="color:var(--sys-label-secondary)">Sample data. Ordering, Apple Pay, and POS confirmations below are illustrative.</span></div>
-      <a class="hig-action-btn" id="workingBackendLink" href="/sandbox.html#demo" style="text-decoration:none">Open working backend demo →</a>
-    </div>
-
-    <!-- Quick Mode Indicator Banner -->
-    <div class="compare-banner compare-banner--visible" id="topThemeBanner">
-      <div style="display:flex; align-items:center; gap:10px; font-size:0.8rem;">
-        <span style="font-weight:700;" id="bannerModeTitle">Active Mode: ☀ Silver Sequoia Frost (data-theme="sequoia-light")</span>
-        <span style="color:var(--sys-label-secondary);" id="bannerModeSpecs">
-          Canvas #F2F4F8 • Frosted Glass rgba(255,255,255,0.78) • 0.5px Machined Silver Hairlines • Ink-Black  Pay CTAs
-        </span>
-      </div>
-      <div style="display:flex; gap:8px;">
-        <button class="hig-action-btn" data-master-event-7="true">
-          Swap Light ⇄ Dark
-        </button>
-        <button class="hig-action-btn hig-action-btn--secondary" data-master-event-8="true">
-          Open Side-by-Side Compare →
+        <button
+          class="sheet-close"
+          id="closeNavigation"
+          aria-label="Close navigation menu"
+          autofocus
+        >
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="m7 7 10 10M17 7 7 17"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
         </button>
       </div>
-    </div>
-
-    <!-- ======================================================================
-         TAB 1: THREE INTERACTIVE IPHONE 16 PRO FRAMES SIDE-BY-SIDE
-         ====================================================================== -->
-    <section id="tab-guest" class="hig-tab-panel hig-tab-panel--active">
-      <div class="iphone-stage-grid">
-
-        <!-- ------------------------------------------------------------------
-             IPHONE 1: Mode A — Scan -> Order -> Pay (/t/k9x2m8/menu)
-             ------------------------------------------------------------------ -->
-        <div class="iphone-column">
-          <div class="iphone-column__caption">
-            <span class="iphone-column__tag">Mode A • /t/k9x2m8/menu (Sequoia Glass Bento)</span>
-            <button class="iphone-column__code-btn" data-master-event-9="true">
-              MenuGlassBentoCard.module.scss →
+      <nav class="sheet-navigation" aria-label="Presentation chapters">
+        <button data-slide="0">
+          <span>01</span><b>Opportunity</b
+          ><span class="menu-current" aria-hidden="true"></span>
+        </button>
+        <button data-slide="1">
+          <span>02</span><b>Experience</b
+          ><span class="menu-current" aria-hidden="true"></span>
+        </button>
+        <button data-slide="2">
+          <span>03</span><b>Operations</b
+          ><span class="menu-current" aria-hidden="true"></span>
+        </button>
+        <button data-slide="3">
+          <span>04</span><b>Business</b
+          ><span class="menu-current" aria-hidden="true"></span>
+        </button>
+        <button data-slide="4">
+          <span>05</span><b>The pilot</b
+          ><span class="menu-current" aria-hidden="true"></span>
+        </button>
+      </nav>
+      <div class="sheet-section">
+        <p class="sheet-eyebrow">TRY THE GUEST EXPERIENCE</p>
+        <div
+          class="sheet-journeys"
+          role="group"
+          aria-label="Choose a guest journey"
+        >
+          <button data-journey="order" aria-pressed="true">
+            <span>Order &amp; pay</span
+            ><small>Menu, basket, confirmation</small></button
+          ><button data-journey="pay" aria-pressed="false">
+            <span>Pay existing bill</span
+            ><small>Choose a share and settle up</small>
+          </button>
+        </div>
+      </div>
+      <div class="sheet-tools">
+        <button id="theme" aria-label="Switch to dark mode">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z"
+              stroke="currentColor"
+              stroke-width="1.4"
+            /></svg
+          ><span id="themeLabel">Dark appearance</span></button
+        ><button id="present">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-linecap="round"
+            /></svg
+          ><span>Present</span>
+        </button>
+      </div>
+    </dialog>
+    <main>
+      <section
+        class="slide"
+        id="opportunity"
+        aria-labelledby="opportunity-title"
+      >
+        <div class="split-layout">
+          <div class="chapter-copy">
+            <p class="kicker">01 / THE OPPORTUNITY</p>
+            <h1 id="opportunity-title">
+              The meal is finished.<br /><span>The waiting shouldn’t be.</span>
+            </h1>
+            <p class="lead">
+              Groundwork lets guests order, split and pay from their phone—while
+              the restaurant keeps its existing till.
+            </p>
+            <button class="cta" data-go="1">
+              Try the guest experience <span>→</span>
             </button>
+            <p class="subtle">
+              No app download. One connected table experience.
+            </p>
           </div>
-
-          <div class="iphone-chassis">
-            <div class="iphone-screen">
-              <div>
-                <!-- Sticky Sequoia Frosted Header -->
+          <div class="opportunity-visual">
+            <div class="moment">
+              <span class="moment-index">TODAY</span>
+              <h3>“Could we get the bill?”</h3>
+              <div class="wait-steps">
+                <span>Ask for bill</span><i>→</i><span>Wait for terminal</span
+                ><i>→</i><span>Work out the split</span>
+              </div>
+            </div>
+            <div class="moment future">
+              <span class="moment-index">WITH GROUNDWORK</span>
+              <h3>Leave when you’re ready.</h3>
+              <div class="path">
+                <div>
+                  <b>01</b><strong>Scan</strong
+                  ><small>Your table. Your bill.</small>
+                </div>
+                <div>
+                  <b>02</b><strong>Choose</strong
+                  ><small>Your share and tip.</small>
+                </div>
+                <div>
+                  <b>03</b><strong>Pay</strong
+                  ><small>Both sides confirmed.</small>
+                </div>
+              </div>
+              <div class="benefit">
+                <span class="check">✓</span> A better guest experience, built
+                around the restaurant.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-note">
+          <strong>The first customer</strong
+          ><span
+            >Independent and small-group restaurants on one supported till system in
+            Gauteng.</span
+          >
+        </div>
+      </section>
+      <section
+        class="slide"
+        id="experience"
+        aria-labelledby="experience-title"
+        hidden
+      >
+        <div class="split-layout experience-layout">
+          <div class="chapter-copy">
+            <p class="kicker">02 / THE GUEST EXPERIENCE</p>
+            <h2 id="experience-title">Your table.<br />Your choice.</h2>
+            <p class="lead">
+              Order from your phone, or settle a bill your waiter has already
+              opened. Try both journeys at The Olive Room.
+            </p>
+            <p class="journey-label" id="journeyLabel">Order &amp; pay</p>
+            <ol class="demo-steps">
+              <li data-step-marker="0">
+                <span>1</span>
+                <div>
+                  <b>Scan the table</b>
+                  <p>The correct bill opens in the browser.</p>
+                </div>
+              </li>
+              <li data-step-marker="1">
+                <span>2</span>
+                <div>
+                  <b>Choose a share</b>
+                  <p>Split the bill and add an optional tip.</p>
+                </div>
+              </li>
+              <li data-step-marker="2">
+                <span>3</span>
+                <div>
+                  <b>Get confirmation</b>
+                  <p>Payment and till update are checked separately.</p>
+                </div>
+              </li>
+            </ol>
+            <button class="quiet" id="restart">↺ Restart walkthrough</button>
+          </div>
+          <div class="device-wrap">
+            <div class="iphone-chassis">
+              <div class="iphone-screen">
                 <header class="ios-statusbar">
                   <div class="ios-statusbar__top">
                     <span>9:41</span>
                     <div class="dynamic-island">
                       <span class="dynamic-island__dot"></span>
-                      <span style="font-size:0.58rem; color:#D4C5B1; font-family:var(--font-mono);">PILOT SYNC</span>
                     </div>
-                    <span>5G • 100%</span>
+                    <span>5G</span>
                   </div>
                   <div class="ios-navbar">
-                    <span class="ios-navbar__brand">THE GRILLHOUSE</span>
-                    <span class="ios-navbar__table-pill">Table 12 • Active</span>
-                    <span class="ios-navbar__bag" id="navBagCount">2</span>
+                    <span class="ios-navbar__brand">THE OLIVE ROOM</span
+                    ><span class="ios-navbar__table-pill">Table 07</span>
                   </div>
                 </header>
-
-                <!-- Scrollable Menu Content -->
-                <div class="ios-content-scroll">
-                  <!-- Sequoia Glass Bento Strip inside Mobile View -->
-                  <div class="sequoia-guest-bento-strip">
-                    <div class="sequoia-mini-tile">
-                      <span class="sequoia-mini-tile__label">POS Price Source</span>
-                      <span class="sequoia-mini-tile__value">
-                        <span style="color:var(--sys-green);">●</span> Rev #412 (15% VAT)
-                      </span>
-                    </div>
-                    <div class="sequoia-mini-tile">
-                      <span class="sequoia-mini-tile__label">Kitchen Routing</span>
-                      <span class="sequoia-mini-tile__value">Held Order Flow</span>
-                    </div>
-                  </div>
-
-                  <!-- Culinary Hero Card -->
-                  <article class="hero-dish-card">
-                    <div class="hero-dish-card__media">
-                      <img
-                        class="hero-dish-card__img"
-                        src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=85"
-                        alt="The Groundwork Wagyu Burger"
-                        data-master-event-10="true"
-                      />
-                      <span class="hero-dish-card__price-tag zar-tabular">R 185.00</span>
-                    </div>
-
-                    <div class="hero-dish-card__body">
-                      <div>
-                        <h3 class="hero-dish-card__title">The Groundwork Wagyu Burger</h3>
-                        <p class="hero-dish-card__desc">
-                          200g Karoo Wagyu patty, black truffle aioli, 18-month aged white cheddar, toasted brioche, hand-cut skin-on fries.
-                        </p>
-                      </div>
-
-                      <!-- Interactive Modifiers -->
-                      <div class="modifier-list">
-                        <div class="modifier-pill modifier-pill--selected" data-master-event-11="true">
-                          <div class="modifier-pill__left">
-                            <span class="ios-check-circle">✓</span>
-                            <span>Double Wagyu Patty</span>
-                          </div>
-                          <span class="zar-tabular" style="font-weight:600;">+R 75.00</span>
-                        </div>
-
-                        <div class="modifier-pill" data-master-event-12="true">
-                          <div class="modifier-pill__left">
-                            <span class="ios-check-circle">✓</span>
-                            <span>Sub Truffle Parmesan Fries</span>
-                          </div>
-                          <span class="zar-tabular" style="font-weight:600;">+R 30.00</span>
-                        </div>
-
-                        <div class="modifier-pill" data-master-event-13="true">
-                          <div class="modifier-pill__left">
-                            <span class="ios-check-circle">✓</span>
-                            <span>Aged Karoo Boerewors Side</span>
-                          </div>
-                          <span class="zar-tabular" style="font-weight:600;">+R 18.00</span>
-                        </div>
-                      </div>
-
-                      <div class="dish-card-footer">
-                        <span class="pos-origin-chip">● POS_ITEM_101 IN STOCK</span>
-                        <div class="ios-stepper">
-                          <button class="ios-stepper__btn" data-master-event-14="true" aria-label="Decrease quantity">−</button>
-                          <span class="ios-stepper__qty zar-tabular" id="wagyuQtyDisplay">1</span>
-                          <button class="ios-stepper__btn" data-master-event-15="true" aria-label="Increase quantity">+</button>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-
-                  <!-- Secondary Artisanal Dish Card -->
-                  <article class="compact-dish-card">
-                    <div>
-                      <h4 style="font-size: 0.9rem; font-weight: 600;">Franschhoek Trout Crudo</h4>
-                      <p style="font-size: 0.74rem; color: var(--sys-label-secondary); margin: 2px 0 8px;">
-                        Citrus ponzu, avo mousse, crispy capers
-                      </p>
-                      <div style="display:flex; align-items:center; justify-content:space-between;">
-                        <span class="zar-tabular" style="font-weight:600; font-size:0.84rem;">R 135.00</span>
-                        <div class="ios-stepper">
-                          <button class="ios-stepper__btn" data-master-event-16="true" aria-label="Decrease trout quantity">−</button>
-                          <span class="ios-stepper__qty zar-tabular" id="sideQtyDisplay">1</span>
-                          <button class="ios-stepper__btn" data-master-event-17="true" aria-label="Increase trout quantity">+</button>
-                        </div>
-                      </div>
-                    </div>
-                    <img
-                      class="compact-dish-card__thumb"
-                      src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80"
-                      alt="Franschhoek Trout Crudo"
-                      data-master-event-18="true"
-                    />
-                  </article>
-                </div>
-              </div>
-
-              <!-- Floating Sequoia Glass Apple Pay Dock -->
-              <div class="ios-floating-dock">
-                <div class="apple-pay-bar">
-                  <div class="apple-pay-bar__meta">
-                    <span class="apple-pay-bar__label" id="modeACartSummary">2 Items • Held Order Flow</span>
-                    <span class="apple-pay-bar__total zar-tabular" id="modeACartTotal">R 395.00</span>
-                  </div>
-                  <button class="apple-pay-cta" data-master-event-19="true">
-                    <span> Pay</span>
-                    <span class="zar-tabular" id="modeAPayBtnText">R 395.00</span>
-                  </button>
-                </div>
+                <div id="phoneContent"></div>
               </div>
             </div>
+            <span class="device-caption"
+              >Interactive illustration · no real payment</span
+            >
           </div>
         </div>
-
-        <!-- ------------------------------------------------------------------
-             IPHONE 2: Mode B — Titanium Ring + Sequoia Bento Split (/t/k9x2m8/bill)
-             ------------------------------------------------------------------ -->
-        <div class="iphone-column">
-          <div class="iphone-column__caption">
-            <span class="iphone-column__tag">Mode B • /t/k9x2m8/bill (Titanium Ring + Bento)</span>
-            <button class="iphone-column__code-btn" data-master-event-20="true">
-              TitaniumSplitRing.module.scss →
-            </button>
-          </div>
-
-          <div class="iphone-chassis">
-            <div class="iphone-screen">
+      </section>
+      <section
+        class="slide"
+        id="operations"
+        aria-labelledby="operations-title"
+        hidden
+      >
+        <div class="section-intro">
+          <p class="kicker">03 / THE RESTAURANT EXPERIENCE</p>
+          <h2 id="operations-title">Confidence on both sides of the table.</h2>
+          <p class="lead">
+            A guest’s payment is only complete when the restaurant can account
+            for it.
+          </p>
+        </div>
+        <div class="operator-layout">
+          <div class="operator-board">
+            <div class="board-header">
               <div>
-                <header class="ios-statusbar">
-                  <div class="ios-statusbar__top">
-                    <span>9:41</span>
-                    <div class="dynamic-island">
-                      <span class="dynamic-island__dot"></span>
-                      <span style="font-size:0.58rem; color:#D4C5B1; font-family:var(--font-mono);">CHECK #804</span>
-                    </div>
-                    <span>5G • 100%</span>
-                  </div>
-                  <div class="ios-navbar">
-                    <span class="ios-navbar__brand">THE GRILLHOUSE</span>
-                    <span class="ios-navbar__table-pill">Table 12 • Rev #4</span>
-                    <span class="zar-tabular" style="font-size:0.75rem; font-weight:700;">R 600.00</span>
-                  </div>
-                </header>
-
-                <div class="ios-content-scroll">
-                  <!-- Hybrid Titanium Radial Gauge + Sequoia Bento Trio -->
-                  <div class="wallet-ring-card">
-                    <div class="wallet-ring-card__glow"></div>
-
-                    <div class="wallet-ring-viewport">
-                      <svg class="wallet-ring-svg" viewBox="0 0 200 200">
-                        <defs>
-                          <linearGradient id="titaniumSequoiaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#0A84FF" />
-                            <stop offset="50%" stop-color="#10B981" />
-                            <stop offset="100%" stop-color="#D4C5B1" />
-                          </linearGradient>
-                        </defs>
-                        <!-- Circumference for r=78 is ~490 -->
-                        <circle class="wallet-ring-track" cx="100" cy="100" r="78" />
-                        <!-- Already Settled Arc (R 175 / R 600 = 29.1% -> 142px of 490) -->
-                        <circle
-                          class="wallet-ring-settled"
-                          cx="100"
-                          cy="100"
-                          r="78"
-                          stroke-dasharray="490"
-                          stroke-dashoffset="348"
-                        />
-                        <!-- Dynamic Guest Share Arc -->
-                        <circle
-                          id="dynamicShareArc"
-                          class="wallet-ring-share"
-                          cx="100"
-                          cy="100"
-                          r="78"
-                          stroke-dasharray="490"
-                          stroke-dashoffset="348"
-                        />
-                      </svg>
-
-                      <div class="wallet-ring-center">
-                        <span class="wallet-ring-center__eyebrow">Your Allocation</span>
-                        <div class="wallet-ring-center__amount zar-tabular" id="ringCenterAmount">R 141.67</div>
-                        <div class="wallet-ring-center__sub zar-tabular" id="ringCenterSub">of R 425.00 open</div>
-                      </div>
-                    </div>
-
-                    <!-- Sequoia Glass 3-Tile Bento Strip inside Split Card -->
-                    <div class="split-bento-trio">
-                      <div class="split-bento-cell">
-                        <span class="split-bento-cell__lbl">Paid by Table</span>
-                        <span class="split-bento-cell__val zar-tabular" style="color:var(--sys-green);">R 175.00</span>
-                      </div>
-                      <div class="split-bento-cell">
-                        <span class="split-bento-cell__lbl">5m Intent Lock</span>
-                        <span class="split-bento-cell__val zar-tabular" style="color:var(--sys-amber);">04:48 TTL</span>
-                      </div>
-                      <div class="split-bento-cell">
-                        <span class="split-bento-cell__lbl">Your Share</span>
-                        <span class="split-bento-cell__val zar-tabular" id="bentoYourShareVal" style="color:var(--sys-accent-blue);">R 141.67</span>
-                      </div>
-                    </div>
-
-                    <!-- Sliding Sequoia Glass Segmented Control -->
-                    <div class="ios-segmented" role="tablist">
-                      <button class="ios-segmented__btn ios-segmented__btn--active" id="segEqual" data-master-event-21="true">
-                        Equal Split
-                      </button>
-                      <button class="ios-segmented__btn" id="segItem" data-master-event-22="true">
-                        By Item
-                      </button>
-                      <button class="ios-segmented__btn" id="segFull" data-master-event-23="true">
-                        Full Rem.
-                      </button>
-                    </div>
-
-                    <div class="split-math-banner">
-                      <span id="splitMathCaption" style="color:var(--sys-label-secondary);">
-                        R 425.00 ÷ 3 guests (rem 2c allocated)
-                      </span>
-                      <div class="ios-stepper" id="guestCountStepper">
-                        <button class="ios-stepper__btn" data-master-event-24="true" aria-label="Fewer guests">−</button>
-                        <span class="ios-stepper__qty zar-tabular" id="splitGuestsDisplay">3</span>
-                        <button class="ios-stepper__btn" data-master-event-25="true" aria-label="More guests">+</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Live POS Check Line Items -->
-                  <div class="wallet-check-list">
-                    <div class="wallet-check-row wallet-check-row--settled">
-                      <div class="wallet-check-row__left">
-                        <span class="settled-chip">Settled</span>
-                        <span>Starter Oysters (x6)</span>
-                      </div>
-                      <span class="zar-tabular">R 175.00</span>
-                    </div>
-
-                    <div class="wallet-check-row" data-master-event-26="true">
-                      <div class="wallet-check-row__left">
-                        <span class="ios-check-circle" id="lineCheck0" style="background:var(--sys-accent-blue); border-color:var(--sys-accent-blue);">✓</span>
-                        <span>300g Chalmar Ribeye Steak</span>
-                      </div>
-                      <span class="zar-tabular" style="font-weight:600;">R 285.00</span>
-                    </div>
-
-                    <div class="wallet-check-row" data-master-event-27="true">
-                      <div class="wallet-check-row__left">
-                        <span class="ios-check-circle" id="lineCheck1" style="background:var(--sys-accent-blue); border-color:var(--sys-accent-blue);">✓</span>
-                        <span>Truffle Parmesan Fries</span>
-                      </div>
-                      <span class="zar-tabular" style="font-weight:600;">R 55.00</span>
-                    </div>
-
-                    <div class="wallet-check-row" data-master-event-28="true">
-                      <div class="wallet-check-row__left">
-                        <span class="ios-check-circle" id="lineCheck2" style="background:var(--sys-accent-blue); border-color:var(--sys-accent-blue);">✓</span>
-                        <span>Kanonkop Pinotage (Glass)</span>
-                      </div>
-                      <span class="zar-tabular" style="font-weight:600;">R 85.00</span>
-                    </div>
-                  </div>
-
-                  <!-- Waiter Tip Selector -->
-                  <div class="wallet-tip-card">
-                    <div class="wallet-tip-card__top">
-                      <span>Add Waiter Tip (100% to Staff)</span>
-                      <span class="zar-tabular" id="walletTipReadout" style="color:var(--sys-titanium-champagne);">+R 14.17 (10%)</span>
-                    </div>
-                    <div class="wallet-tip-pills">
-                      <button class="wallet-tip-pill" data-master-event-29="true">0%</button>
-                      <button class="wallet-tip-pill wallet-tip-pill--active" data-master-event-30="true">10%</button>
-                      <button class="wallet-tip-pill" data-master-event-31="true">12%</button>
-                      <button class="wallet-tip-pill" data-master-event-32="true">15%</button>
-                    </div>
-                  </div>
-                </div>
+                <small>THE OLIVE ROOM</small>
+                <h3>Table 07</h3>
               </div>
-
-              <!-- Floating Sequoia Glass Apple Pay Bar -->
-              <div class="ios-floating-dock">
-                <div class="apple-pay-bar">
-                  <div class="apple-pay-bar__meta">
-                    <span class="apple-pay-bar__label">Share + Tip (ZAR)</span>
-                    <span class="apple-pay-bar__total zar-tabular" id="walletFinalTotal">R 155.84</span>
-                  </div>
-                  <button class="apple-pay-cta" data-master-event-33="true">
-                    <span> Pay</span>
-                    <span class="zar-tabular" id="walletPayBtnText">R 155.84</span>
-                  </button>
-                </div>
-              </div>
+              <span class="settled-chip" id="opsBadge">ILLUSTRATIVE VIEW</span>
             </div>
-          </div>
-        </div>
-
-        <!-- ------------------------------------------------------------------
-             IPHONE 3: 3-Stage Server-Verified Result Sheet (/t/k9x2m8/result)
-             ------------------------------------------------------------------ -->
-        <div class="iphone-column">
-          <div class="iphone-column__caption">
-            <span class="iphone-column__tag">Result • /t/k9x2m8/result (State Machine)</span>
-            <button class="iphone-column__code-btn" data-master-event-34="true">
-              PosVerificationSheet.module.scss →
-            </button>
-          </div>
-
-          <div class="iphone-chassis">
-            <div class="iphone-screen">
+            <div class="ops-metrics">
               <div>
-                <header class="ios-statusbar">
-                  <div class="ios-statusbar__top">
-                    <span>9:41</span>
-                    <div class="dynamic-island">
-                      <span class="dynamic-island__dot" id="islandStatusDot"></span>
-                      <span style="font-size:0.58rem; color:#D4C5B1; font-family:var(--font-mono);" id="islandStatusText">VERIFIED</span>
-                    </div>
-                    <span>5G • 100%</span>
-                  </div>
-                  <div class="ios-navbar">
-                    <span class="ios-navbar__brand">POS LEDGER</span>
-                    <span class="ios-navbar__table-pill">Table 12</span>
-                    <span style="font-size:0.72rem; color:var(--sys-label-secondary);">Paystack ZA</span>
-                  </div>
-                </header>
-
-                <div class="ios-content-scroll">
-                  <!-- Interactive State Machine Switcher -->
-                  <div>
-                    <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--sys-label-secondary); margin-bottom: 6px;">
-                      Simulate Server Verification State:
-                    </div>
-                    <div class="ios-segmented">
-                      <button class="ios-segmented__btn" id="stateBtnPending" data-master-event-35="true">
-                        POS_SYNC
-                      </button>
-                      <button class="ios-segmented__btn ios-segmented__btn--active" id="stateBtnSettled" data-master-event-36="true">
-                        SETTLED
-                      </button>
-                      <button class="ios-segmented__btn" id="stateBtnException" data-master-event-37="true">
-                        EXCEPTION
-                      </button>
-                    </div>
-                  </div>
-
-                  <!-- Status Hero Sheet -->
-                  <div class="result-hero-sheet" id="resultHeroSheet">
-                    <div class="result-hero-sheet__orb result-hero-sheet__orb--settled" id="resultOrb">✓</div>
-                    <div style="font-family:var(--font-mono); font-size:0.68rem; font-weight:600; color:var(--sys-titanium-champagne);" id="resultStateBadge">
-                      STATE: SETTLED_IN_POS
-                    </div>
-                    <h3 style="font-size:1.15rem; font-weight:700; letter-spacing:-0.02em;" id="resultHeadline">
-                      Confirmed in Restaurant POS
-                    </h3>
-                    <p style="font-size:0.78rem; color:var(--sys-label-secondary); line-height:1.4;" id="resultDescription">
-                      Your payment was cryptographically verified via Paystack and posted directly to Check #804 at Table 12.
-                    </p>
-                  </div>
-
-                  <!-- 3-Stage Verification Timeline -->
-                  <div class="timeline-card">
-                    <div class="timeline-node">
-                      <span class="timeline-node__badge timeline-node__badge--done">✓</span>
-                      <div>
-                        <div style="font-weight:600;">1. PSP Webhook HMAC Verified</div>
-                        <div style="font-size:0.72rem; color:var(--sys-label-secondary);">
-                          Paystack ZA event <code>evt_za_904182</code> verified in server memory.
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="timeline-node">
-                      <span class="timeline-node__badge timeline-node__badge--done" id="timelineBadge2">✓</span>
-                      <div>
-                        <div style="font-weight:600;" id="timelineTitle2">2. Transactional Outbox Dispatched</div>
-                        <div style="font-size:0.72rem; color:var(--sys-label-secondary);" id="timelineDesc2">
-                          Idempotent <code>recordExternalPayment()</code> sent with key <code>idem_8841a</code>.
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="timeline-node">
-                      <span class="timeline-node__badge timeline-node__badge--done" id="timelineBadge3">✓</span>
-                      <div>
-                        <div style="font-weight:600;" id="timelineTitle3">3. POS Check #804 Acknowledged</div>
-                        <div style="font-size:0.72rem; color:var(--sys-label-secondary);" id="timelineDesc3">
-                          Native POS receipt <code>PILOT-PAY-4410</code> recorded. Zero duplicate risk.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Sequoia Glass Audit Receipt -->
-                  <div class="apple-receipt-sheet">
-                    <div class="apple-receipt-sheet__row">
-                      <span>Correlation ID</span>
-                      <strong>gw_corr_99481a</strong>
-                    </div>
-                    <div class="apple-receipt-sheet__row">
-                      <span>POS Check Reference</span>
-                      <strong>CHK-804-T12</strong>
-                    </div>
-                    <div class="apple-receipt-sheet__row">
-                      <span>PSP Reference</span>
-                      <strong>ps_za_7741902</strong>
-                    </div>
-                    <div class="apple-receipt-sheet__row">
-                      <span>Settlement Currency</span>
-                      <strong>ZAR (Integer Cents)</strong>
-                    </div>
-                  </div>
-                </div>
+                <small>Bill payment</small
+                ><strong id="opsPrincipal">R212.50</strong>
               </div>
-
-              <div class="ios-floating-dock">
-                <div class="apple-pay-bar">
-                  <div class="apple-pay-bar__meta">
-                    <span class="apple-pay-bar__label" id="resultFooterLabel">Tax Invoice Ready</span>
-                    <span class="apple-pay-bar__total zar-tabular">Check #804</span>
-                  </div>
-                  <button class="apple-pay-cta" id="resultFooterCta">
-                    <span>Receipt PDF</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ======================================================================
-         TAB 2: SIDE-BY-SIDE LIGHT MODE vs. DARK MODE LIVE COMPARISON
-         ====================================================================== -->
-    <section id="tab-compare" class="hig-tab-panel">
-      <div class="compare-split-grid">
-
-        <!-- LEFT PANE: SILVER SEQUOIA FROST (LIGHT MODE) -->
-        <div class="compare-theme-pane theme-scope-light">
-          <div class="compare-theme-pane__header">
-            <div>
-              <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--sys-titanium-champagne);">
-                1. Light Mode • data-theme="sequoia-light"
-              </div>
-              <h3 style="font-size:1.25rem; font-weight:700; letter-spacing:-0.02em;">
-                ☀ Silver Sequoia Frost (Daytime &amp; Bistro Default)
-              </h3>
-            </div>
-            <button class="hig-action-btn" data-master-event-38="true">
-              Apply Light Mode Everywhere
-            </button>
-          </div>
-
-          <div class="compare-token-pills">
-            <span class="compare-token-pill">Canvas: #F2F4F8</span>
-            <span class="compare-token-pill">Glass: rgba(255,255,255,0.78)</span>
-            <span class="compare-token-pill">Card: #FFFFFF</span>
-            <span class="compare-token-pill">CTA: #111215 → #FFFFFF</span>
-          </div>
-
-          <!-- Scoped Light Mode iPhone Preview -->
-          <div class="iphone-chassis" style="max-width:400px; margin:0 auto; width:100%;">
-            <div class="iphone-screen" style="min-height:650px; max-height:650px;">
               <div>
-                <header class="ios-statusbar">
-                  <div class="ios-statusbar__top">
-                    <span>9:41</span>
-                    <div class="dynamic-island">
-                      <span class="dynamic-island__dot"></span>
-                      <span style="font-size:0.58rem; color:#D4C5B1; font-family:var(--font-mono);">LIGHT FROST</span>
-                    </div>
-                    <span>5G • 100%</span>
-                  </div>
-                  <div class="ios-navbar">
-                    <span class="ios-navbar__brand">THE GRILLHOUSE</span>
-                    <span class="ios-navbar__table-pill">Table 12 • Daylight</span>
-                    <span class="zar-tabular" style="font-size:0.75rem; font-weight:700;">R 600.00</span>
-                  </div>
-                </header>
-
-                <div class="ios-content-scroll" style="padding-bottom:24px;">
-                  <div class="sequoia-guest-bento-strip">
-                    <div class="sequoia-mini-tile">
-                      <span class="sequoia-mini-tile__label">Surface Material</span>
-                      <span class="sequoia-mini-tile__value">Silver Titanium + Frost</span>
-                    </div>
-                    <div class="sequoia-mini-tile">
-                      <span class="sequoia-mini-tile__label">Specular Rim</span>
-                      <span class="sequoia-mini-tile__value">0.5px White Inset</span>
-                    </div>
-                  </div>
-
-                  <div class="wallet-ring-card">
-                    <div class="wallet-ring-card__glow"></div>
-                    <div class="wallet-ring-viewport" style="width:148px; height:148px;">
-                      <svg class="wallet-ring-svg" viewBox="0 0 200 200">
-                        <circle class="wallet-ring-track" cx="100" cy="100" r="78" />
-                        <circle class="wallet-ring-settled" cx="100" cy="100" r="78" stroke-dasharray="490" stroke-dashoffset="348" />
-                        <circle class="wallet-ring-share" cx="100" cy="100" r="78" stroke-dasharray="490" stroke-dashoffset="260" />
-                      </svg>
-                      <div class="wallet-ring-center">
-                        <span class="wallet-ring-center__eyebrow">Your Share</span>
-                        <div class="wallet-ring-center__amount zar-tabular" style="font-size:1.3rem;">R 141.67</div>
-                        <div class="wallet-ring-center__sub zar-tabular">of R 425.00 open</div>
-                      </div>
-                    </div>
-
-                    <div class="split-bento-trio">
-                      <div class="split-bento-cell">
-                        <span class="split-bento-cell__lbl">Settled</span>
-                        <span class="split-bento-cell__val zar-tabular" style="color:var(--sys-green);">R 175.00</span>
-                      </div>
-                      <div class="split-bento-cell">
-                        <span class="split-bento-cell__lbl">5m Lock</span>
-                        <span class="split-bento-cell__val zar-tabular" style="color:var(--sys-amber);">04:48</span>
-                      </div>
-                      <div class="split-bento-cell">
-                        <span class="split-bento-cell__lbl">10% Tip</span>
-                        <span class="split-bento-cell__val zar-tabular" style="color:var(--sys-accent-blue);">+R 14.17</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <article class="compact-dish-card">
-                    <div>
-                      <h4 style="font-size: 0.88rem; font-weight: 700;">The Groundwork Wagyu Burger</h4>
-                      <p style="font-size: 0.72rem; color: var(--sys-label-secondary); margin: 2px 0 6px;">
-                        Double Wagyu Patty (+R 75.00) • POS_ITEM_101
-                      </p>
-                      <span class="zar-tabular" style="font-weight:700; font-size:0.84rem;">R 260.00</span>
-                    </div>
-                    <img
-                      class="compact-dish-card__thumb"
-                      src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=80"
-                      alt="Wagyu Burger"
-                    />
-                  </article>
-                </div>
+                <small>Optional tip</small><strong id="opsTip">R21.25</strong>
               </div>
-
-              <div class="ios-floating-dock">
-                <div class="apple-pay-bar">
-                  <div class="apple-pay-bar__meta">
-                    <span class="apple-pay-bar__label">Ink-Black Light CTA</span>
-                    <span class="apple-pay-bar__total zar-tabular">R 155.84</span>
-                  </div>
-                  <button class="apple-pay-cta" data-master-event-39="true">
-                    <span> Pay</span>
-                    <span class="zar-tabular">R 155.84</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT PANE: DARK TITANIUM SEQUOIA (DARK MODE) -->
-        <div class="compare-theme-pane theme-scope-dark">
-          <div class="compare-theme-pane__header">
-            <div>
-              <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--sys-titanium-champagne);">
-                2. Dark Mode • data-theme="titanium-dark"
-              </div>
-              <h3 style="font-size:1.25rem; font-weight:700; letter-spacing:-0.02em;">
-                ☾ Dark Titanium Sequoia (Evening &amp; Lounge OLED)
-              </h3>
-            </div>
-            <button class="hig-action-btn" data-master-event-40="true">
-              Apply Dark Mode Everywhere
-            </button>
-          </div>
-
-          <div class="compare-token-pills">
-            <span class="compare-token-pill">Canvas: #0B0C0E</span>
-            <span class="compare-token-pill">Glass: rgba(24,26,32,0.72)</span>
-            <span class="compare-token-pill">Rim: 0.5px Champagne</span>
-            <span class="compare-token-pill">CTA: #F5F5F7 → #0B0C0E</span>
-          </div>
-
-          <!-- Scoped Dark Mode iPhone Preview -->
-          <div class="iphone-chassis" style="max-width:400px; margin:0 auto; width:100%;">
-            <div class="iphone-screen" style="min-height:650px; max-height:650px;">
               <div>
-                <header class="ios-statusbar">
-                  <div class="ios-statusbar__top">
-                    <span>9:41</span>
-                    <div class="dynamic-island">
-                      <span class="dynamic-island__dot"></span>
-                      <span style="font-size:0.58rem; color:#D4C5B1; font-family:var(--font-mono);">DARK TITANIUM</span>
-                    </div>
-                    <span>5G • 100%</span>
-                  </div>
-                  <div class="ios-navbar">
-                    <span class="ios-navbar__brand">THE GRILLHOUSE</span>
-                    <span class="ios-navbar__table-pill">Table 12 • Evening</span>
-                    <span class="zar-tabular" style="font-size:0.75rem; font-weight:700;">R 600.00</span>
-                  </div>
-                </header>
-
-                <div class="ios-content-scroll" style="padding-bottom:24px;">
-                  <div class="sequoia-guest-bento-strip">
-                    <div class="sequoia-mini-tile">
-                      <span class="sequoia-mini-tile__label">Surface Material</span>
-                      <span class="sequoia-mini-tile__value">Grade-5 Dark Titanium</span>
-                    </div>
-                    <div class="sequoia-mini-tile">
-                      <span class="sequoia-mini-tile__label">Specular Rim</span>
-                      <span class="sequoia-mini-tile__value">0.5px Anodized Edge</span>
-                    </div>
-                  </div>
-
-                  <div class="wallet-ring-card">
-                    <div class="wallet-ring-card__glow"></div>
-                    <div class="wallet-ring-viewport" style="width:148px; height:148px;">
-                      <svg class="wallet-ring-svg" viewBox="0 0 200 200">
-                        <circle class="wallet-ring-track" cx="100" cy="100" r="78" />
-                        <circle class="wallet-ring-settled" cx="100" cy="100" r="78" stroke-dasharray="490" stroke-dashoffset="348" />
-                        <circle class="wallet-ring-share" cx="100" cy="100" r="78" stroke-dasharray="490" stroke-dashoffset="260" />
-                      </svg>
-                      <div class="wallet-ring-center">
-                        <span class="wallet-ring-center__eyebrow">Your Share</span>
-                        <div class="wallet-ring-center__amount zar-tabular" style="font-size:1.3rem;">R 141.67</div>
-                        <div class="wallet-ring-center__sub zar-tabular">of R 425.00 open</div>
-                      </div>
-                    </div>
-
-                    <div class="split-bento-trio">
-                      <div class="split-bento-cell">
-                        <span class="split-bento-cell__lbl">Settled</span>
-                        <span class="split-bento-cell__val zar-tabular" style="color:var(--sys-green);">R 175.00</span>
-                      </div>
-                      <div class="split-bento-cell">
-                        <span class="split-bento-cell__lbl">5m Lock</span>
-                        <span class="split-bento-cell__val zar-tabular" style="color:var(--sys-amber);">04:48</span>
-                      </div>
-                      <div class="split-bento-cell">
-                        <span class="split-bento-cell__lbl">10% Tip</span>
-                        <span class="split-bento-cell__val zar-tabular" style="color:var(--sys-accent-blue);">+R 14.17</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <article class="compact-dish-card">
-                    <div>
-                      <h4 style="font-size: 0.88rem; font-weight: 700;">The Groundwork Wagyu Burger</h4>
-                      <p style="font-size: 0.72rem; color: var(--sys-label-secondary); margin: 2px 0 6px;">
-                        Double Wagyu Patty (+R 75.00) • POS_ITEM_101
-                      </p>
-                      <span class="zar-tabular" style="font-weight:700; font-size:0.84rem;">R 260.00</span>
-                    </div>
-                    <img
-                      class="compact-dish-card__thumb"
-                      src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=80"
-                      alt="Wagyu Burger"
-                    />
-                  </article>
-                </div>
-              </div>
-
-              <div class="ios-floating-dock">
-                <div class="apple-pay-bar">
-                  <div class="apple-pay-bar__meta">
-                    <span class="apple-pay-bar__label">Crisp White Dark CTA</span>
-                    <span class="apple-pay-bar__total zar-tabular">R 155.84</span>
-                  </div>
-                  <button class="apple-pay-cta" data-master-event-41="true">
-                    <span> Pay</span>
-                    <span class="zar-tabular">R 155.84</span>
-                  </button>
-                </div>
+                <small>Still on the table</small
+                ><strong id="opsRemaining">R212.50</strong>
               </div>
             </div>
+            <div class="confirmation">
+              <span class="check">✓</span>
+              <div>
+                <b>Payment provider confirms funds</b>
+                <p>The amount and reference match.</p>
+              </div>
+            </div>
+            <div class="confirmation" id="posConfirmation"></div>
+            <div class="operator-action" id="opsAction"></div>
+            <div class="order-ticket" id="orderTicket" hidden></div>
+          </div>
+          <div class="operations-copy">
+            <h3>The till stays the source of truth.</h3>
+            <p>
+              Groundwork connects the guest’s payment to the original restaurant
+              bill. Staff see what settled and what needs attention.
+            </p>
+            <div class="exception-choice">
+              <span>Explore the outcome</span>
+              <div class="ios-segmented">
+                <button class="ios-segmented__btn" data-outcome="normal">
+                  Normal payment</button
+                ><button class="ios-segmented__btn" data-outcome="offline">
+                  Till offline
+                </button>
+              </div>
+            </div>
+            <p class="subtle">
+              Simulated scenarios. Live vendor approval is still required.
+            </p>
           </div>
         </div>
-
-      </div>
-    </section>
-
-    <!-- ======================================================================
-         TAB 3: TITANIUM SEQUOIA MERCHANT PORTAL (macOS Bento Grid)
-         ====================================================================== -->
-    <section id="tab-sequoia" class="hig-tab-panel">
-      <div class="sequoia-window">
-        <!-- macOS Translucent Sidebar -->
-        <aside class="sequoia-sidebar">
-          <div class="traffic-lights">
-            <span class="traffic-light" style="background:#FF5F56;"></span>
-            <span class="traffic-light" style="background:#FFBD2E;"></span>
-            <span class="traffic-light" style="background:#27C93F;"></span>
-          </div>
-
-          <button class="sequoia-nav-item sequoia-nav-item--active">
-            <span>Sequoia Bento Overview</span>
-            <span style="color:var(--sys-titanium-champagne);">●</span>
-          </button>
-          <button class="sequoia-nav-item">
-            <span>12 Tables &amp; QR Stands</span>
-            <span class="zar-tabular">A6</span>
-          </button>
-          <button class="sequoia-nav-item">
-            <span>POS Sync Health</span>
-            <span style="color:var(--sys-green); font-size:0.72rem; font-weight:700;" id="sidebarHealthBadge">OK</span>
-          </button>
-          <button class="sequoia-nav-item">
-            <span>ZAR Reconciliation</span>
-            <span>CSV</span>
-          </button>
-          <button class="sequoia-nav-item" data-master-event-42="true">
-            <span>.module.scss Files</span>
-            <span>9</span>
-          </button>
-        </aside>
-
-        <!-- Main Bento Workspace -->
-        <div class="sequoia-main">
-          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;">
-            <div>
-              <h2 style="font-size:1.45rem; font-weight:700; letter-spacing:-0.025em;">
-                The Grillhouse Rosebank — Titanium Sequoia Command Center
-              </h2>
-              <p style="font-size:0.8rem; color:var(--sys-label-secondary);">
-                Timezone: Africa/Johannesburg (SAST) • Tenant-isolated venue ledger • Integer-cents ZAR
-              </p>
-            </div>
-
-            <div class="segmented-pill-bar">
-              <button class="segmented-pill-bar__btn segmented-pill-bar__btn--active" data-master-event-43="true">
-                POS: OK (142ms)
-              </button>
-              <button class="segmented-pill-bar__btn" data-master-event-44="true">
-                Simulate Degraded
-              </button>
-              <button class="segmented-pill-bar__btn" data-master-event-45="true">
-                Simulate Outage
-              </button>
-            </div>
-          </div>
-
-          <!-- Top 3 Bento Metric Cards with Sparklines -->
-          <div class="bento-metrics-grid">
-            <div class="bento-card">
-              <div class="bento-card__eyebrow">
-                <span>Total Venue QR Sales (Today)</span>
-                <span class="pos-origin-chip">+14.2%</span>
-              </div>
-              <div class="bento-card__metric zar-tabular">R 24,850.00</div>
-              <svg width="100%" height="36" viewBox="0 0 200 36" fill="none">
-                <path d="M2 28C30 26 45 14 75 18C105 22 130 6 160 10C180 12 190 4 198 4" stroke="var(--sys-accent-blue)" stroke-width="2.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-
-            <div class="bento-card">
-              <div class="bento-card__eyebrow">
-                <span>Paystack Verified &amp; POS Matched</span>
-                <span class="pos-origin-chip">100% Reconciled</span>
-              </div>
-              <div class="bento-card__metric zar-tabular">R 23,600.00</div>
-              <svg width="100%" height="36" viewBox="0 0 200 36" fill="none">
-                <path d="M2 30C40 24 65 20 95 16C125 12 155 14 198 6" stroke="var(--sys-green)" stroke-width="2.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-
-            <div class="bento-card">
-              <div class="bento-card__eyebrow">
-                <span>Waiter Tips Allocated in POS</span>
-                <span style="font-size:0.72rem; color:var(--sys-titanium-champagne);">0% Platform Cut</span>
-              </div>
-              <div class="bento-card__metric zar-tabular">+R 1,250.00</div>
-              <svg width="100%" height="36" viewBox="0 0 200 36" fill="none">
-                <path d="M2 26C35 28 70 12 110 15C150 18 170 8 198 5" stroke="var(--sys-titanium-champagne)" stroke-width="2.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-          </div>
-
-          <!-- Middle Bento Row: 12-Table Floor Map + Printable A6 QR Stand Inspector -->
-          <div class="bento-middle-grid">
-            <div class="bento-card">
-              <div class="bento-card__eyebrow">
-                <span>Interactive 12-Table Floor Map (Click Any Table to Inspect &amp; Rotate Opaque QR)</span>
-                <span id="selectedTableTokenLabel" style="font-family:var(--font-mono); font-size:0.74rem; color:var(--sys-titanium-champagne);">
-                  /t/k9x2m8 (Table 12)
-                </span>
-              </div>
-
-              <div class="table-map-grid" id="merchantTableGrid">
-                <button class="table-orb table-orb--paid" data-master-event-46="true">T1<span style="font-size:0.58rem;">PAID</span></button>
-                <button class="table-orb table-orb--paid" data-master-event-47="true">T2<span style="font-size:0.58rem;">PAID</span></button>
-                <button class="table-orb table-orb--paid" data-master-event-48="true">T3<span style="font-size:0.58rem;">PAID</span></button>
-                <button class="table-orb table-orb--syncing" data-master-event-49="true">T4<span style="font-size:0.58rem;">SPLIT</span></button>
-                <button class="table-orb table-orb--paid" data-master-event-50="true">T5<span style="font-size:0.58rem;">PAID</span></button>
-                <button class="table-orb" data-master-event-51="true">T6<span style="font-size:0.58rem; color:var(--sys-label-secondary);">OPEN</span></button>
-                <button class="table-orb table-orb--paid" data-master-event-52="true">T7<span style="font-size:0.58rem;">PAID</span></button>
-                <button class="table-orb table-orb--paid" data-master-event-53="true">T8<span style="font-size:0.58rem;">PAID</span></button>
-                <button class="table-orb table-orb--syncing" data-master-event-54="true">T9<span style="font-size:0.58rem;">LOCK</span></button>
-                <button class="table-orb" data-master-event-55="true">T10<span style="font-size:0.58rem; color:var(--sys-label-secondary);">IDLE</span></button>
-                <button class="table-orb" data-master-event-56="true">T11<span style="font-size:0.58rem; color:var(--sys-label-secondary);">IDLE</span></button>
-                <button class="table-orb table-orb--paid table-orb--selected" data-master-event-57="true">T12<span style="font-size:0.58rem;">ACTIVE</span></button>
-              </div>
-            </div>
-
-            <div class="bento-card">
-              <div class="bento-card__eyebrow">
-                <span>A6 Printable QR Stand &amp; POS Adapter Status</span>
-                <span class="pos-origin-chip" id="bentoHealthPill">● ACTIVE</span>
-              </div>
-
-              <!-- Live Printable A6 Table Stand Preview -->
-              <div class="qr-stand-inspector">
-                <div class="qr-stand-plaque">
-                  <div style="font-size:0.52rem; font-weight:800; letter-spacing:0.06em;">THE GRILLHOUSE</div>
-                  <svg viewBox="0 0 64 64" width="68" height="68" style="margin:4px auto; display:block;">
-                    <rect width="64" height="64" fill="#FFFFFF"/>
-                    <rect x="4" y="4" width="18" height="18" fill="none" stroke="#000" stroke-width="4"/>
-                    <rect x="10" y="10" width="6" height="6" fill="#000"/>
-                    <rect x="42" y="4" width="18" height="18" fill="none" stroke="#000" stroke-width="4"/>
-                    <rect x="48" y="10" width="6" height="6" fill="#000"/>
-                    <rect x="4" y="42" width="18" height="18" fill="none" stroke="#000" stroke-width="4"/>
-                    <rect x="10" y="48" width="6" height="6" fill="#000"/>
-                    <rect x="28" y="8" width="6" height="6" fill="#000"/>
-                    <rect x="26" y="24" width="12" height="12" fill="#000"/>
-                    <rect x="44" y="28" width="6" height="10" fill="#000"/>
-                    <rect x="28" y="44" width="10" height="6" fill="#000"/>
-                    <rect x="44" y="46" width="14" height="12" fill="#000"/>
-                  </svg>
-                  <div style="font-size:0.65rem; font-weight:800;" id="plaqueTableTitle">TABLE 12</div>
-                  <div style="font-family:var(--font-mono); font-size:0.52rem; color:#555;" id="plaqueTokenCode">/t/k9x2m8</div>
-                </div>
-
-                <div style="display:flex; flex-direction:column; gap:8px;">
-                  <div style="font-size:0.8rem; font-weight:600;" id="bentoHealthDesc">
-                    MockPosAdapter Sandbox Connected • Pilot/GAAP Skeletons Fail-Closed
-                  </div>
-                  <div style="display:flex; flex-wrap:wrap; gap:5px;">
-                    <span class="pos-origin-chip">✓ readOpenCheck</span>
-                    <span class="pos-origin-chip">✓ createHeldOrder</span>
-                    <span class="pos-origin-chip">✓ recordPartialPayment</span>
-                  </div>
-                  <div style="display:flex; gap:8px; margin-top:2px;">
-                    <button class="hig-action-btn" data-master-event-58="true">Rotate Opaque QR</button>
-                    <button class="hig-action-btn hig-action-btn--secondary" data-master-event-59="true">
-                      View Print SCSS →
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bottom Bento Card: Live Payment Reconciliation Table -->
-          <div class="bento-card">
-            <div class="bento-card__eyebrow">
-              <span>Live Payment &amp; POS Check Reconciliation Ledger</span>
-              <span class="zar-tabular">Currency: ZAR (Integer Cents)</span>
-            </div>
-            <table class="hig-table">
-              <thead>
-                <tr>
-                  <th>Time</th>
-                  <th>Table &amp; Check</th>
-                  <th>Principal</th>
-                  <th>Waiter Tip</th>
-                  <th>PSP Webhook</th>
-                  <th>POS Write Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="zar-tabular">19:48</td>
-                  <td>Table 12 • Check #804</td>
-                  <td class="zar-tabular">R 141.67</td>
-                  <td class="zar-tabular">R 14.17</td>
-                  <td><span class="settled-chip">Verified</span></td>
-                  <td><span class="settled-chip">Matched (PILOT-4410)</span></td>
-                </tr>
-                <tr>
-                  <td class="zar-tabular">19:42</td>
-                  <td>Table 4 • Check #799</td>
-                  <td class="zar-tabular">R 420.00</td>
-                  <td class="zar-tabular">R 42.00</td>
-                  <td><span class="settled-chip">Verified</span></td>
-                  <td><span class="settled-chip">Matched (PILOT-4408)</span></td>
-                </tr>
-                <tr>
-                  <td class="zar-tabular">19:35</td>
-                  <td>Table 9 • Check #795</td>
-                  <td class="zar-tabular">R 285.00</td>
-                  <td class="zar-tabular">R 28.50</td>
-                  <td><span class="settled-chip">Verified</span></td>
-                  <td><span class="settled-chip">Matched (PILOT-4402)</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      </section>
+      <section
+        class="slide"
+        id="business"
+        aria-labelledby="business-title"
+        hidden
+      >
+        <div class="section-intro">
+          <p class="kicker">04 / THE BUSINESS</p>
+          <h2 id="business-title">
+            Sell a better checkout.<br />Keep the restaurant’s systems.
+          </h2>
+          <p class="lead">
+            A venue subscription, introduced through a focused integration and a
+            repeatable onboarding process.
+          </p>
         </div>
-      </div>
-    </section>
-
-    <!-- ======================================================================
-         TAB 3: COMPLETE ZERO-TAILWIND .module.scss FILE EXPLORER (9 FILES)
-         ====================================================================== -->
-    <section id="tab-scss" class="hig-tab-panel">
-      <div class="scss-workbench">
-        <aside class="scss-file-list">
-          <div class="scss-file-list__group">packages/ui/src/styles/</div>
-          <button class="scss-file-btn scss-file-btn--active" data-file="_tokens.scss" data-master-event-60="true">
-            <span>1. _tokens.scss</span>
-            <span>Hybrid</span>
-          </button>
-          <button class="scss-file-btn" data-file="_mixins.scss" data-master-event-61="true">
-            <span>2. _mixins.scss</span>
-            <span>Glass</span>
-          </button>
-
-          <div class="scss-file-list__group">packages/ui/src/components/</div>
-          <button class="scss-file-btn" data-file="GlassNavigationBar.module.scss" data-master-event-62="true">
-            <span>3. GlassNavigationBar.module.scss</span>
-            <span>TopBar</span>
-          </button>
-          <button class="scss-file-btn" data-file="MenuGlassBentoCard.module.scss" data-master-event-63="true">
-            <span>4. MenuGlassBentoCard.module.scss</span>
-            <span>Mode A</span>
-          </button>
-          <button class="scss-file-btn" data-file="TitaniumSplitRing.module.scss" data-master-event-64="true">
-            <span>5. TitaniumSplitRing.module.scss</span>
-            <span>Mode B</span>
-          </button>
-          <button class="scss-file-btn" data-file="SequoiaFloatingDock.module.scss" data-master-event-65="true">
-            <span>6. SequoiaFloatingDock.module.scss</span>
-            <span> Pay</span>
-          </button>
-          <button class="scss-file-btn" data-file="PosVerificationSheet.module.scss" data-master-event-66="true">
-            <span>7. PosVerificationSheet.module.scss</span>
-            <span>Result</span>
-          </button>
-          <button class="scss-file-btn" data-file="MerchantSequoiaBento.module.scss" data-master-event-67="true">
-            <span>8. MerchantSequoiaBento.module.scss</span>
-            <span>Admin</span>
-          </button>
-          <button class="scss-file-btn" data-file="PrintableQrStand.module.scss" data-master-event-68="true">
-            <span>9. PrintableQrStand.module.scss</span>
-            <span>A6 Print</span>
-          </button>
-        </aside>
-
-        <div class="scss-viewer-pane">
-          <div class="scss-viewer-pane__bar">
-            <span id="scssFilePathLabel">packages/ui/src/styles/_tokens.scss</span>
-            <div style="display:flex; gap:8px;">
-              <button class="hig-action-btn" id="copySingleBtn" data-master-event-69="true">
-                Copy Single File
-              </button>
-              <button class="hig-action-btn hig-action-btn--secondary" id="copyBundleBtn" data-master-event-70="true">
-                Copy All 9 .module.scss Files
-              </button>
-            </div>
-          </div>
-          <pre class="scss-code-block" id="scssCodeViewport"></pre>
+        <div class="business-grid">
+          <article class="pricing-card">
+            <span class="kicker">ENTRY PRODUCT · QR PAY</span>
+            <div class="price">R349<span>/ venue / month</span></div>
+            <p>Waiter takes the order.<br />Guest pays from their phone.</p>
+            <span class="hypothesis"
+              >Pricing hypothesis · to validate in pilot</span
+            >
+          </article>
+          <article class="business-card">
+            <span class="number">01</span>
+            <h3>Win one integration</h3>
+            <p>
+              Agree commercial terms and prove compatibility with one till
+              partner.
+            </p>
+          </article>
+          <article class="business-card">
+            <span class="number">02</span>
+            <h3>Prove value in service</h3>
+            <p>
+              Measure guest adoption, payment time and staff intervention at two
+              venues.
+            </p>
+          </article>
+          <article class="business-card">
+            <span class="number">03</span>
+            <h3>Repeat the rollout</h3>
+            <p>
+              Use an established onboarding playbook to reach more venues on
+              that till system.
+            </p>
+          </article>
         </div>
+        <div class="bottom-note">
+          <strong>Expansion after proof</strong
+          ><span
+            >Ordering follows once payments are proven and kitchen integration
+            is approved. Payment fees, till integration costs and taxes are
+            separate.</span
+          >
+        </div>
+      </section>
+      <section class="slide" id="pilot" aria-labelledby="pilot-title" hidden>
+        <div class="section-intro">
+          <p class="kicker">05 / THE FUNDING CONVERSATION</p>
+          <h2 id="pilot-title">Fund the proof.<br />Then fund the rollout.</h2>
+          <p class="lead">
+            Support a controlled pilot: one approved till integration, one
+            payment partner, and two restaurants.
+          </p>
+        </div>
+        <div class="pilot-grid">
+          <article class="pilot-card">
+            <span class="phase">01 · ENABLE</span>
+            <h3>Secure the partners</h3>
+            <p>
+              Confirm till access, payment terms, pilot venues and the cost of
+              delivery.
+            </p>
+            <span class="gate-label"
+              >Gate: written scope and partner approval</span
+            >
+          </article>
+          <article class="pilot-card">
+            <span class="phase">02 · PROVE</span>
+            <h3>Run real service tests</h3>
+            <p>
+              Validate partial payments, tips, reconciliation and recovery when
+              the till is unavailable.
+            </p>
+            <span class="gate-label">Gate: agreed acceptance tests pass</span>
+          </article>
+          <article class="pilot-card">
+            <span class="phase">03 · DECIDE</span>
+            <h3>Measure the case to scale</h3>
+            <p>
+              Track adoption, median payment time, matched payments and support
+              effort per venue.
+            </p>
+            <span class="gate-label"
+              >Gate: pilot evidence supports rollout</span
+            >
+          </article>
+        </div>
+        <div class="funding-ask">
+          <div>
+            <h3>The decision today</h3>
+            <p>
+              Back partner discovery and a costed pilot plan. Agree the
+              investment amount and success thresholds before launch.
+            </p>
+          </div>
+          <button class="cta" id="readiness">
+            What is built today? <span>↗</span>
+          </button>
+        </div>
+      </section>
+    </main>
+    <footer class="presentation-footer">
+      <span id="pageLabel">01 / 05 · Opportunity</span>
+      <div>
+        <button class="quiet" id="prev" aria-label="Previous chapter">←</button
+        ><button class="next" id="next">Guest experience →</button>
       </div>
-    </section>
-
-  </main>
-
-  <!-- ========================================================================
-       INTERACTIVE TITANIUM SEQUOIA CONTROLLER & 9-FILE SCSS REPOSITORY
-       ======================================================================== -->
-  
-<script src="/master.js"></script></body>
+      <span class="demo-label">Interactive demo · pre-launch</span>
+    </footer>
+    <dialog id="readinessDialog">
+      <button
+        class="quiet close"
+        id="closeDialog"
+        aria-label="Close readiness summary"
+      >
+        ×
+      </button>
+      <p class="kicker">WHERE WE ARE TODAY</p>
+      <h2>Ready to demonstrate.<br />Preparing for a pilot.</h2>
+      <div class="readiness-row">
+        <b>Built and tested</b>
+        <p>
+          Try ordering, splitting a bill and viewing a restaurant ticket.
+          A separate test system tracks payments and recovers when the till
+          is unavailable.
+        </p>
+      </div>
+      <div class="readiness-row">
+        <b>Next: connect the partners</b>
+        <p>
+          Payment integration has been started. Testing with a payment partner
+          and access to a restaurant till are still needed before a live pilot.
+        </p>
+      </div>
+      <div class="readiness-row">
+        <b>Then: prove it in service</b>
+        <p>
+          Agree the pilot scope, complete security and payment checks, and
+          confirm the full experience with the first two restaurants.
+        </p>
+      </div>
+      <p class="subtle">
+        This presentation uses sample data. Orders and payments are simulated.
+      </p>
+    </dialog>
+    <script type="module" src="/master.js"></script>
+  </body>
 </html>

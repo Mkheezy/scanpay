@@ -399,3 +399,36 @@ test("HTTP session, origin, merchant authorization and fresh quote checks", asyn
     await new Promise<void>((r) => server.close(() => r()));
   }
 });
+
+test("public home, retired references and payment returns use the right screens", async () => {
+  const app = createApp(service, {
+    origin: "http://127.0.0.1",
+    demo: true,
+    signatureMode: "timestamped",
+  });
+  const server = app.listen(0, "127.0.0.1");
+  await new Promise<void>((r) => server.once("listening", r));
+  const base = "http://127.0.0.1:" + (server.address() as any).port;
+  try {
+    const home = await fetch(base);
+    assert.equal(home.status, 200);
+    const html = await home.text();
+    assert.match(html, /A better end to every meal/);
+    assert.doesNotMatch(html, /Active Mode:|Integer Cents|bannerModeSpecs/);
+    for (const path of ["/", "/index.html"]) {
+      const callback = await fetch(base + path + "?payment=test&reference=gw-test", { redirect: "manual" });
+      assert.equal(callback.status, 303);
+      assert.equal(callback.headers.get("location"), "/sandbox.html?payment=test&reference=gw-test#demo");
+    }
+    for (const path of ["/design-reference.html", "/demo-info.html"]) {
+      const legacy = await fetch(base + path, { redirect: "manual" });
+      assert.equal(legacy.status, 302);
+      assert.equal(legacy.headers.get("location"), "/");
+    }
+    const table = await fetch(base + "/t/demo-table");
+    assert.equal(table.status, 200);
+    assert.match(await table.text(), /src="\/app.js"/);
+  } finally {
+    await new Promise<void>((r) => server.close(() => r()));
+  }
+});

@@ -11,7 +11,7 @@ npm ci
 npm start
 ```
 
-On this Mac you can also double-click START.command. Open http://127.0.0.1:4310. Select **Live demo**. If your shell or process manager terminates npm's child process, run `node --import tsx src/server.ts` directly.
+On this Mac you can also double-click START.command. Open http://127.0.0.1:4310 for the stakeholder presentation, or http://127.0.0.1:4310/sandbox.html#demo for the payment test console. If your shell or process manager terminates npm's child process, run `node --import tsx src/server.ts` directly.
 
 The default database is `.data/groundwork`. It survives restarts. No Docker or database installation is needed. Do not open that embedded database from multiple processes. The API runs its worker in-process; queued jobs are stored durably in the database.
 
