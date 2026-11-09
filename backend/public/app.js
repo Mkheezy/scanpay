@@ -60,8 +60,23 @@ async function api(path, method = "GET", body, key) {
   }
   return d;
 }
+const sandboxNavigation = $("#sandboxNavigation");
+$("#sandboxMenu").onclick = () => {
+  sandboxNavigation.showModal();
+  $("#sandboxMenu").setAttribute("aria-expanded", "true");
+};
+$("#closeSandboxMenu").onclick = () => sandboxNavigation.close();
+sandboxNavigation.addEventListener("close", () =>
+  $("#sandboxMenu").setAttribute("aria-expanded", "false"),
+);
 function navigate(v) {
+  if (sandboxNavigation.open) sandboxNavigation.close();
   view = ["overview", "demo", "build"].includes(v) ? v : "overview";
+  $("#sandboxChapter").textContent = {
+    overview: "Overview",
+    demo: "Live demo",
+    build: "Under the hood",
+  }[view];
   $$(".view").forEach((el) => el.classList.toggle("active", el.id === view));
   $$("nav button").forEach((b) =>
     b.classList.toggle("active", b.dataset.view === view),
@@ -81,6 +96,7 @@ $$("[data-open-demo]").forEach((b) => (b.onclick = () => navigate("demo")));
 $("#explain").onclick = () =>
   $("#story").scrollIntoView({ behavior: "smooth" });
 $("#present").onclick = () => {
+  sandboxNavigation.close();
   if (document.fullscreenElement) document.exitFullscreen();
   else
     document.documentElement
@@ -182,6 +198,8 @@ async function refresh(force = false) {
     $("#demoGate").hidden = true;
     $("#demoContent").hidden = false;
     const admin = role !== "guest";
+    document.body.classList.toggle("guest-mode", !admin);
+    $(".rail-col").hidden = !admin;
     $("#newVisit").hidden = !admin;
     $(".desk-col").hidden = !admin;
     $(".bottom-grid").hidden = !admin;
@@ -228,7 +246,7 @@ function renderGuest() {
   if (paymentId && payment) return renderResult();
   const q = value();
   $("#guestBody").innerHTML =
-    `<h4>Your table bill</h4>${bill.lines.map((l) => `<div class="bill-line"><span><small>${l.quantity}×</small>${esc(l.name)}</span><strong>${money(l.quantity * l.cents)}</strong></div>`).join("")}<div class="bill-total"><span>Table total</span><span>${money(bill.total_cents)}</span></div><p class="micro">Venue tax included · revision ${bill.revision}</p><div class="available"><span>Available to pay</span><b>${money(bill.available_cents)}</b></div>${
+    `<h4>Your table bill</h4>${bill.lines.map((l) => `<div class="bill-line"><span><small>${l.quantity}×</small>${esc(l.name)}</span><strong>${money(l.quantity * l.cents)}</strong></div>`).join("")}<div class="bill-total"><span>Table total</span><span>${money(bill.total_cents)}</span></div><p class="micro">Venue tax included</p><div class="available"><span>Available to pay</span><b>${money(bill.available_cents)}</b></div>${
       bill.available_cents > 0
         ? `<span class="field-label">Choose your share</span><div class="segments">${[
             ["full", "Full balance"],
@@ -530,6 +548,9 @@ function renderEvents() {
     RETRY_REQUESTED: "Operator requested retry",
     REFUND_REQUESTED: "Refund review requested",
     QR_ROTATED: "Table code rotated",
+    DEMO_ORDER_CREATED: "Demo order saved",
+    DEMO_ORDER_PAYMENT_RETRIED: "Demo order payment retried",
+    DEMO_ORDER_STATUS_CHANGED: "Kitchen status updated",
   };
   $("#events").innerHTML = dashboard.events.length
     ? dashboard.events
@@ -575,7 +596,7 @@ async function init() {
   try {
     const health = await api("/health");
     online = health.ok;
-    $("#connection").textContent = health.database + " · connected";
+    $("#connection").textContent = "Sandbox connected";
     $("#connectionDot").classList.add("on");
     if (location.pathname.startsWith("/t/")) {
       await api(

@@ -1,7 +1,12 @@
 <!doctype html>
 <html lang="en">
   <head>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta
@@ -19,8 +24,44 @@
           >QR PAY / 02</span
         ></a
       >
+      <span class="sandbox-chapter" id="sandboxChapter">Overview</span>
+      <button
+        class="sandbox-menu"
+        id="sandboxMenu"
+        aria-label="Open navigation menu"
+        aria-haspopup="dialog"
+        aria-controls="sandboxNavigation"
+        aria-expanded="false"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M5 8h14M5 16h14"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+    </header>
+    <dialog
+      class="sandbox-sheet"
+      id="sandboxNavigation"
+      aria-labelledby="sandboxNavTitle"
+    >
+      <div class="sandbox-sheet-heading">
+        <h2 id="sandboxNavTitle">Explore.</h2>
+        <button
+          class="sandbox-menu"
+          id="closeSandboxMenu"
+          aria-label="Close navigation menu"
+          autofocus
+        >
+          ×
+        </button>
+      </div>
       <nav aria-label="Main navigation">
-        <button data-view="overview" class="active">The idea</button
+        <button data-view="overview" class="active">Overview</button
         ><button data-view="demo">Live demo</button
         ><button data-view="build">Under the hood</button>
       </nav>
@@ -36,7 +77,8 @@
         </div>
         <button class="outline small" id="present">Present ↗</button>
       </div>
-    </header>
+      <a class="outline" href="/">Open presentation →</a>
+    </dialog>
     <div class="environment">
       <span
         ><i id="connectionDot"></i
@@ -44,7 +86,42 @@
       ><span>Sandbox · ZAR · no live payments</span>
     </div>
     <main>
-      <section class="view active" id="overview"><div class="sectionhead"><div><p class="eyebrow">TITANIUM SEQUOIA MASTER</p><h2>Groundwork integration sandbox</h2></div><a class="outline" href="/">Open the master design →</a></div><p>The working payment integration is available in Live demo.</p><button class="primary" data-open-demo>Open live demo →</button><div id="story" hidden><div id="storyGraphic"></div><h3 id="storyTitle"></h3><p id="storyCopy"></p><p id="storyWho"></p><p id="storyCallout"></p></div><button id="explain" hidden></button></section>
+      <section class="view active" id="overview">
+        <div class="sandbox-intro">
+          <p class="eyebrow">THE PAYMENT SANDBOX</p>
+          <h2>Follow a payment.<br />From guest to restaurant.</h2>
+          <p class="sandbox-lead">
+            Choose a bill share, try a payment outcome and see how the
+            restaurant keeps track. All payments here are simulated.
+          </p>
+          <div class="actions">
+            <button class="primary" data-open-demo>Open live demo →</button
+            ><a class="outline" href="/">Open presentation →</a>
+          </div>
+          <div class="sandbox-flow">
+            <div>
+              <span>01</span><b>Choose a share</b>
+              <p>The guest decides what to pay.</p>
+            </div>
+            <div>
+              <span>02</span><b>Confirm the payment</b>
+              <p>The server checks the outcome.</p>
+            </div>
+            <div>
+              <span>03</span><b>Match the till</b>
+              <p>The restaurant sees what settled.</p>
+            </div>
+          </div>
+        </div>
+        <div id="story" hidden>
+          <div id="storyGraphic"></div>
+          <h3 id="storyTitle"></h3>
+          <p id="storyCopy"></p>
+          <p id="storyWho"></p>
+          <p id="storyCallout"></p>
+        </div>
+        <button id="explain" hidden></button>
+      </section>
       <section class="view" id="demo">
         <div class="sectionhead">
           <div>
@@ -59,8 +136,8 @@
           </div>
         </div>
         <p class="demo-intro">
-          The guest pays on the left. The middle shows what happens. The
-          restaurant sees the result on the right.
+          Follow three views: the guest’s checkout, the payment connection, and
+          the restaurant’s records.
         </p>
         <div id="demoGate" class="gate" hidden>
           <h3>Run the backend to try the live flow.</h3>
@@ -173,8 +250,8 @@
                 Rotate table 07 code
               </button>
               <p class="micro">
-                Phone access requires a reachable APP_ORIGIN. Localhost QR codes
-                open only on this computer.
+                This local demo link opens on this computer. A shared server
+                address is needed before guests can scan from their own phones.
               </p>
             </div>
             <div id="qr"></div>

@@ -331,7 +331,7 @@ body {
 .opportunity-visual::before {
   content: "";
   position: absolute;
-  inset: 6% -8% 9% 24%;
+  inset: 6% 0 9% 24%;
   border-radius: 46% 54% 58% 42%;
   background: linear-gradient(
     145deg,
@@ -341,7 +341,7 @@ body {
   );
   z-index: -1;
   filter: blur(10px);
-  transform: rotate(-18deg);
+  transform: none;
   pointer-events: none;
 }
 [data-theme="titanium-dark"] .opportunity-visual::before {
@@ -796,5 +796,43 @@ h2 {
   .presenter-timeline li {
     grid-template-columns: 1fr;
     gap: 4px;
+  }
+}
+
+/* Let the phone and copy shrink within narrow guest layouts. */
+.split-layout > *,
+.device-wrap {
+  min-width: 0;
+}
+@media (max-width: 700px) {
+  .split-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Reserve a proper hit area for modal dismissal, clear of the title. */
+#presenterDialog .close,
+#readinessDialog .close {
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-size: 24px;
+  border-radius: 50%;
+  background: var(--sys-glass-surface);
+  border: 0.5px solid var(--glass-edge);
+}
+#presenterDialog > .kicker,
+#readinessDialog > .kicker {
+  padding-right: 48px;
+  min-height: 36px;
+}
+@media (max-width: 380px) {
+  .header-chapter {
+    display: none;
+  }
+  #readinessDialog {
+    padding: 24px;
   }
 }
