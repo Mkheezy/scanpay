@@ -2,7 +2,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 
 const destination = process.argv[2];
 if (!destination) throw new Error('Provide an output HTML path.');
-const source = new URL('../public/', import.meta.url);
+const source = new URL('../site/', import.meta.url);
 let html = await readFile(new URL('index.html', source), 'utf8');
 for (const file of ['master.css', 'pitch.css', 'glass.css']) {
   const css = (await readFile(new URL(file, source), 'utf8'))

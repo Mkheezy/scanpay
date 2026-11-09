@@ -6,21 +6,22 @@ Stakeholder presentation using the Titanium Sequoia visual system. Five guided c
 
 1. Import this Git repository into Vercel.
 2. Select the `demo/titanium-sequoia-vercel` branch for the demo deployment (or make it the production branch).
-3. Keep Root Directory at this folder, Framework Preset **Other**, Build Command **npm run build**, and Output Directory **dist**. These are also declared in vercel.json.
+3. Keep Root Directory at this folder, Framework Preset **Other**, Build Command **npm run build**, and Output Directory **public**. These are also declared in vercel.json. If updating an existing project, remove any old `dist` override or set it to `public`.
 4. Deploy. No environment variables, database or payment credentials are needed for the visual demo.
 
 See [Vercel Git deployments](https://vercel.com/docs/git) and [project configuration](https://vercel.com/docs/project-configuration).
 
 ## Files
 
-- public/: stakeholder presentation and ordering interactions.
+- site/: presentation source and ordering interactions.
+- public/: generated deployable website (created by the build).
 - scripts/build-demo.mjs: dependency-free static build.
 - vercel.json: build settings and security headers.
 - backend/: complete TypeScript backend, operational console, source SCSS, tests, Docker configuration, and local launcher.
 
 ## Run and check
 
-Use Node 22. Run `npm run check` and `npm run build`. The generated dist directory is the complete deployable website.
+Use Node 22. Run `npm run check` and `npm run build`. The generated public directory is the complete deployable website.
 
 For the persistent payment sandbox: `cd backend`, `npm ci`, then `npm start`. Open http://127.0.0.1:4310 for the presentation, or http://127.0.0.1:4310/sandbox.html#demo for the payment test console. `npm run check` in backend checks TypeScript and runs the 18 backend tests.
 
@@ -38,8 +39,8 @@ Open the hamburger menu for chapters, guest journeys, appearance and fullscreen 
 
 ## Tests
 
-`npm run check` validates JavaScript and runs 10 ordering tests and 2 presentation packaging checks. After `npm ci --prefix backend`, `npm run test:backend` runs the backend type check and its 18 tests. GitHub Actions runs both suites and the static build. See docs/ORDERING_VALIDATION.md for the browser verification and simulation limits.
+`npm run check` validates JavaScript and runs 10 ordering tests and 3 presentation packaging checks. After `npm ci --prefix backend`, `npm run test:backend` runs the backend type check and its 18 tests. GitHub Actions runs both suites and the static build. See docs/ORDERING_VALIDATION.md for the browser verification and simulation limits.
 
-The presentation now uses a single frosted navigation menu and shared translucent glass styling in `public/glass.css`. Native dialog behavior provides keyboard focus containment and Escape dismissal. The basket stays in memory while navigating or changing themes.
+The presentation now uses a single frosted navigation menu and shared translucent glass styling in `site/glass.css`. Native dialog behavior provides keyboard focus containment and Escape dismissal. The basket stays in memory while navigating or changing themes.
 
-To export one HTML file for local presenting, run `node scripts/export-presentation.mjs /path/to/Groundwork_Presentation.html`. After changing public assets, copy the six files listed in `scripts/demo-assets.mjs` into `backend/public/`; the parity check catches stale copies.
+To export one HTML file for local presenting, run `node scripts/export-presentation.mjs /path/to/Groundwork_Presentation.html`. After changing site source files, copy the six files listed in `scripts/demo-assets.mjs` into `backend/public/`; the parity check catches stale copies.

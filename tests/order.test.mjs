@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { DemoOrder } from "../public/order-model.mjs";
+import { DemoOrder } from "../site/order-model.mjs";
 test("empty basket cannot submit", () => {
   const o = new DemoOrder();
   assert.throws(() => o.submit(), /Add an item/);

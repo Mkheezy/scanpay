@@ -1,11 +1,14 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
+import { cp, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { buildDemo } from '../scripts/build-demo.mjs';
 import { DEMO_ASSETS } from '../scripts/demo-assets.mjs';
+const run = promisify(execFile);
 
 test('deployment contains only the stakeholder demo and no design-spec copy', async () => {
   const dir = await mkdtemp(join(tmpdir(), 'groundwork-build-'));
@@ -34,8 +37,34 @@ test('backend home page uses the same presentation as the Vercel demo', async ()
   for (const file of DEMO_ASSETS) {
     assert.equal(
       await readFile(new URL(`../backend/public/${file}`, import.meta.url), 'utf8'),
-      await readFile(new URL(`../public/${file}`, import.meta.url), 'utf8'),
+      await readFile(new URL(`../site/${file}`, import.meta.url), 'utf8'),
       `${file} is out of sync`,
     );
+  }
+});
+
+test('clean checkout build creates the configured Vercel output and removes stale assets', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'groundwork-clean-build-'));
+  try {
+    // No backend, dependencies or pre-existing output: like the Vercel checkout.
+    for (const file of ['site', 'scripts', 'package.json', 'vercel.json']) {
+      await cp(new URL(`../${file}`, import.meta.url), join(dir, file), { recursive: true });
+    }
+    const config = JSON.parse(await readFile(join(dir, 'vercel.json'), 'utf8'));
+    assert.equal(config.outputDirectory, 'public');
+    const output = join(dir, config.outputDirectory);
+    const build = () => run(process.execPath, ['scripts/build-demo.mjs'], { cwd: dir });
+    await build();
+    assert.deepEqual((await readdir(output)).sort(), [...DEMO_ASSETS].sort());
+    for (const file of DEMO_ASSETS) {
+      const source = await readFile(join(dir, 'site', file), 'utf8');
+      assert.ok(source.length > 0, `${file} must not be empty`);
+      assert.equal(await readFile(join(output, file), 'utf8'), source);
+    }
+    await writeFile(join(output, 'design-reference.html'), 'stale design reference');
+    await build();
+    assert.deepEqual((await readdir(output)).sort(), [...DEMO_ASSETS].sort());
+  } finally {
+    await rm(dir, { recursive: true, force: true });
   }
 });

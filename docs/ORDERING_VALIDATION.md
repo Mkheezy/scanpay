@@ -37,3 +37,7 @@ Removed the legacy design-system showcase and its script from the web root. The 
 All 30 automated tests pass: 10 ordering, 2 presentation packaging/parity and 18 backend tests. Backend TypeScript checking and static build pass. On desktop, reviewed all five chapters, navigation in both appearances and the plain-language readiness dialog. Completed a burger with double patty, two lemonades and a 12% tip: R330.00 + R39.60 = R369.60. The confirmation and kitchen ticket match, including the kitchen note. No design-spec labels appear in the public presentation.
 
 The freshly exported standalone HTML also rendered in a 390px-wide preview frame. Verified its menu and dark appearance; document width stayed at 390px. No console errors were observed in the desktop run.
+
+## Vercel output-directory fix — 9 November 2026
+
+The reported deployment built `dist/` but Vercel validated an empty `public/`. Source files now live in `site/`, and both the build and `vercel.json` select generated `public/`. The source files are never treated as build output. A new clean-checkout test runs the real build script without a backend, dependencies or existing output, verifies all six configured assets, and verifies that rebuilding removes stale files. Frontend tests now total 13.
