@@ -6,4 +6,5 @@ export const DEMO_ASSETS = Object.freeze([
   'glass.css',
   'master.js',
   'order-model.mjs',
+  'order-store.mjs',
 ]);

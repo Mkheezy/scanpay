@@ -1,7 +1,35 @@
 import { MENU, DemoOrder } from "./order-model.mjs";
+import { OrderStore, restoreBasket } from "./order-store.mjs";
 (() => {
   const $ = (s) => document.querySelector(s),
     $$ = (s) => [...document.querySelectorAll(s)];
+  let store;
+  try {
+    store = new OrderStore({
+      storage: sessionStorage,
+      queueStorage: localStorage,
+    });
+  } catch {
+    store = new OrderStore({
+      storage: {
+        getItem: () => null,
+        setItem: () => {
+          throw Error("Storage unavailable");
+        },
+      },
+    });
+  }
+  let paymentOutcome = "success",
+    queueLoading = false,
+    queueOrders = [],
+    queueFingerprint = "";
+  const statusLabel = (status) =>
+    ({
+      RECEIVED: "Received",
+      PREPARING: "Preparing",
+      READY: "Ready",
+      PAYMENT_FAILED: "Payment declined",
+    })[status] || "Checking";
   const ids = ["opportunity", "experience", "operations", "business", "pilot"];
   const titles = [
     "Opportunity",
@@ -82,6 +110,7 @@ import { MENU, DemoOrder } from "./order-model.mjs";
     if (location.hash !== "#" + ids[index])
       history.replaceState(null, "", "#" + ids[index]);
     if (index === 2) renderOps();
+    if (index === 1) renderPhone();
     window.scrollTo({ top: 0, behavior: "instant" });
   }
   $$("[data-slide]").forEach((b) =>
@@ -99,6 +128,7 @@ import { MENU, DemoOrder } from "./order-model.mjs";
     if (
       $("#readinessDialog").open ||
       navigation.open ||
+      $("#presenterDialog").open ||
       /INPUT|SELECT|TEXTAREA|BUTTON/.test(document.activeElement.tagName)
     )
       return;
@@ -150,7 +180,10 @@ import { MENU, DemoOrder } from "./order-model.mjs";
               "Review the basket",
               "Check quantities, a kitchen note and your tip.",
             ],
-            ["Order & pay", "See a simulated confirmation and kitchen ticket."],
+            [
+              "Order & pay",
+              "Follow your demo order from confirmation to ready.",
+            ],
           ]
         : [
             ["Scan the table", "The correct bill opens in the browser."],
@@ -168,7 +201,12 @@ import { MENU, DemoOrder } from "./order-model.mjs";
         i === (journey === "order" ? orderStep : step),
       );
     });
-    $(".device-caption").textContent = "Demo · no real orders or payments";
+    $(".device-caption").textContent =
+      store.mode === "database"
+        ? "Connected demo · orders saved · no real payments"
+        : store.mode === "preview"
+          ? "Device-only preview · no real orders or payments"
+          : "Connecting · no real payments";
   }
   $$("[data-journey]").forEach((b) =>
     b.addEventListener("click", () => {
@@ -181,6 +219,7 @@ import { MENU, DemoOrder } from "./order-model.mjs";
   function orderAction(fn) {
     try {
       fn();
+      store.draft(order);
       renderPhone();
     } catch (error) {
       orderNotice = error.message;
@@ -194,10 +233,11 @@ import { MENU, DemoOrder } from "./order-model.mjs";
     if (orderStep === 0) {
       html = `<div class="menu-heading"><div><small>TABLE 07 · SAMPLE MENU</small><h3>What sounds good?</h3></div><span class="cart-count" aria-label="${t.count} items in basket">${t.count}</span></div><img class="menu-cover" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=85" alt="Wagyu burger with brioche and salad"><div class="order-menu">${MENU.map((item) => `<article class="menu-item"><div class="menu-item-title"><h4>${item.name}</h4><strong>${money(item.cents)}</strong></div><p>${item.description}</p>${item.modifiers.length ? `<fieldset class="modifiers"><legend>Make it yours</legend>${item.modifiers.map((m) => `<label><input type="checkbox" data-modifier="${m.id}" data-for-item="${item.id}"><span>${m.name}</span><b>+${money(m.cents)}</b></label>`).join("")}</fieldset>` : ""}<button class="add-item" data-add="${item.id}" aria-label="Add ${item.name}">Add to basket <span>+</span></button></article>`).join("")}</div><div class="order-dock"><p id="orderStatus" role="status">${escapeHtml(orderNotice || "Sample menu · prices in rand")}</p><button class="cta phone-cta" id="reviewOrder" ${t.count ? "" : "disabled"}>Review basket · ${t.count} items <span>${money(t.principal)}</span></button></div>`;
     } else if (orderStep === 1) {
-      html = `<button class="order-back" id="backMenu">← Back to menu</button><h3 class="basket-heading">Your basket</h3>${t.count ? order.lines.map((l) => `<article class="basket-line"><div><b>${escapeHtml(l.name)}</b><small>${l.modifiers.length ? escapeHtml(l.modifiers.map((m) => m.name).join(" · ")) : "Standard"} · ${money(l.unitCents)} each</small></div><div class="basket-line-bottom"><div class="quantity-controls"><button data-quantity="${l.key}" data-value="${l.quantity - 1}" aria-label="Decrease ${escapeHtml(l.name)} ${escapeHtml(l.modifiers.map((m) => m.name).join(" "))}">−</button><span>${l.quantity}</span><button data-quantity="${l.key}" data-value="${l.quantity + 1}" aria-label="Increase ${escapeHtml(l.name)} ${escapeHtml(l.modifiers.map((m) => m.name).join(" "))}" ${l.quantity >= 10 || t.count >= 20 ? "disabled" : ""}>+</button></div><strong>${money(l.unitCents * l.quantity)}</strong><button class="remove-item" data-remove="${l.key}" aria-label="Remove ${escapeHtml(l.name)} ${escapeHtml(l.modifiers.map((m) => m.name).join(" "))}">Remove</button></div></article>`).join("") : '<p class="empty-basket">Your basket is empty. Add a dish from the menu.</p>'}<label class="kitchen-note" for="kitchenNote">Kitchen note <span>optional</span></label><textarea id="kitchenNote" maxlength="120" rows="2" placeholder="e.g. no onions">${escapeHtml(order.note)}</textarea><span class="phone-label">Waiter tip · optional</span><div class="phone-tip">${[0, 10, 12, 15].map((n) => `<button data-order-tip="${n}" aria-pressed="${order.tipPercent === n}">${n === 0 ? "No tip" : n + "%"}</button>`).join("")}</div><div class="receipt-mini"><div><span>Food & drinks</span><b>${money(t.principal)}</b></div><div><span>Tip</span><b>${money(t.tip)}</b></div><div><strong>Total</strong><strong>${money(t.total)}</strong></div></div><div class="order-dock"><p id="orderStatus" role="status">${escapeHtml(orderNotice || "Demo checkout · no payment taken")}</p><button class="cta phone-cta" id="submitOrder" ${t.count ? "" : "disabled"}>Place demo order <span>${money(t.total)}</span></button></div>`;
+      html = `<button class="order-back" id="backMenu">← Back to menu</button><h3 class="basket-heading">Your basket</h3>${t.count ? order.lines.map((l) => `<article class="basket-line"><div><b>${escapeHtml(l.name)}</b><small>${l.modifiers.length ? escapeHtml(l.modifiers.map((m) => m.name).join(" · ")) : "Standard"} · ${money(l.unitCents)} each</small></div><div class="basket-line-bottom"><div class="quantity-controls"><button data-quantity="${l.key}" data-value="${l.quantity - 1}" aria-label="Decrease ${escapeHtml(l.name)} ${escapeHtml(l.modifiers.map((m) => m.name).join(" "))}">−</button><span>${l.quantity}</span><button data-quantity="${l.key}" data-value="${l.quantity + 1}" aria-label="Increase ${escapeHtml(l.name)} ${escapeHtml(l.modifiers.map((m) => m.name).join(" "))}" ${l.quantity >= 10 || t.count >= 20 ? "disabled" : ""}>+</button></div><strong>${money(l.unitCents * l.quantity)}</strong><button class="remove-item" data-remove="${l.key}" aria-label="Remove ${escapeHtml(l.name)} ${escapeHtml(l.modifiers.map((m) => m.name).join(" "))}">Remove</button></div></article>`).join("") : '<p class="empty-basket">Your basket is empty. Add a dish from the menu.</p>'}<label class="kitchen-note" for="kitchenNote">Kitchen note <span>optional</span></label><textarea id="kitchenNote" maxlength="120" rows="2" placeholder="e.g. no onions">${escapeHtml(order.note)}</textarea><span class="phone-label">Waiter tip · optional</span><div class="phone-tip">${[0, 10, 12, 15].map((n) => `<button data-order-tip="${n}" aria-pressed="${order.tipPercent === n}">${n === 0 ? "No tip" : n + "%"}</button>`).join("")}</div><div class="receipt-mini"><div><span>Food & drinks</span><b>${money(t.principal)}</b></div><div><span>Tip</span><b>${money(t.tip)}</b></div><div><strong>Total</strong><strong>${money(t.total)}</strong></div></div><details class="payment-scenario"><summary>Demo payment</summary><label for="paymentScenario">Test an outcome</label><select id="paymentScenario"><option value="success" ${paymentOutcome === "success" ? "selected" : ""}>Payment approved</option><option value="failed" ${paymentOutcome === "failed" ? "selected" : ""}>Payment declined</option></select><small>No money moves in either scenario.</small></details><div class="order-dock"><p id="orderStatus" role="status">${escapeHtml(orderNotice || "Demo checkout · no payment taken")}</p><button class="cta phone-cta" id="submitOrder" ${t.count && !store.busy && ["database", "preview"].includes(store.mode) ? "" : "disabled"}>${store.busy ? "Saving order…" : store.state.pending ? "Check & retry same order" : "Place demo order"} <span>${money(t.total)}</span></button></div>`;
     } else {
-      const r = order.receipt;
-      html = `<div class="scan-card order-success"><div class="success-orb">✓</div><h3>Order received.</h3><p>Your demo ticket is ready.</p><div class="receipt-mini"><div><span>Table</span><b>07</b></div><div><span>Demo reference</span><b>${r.reference}</b></div><div><span>${r.count} item${r.count === 1 ? "" : "s"}</span><b>${money(r.principal)}</b></div><div><span>Tip</span><b>${money(r.tip)}</b></div><div><strong>Total paid</strong><strong>${money(r.total)}</strong></div><small>✓ Demo payment confirmed</small></div><button class="cta phone-cta" id="seeOrder">See the restaurant ticket →</button><button class="order-back" id="newOrder">Start a new demo order</button><p class="phone-footnote">No real order was sent. No payment was taken.</p></div>`;
+      const r = store.state.receipt;
+      const failed = r.status === "PAYMENT_FAILED";
+      html = `<div class="scan-card order-success"><div class="success-orb">${failed ? "!" : r.status === "READY" ? "✓" : "•"}</div><h3>${failed ? "Payment declined." : r.status === "READY" ? "Ready for you." : r.status === "PREPARING" ? "In the kitchen." : "Order received."}</h3><p>${failed ? "Your basket is saved. Nothing has been sent to the kitchen." : "Your demo order is " + statusLabel(r.status).toLowerCase() + "."}</p>${failed ? "" : `<div class="order-progress" aria-label="Order status: ${statusLabel(r.status)}">${["RECEIVED", "PREPARING", "READY"].map((v, i) => `<span class="${i <= ["RECEIVED", "PREPARING", "READY"].indexOf(r.status) ? "complete" : ""}">${statusLabel(v)}</span>`).join("")}</div>`}<div class="receipt-mini"><div><span>Table</span><b>${escapeHtml(r.table)}</b></div><div><span>Reference</span><b>${escapeHtml(r.reference)}</b></div><div><span>${r.count} item${r.count === 1 ? "" : "s"}</span><b>${money(r.principal)}</b></div><div><span>Tip</span><b>${money(r.tip)}</b></div><div><strong>Order total</strong><strong>${money(r.total)}</strong></div><small>${failed ? "No payment confirmed" : "✓ Simulated payment approved"}</small></div><p id="orderStatus" role="status">${escapeHtml(orderNotice)}</p>${failed ? '<button class="cta phone-cta" id="retryPayment">Retry demo payment →</button>' : '<button class="cta phone-cta" id="seeOrder">See the restaurant ticket →</button>'}<button class="order-back" id="newOrder">Start a new demo order</button><p class="phone-footnote">${r.storage === "database" ? "Saved in the demo database." : "Saved on this device only."} No real payment or kitchen dispatch.</p></div>`;
     }
     $("#phoneContent").classList.add("order-content");
     $("#phoneContent").innerHTML = html;
@@ -251,20 +291,62 @@ import { MENU, DemoOrder } from "./order-model.mjs";
       ),
     );
     if ($("#kitchenNote"))
-      $("#kitchenNote").addEventListener("input", (e) =>
-        order.setNote(e.target.value),
-      );
+      $("#kitchenNote").addEventListener("input", (e) => {
+        try {
+          order.setNote(e.target.value);
+          store.draft(order);
+        } catch (error) {
+          $("#orderStatus").textContent = error.message;
+        }
+      });
+    if ($("#paymentScenario"))
+      $("#paymentScenario").addEventListener("change", (e) => {
+        paymentOutcome = e.target.value;
+      });
     if ($("#submitOrder"))
-      $("#submitOrder").addEventListener("click", () =>
-        orderAction(() => {
-          order.submit();
+      $("#submitOrder").addEventListener("click", async () => {
+        if (store.busy) return;
+        try {
+          orderNotice = "Saving your demo order…";
+          const saving = store.submit(order, paymentOutcome);
+          renderPhone();
+          const receipt = await saving;
+          if (!receipt) return;
           orderStep = 2;
           outcome = "normal";
-        }),
-      );
+          orderNotice = "";
+        } catch (e) {
+          orderNotice = e.message;
+        }
+        renderPhone();
+      });
+    if (store.state.pending || store.busy)
+      $$(
+        "#phoneContent button, #phoneContent input, #phoneContent textarea, #phoneContent select",
+      ).forEach((el) => {
+        if (el.id !== "submitOrder") el.disabled = true;
+      });
+    if ($("#retryPayment"))
+      $("#retryPayment").addEventListener("click", async (e) => {
+        e.currentTarget.disabled = true;
+        try {
+          await store.update(store.state.receipt.id, "RECEIVED", true);
+          orderNotice = "";
+        } catch (error) {
+          orderNotice = error.message;
+        }
+        renderPhone();
+      });
     if ($("#seeOrder")) $("#seeOrder").addEventListener("click", () => show(2));
     if ($("#newOrder"))
       $("#newOrder").addEventListener("click", () => {
+        try {
+          store.newOrder();
+        } catch (e) {
+          orderNotice = e.message;
+          renderPhone();
+          return;
+        }
         order = new DemoOrder();
         orderStep = 0;
         orderNotice = "";
@@ -319,6 +401,13 @@ import { MENU, DemoOrder } from "./order-model.mjs";
     );
   }
   $("#restart").addEventListener("click", () => {
+    try {
+      store.newOrder();
+    } catch (e) {
+      orderNotice = e.message;
+      renderPhone();
+      return;
+    }
     step = 0;
     share = "half";
     tip = 10;
@@ -329,7 +418,20 @@ import { MENU, DemoOrder } from "./order-model.mjs";
     renderPhone();
   });
   function renderOps() {
-    const receipt = journey === "order" ? order.receipt : null;
+    const ordering = journey === "order";
+    $("#orderOperations").hidden = !ordering;
+    $("#paymentOperations").hidden = ordering;
+    $("#operations-title").textContent = ordering
+      ? "Every order. One clear view."
+      : "Confidence on both sides of the table.";
+    $("#operations .lead").textContent = ordering
+      ? "From received to ready, the guest and the restaurant see the same progress."
+      : "A guest’s payment is only complete when the restaurant can account for it.";
+    if (ordering) {
+      renderQueue();
+      return;
+    }
+    const receipt = null;
     const q = receipt || quote();
     $("#orderTicket").hidden = !receipt;
     if (receipt)
@@ -382,14 +484,162 @@ import { MENU, DemoOrder } from "./order-model.mjs";
       renderOps();
     }),
   );
+  function ticketCard(r) {
+    const next =
+      r.status === "RECEIVED"
+        ? "PREPARING"
+        : r.status === "PREPARING"
+          ? "READY"
+          : null;
+    return `<article class="queue-ticket ${store.state.receipt?.id === r.id ? "current-ticket" : ""}"><div class="ticket-top"><strong>Table ${escapeHtml(r.table)}</strong><small>${new Date(r.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</small></div><span class="ticket-reference">${escapeHtml(r.reference)}</span>${r.lines.map((l) => `<p><b>${l.quantity} × ${escapeHtml(l.name)}</b>${l.modifiers.length ? `<small>${escapeHtml(l.modifiers.map((m) => m.name).join(", "))}</small>` : ""}</p>`).join("")}${r.note ? `<p class="ticket-note">${escapeHtml(r.note)}</p>` : ""}<div class="ticket-total"><span>${r.status === "PAYMENT_FAILED" ? "Payment needed" : "Demo payment approved"}</span><b>${money(r.total)}</b></div>${next ? `<button class="cta" data-order-id="${r.id}" data-order-next="${next}">${next === "PREPARING" ? "Start preparing" : "Mark ready"} →</button>` : r.status === "READY" ? '<span class="ready-label">✓ Ready for collection</span>' : "<small>Not released to the kitchen. Retry from the guest receipt.</small>"}</article>`;
+  }
+  async function renderQueue() {
+    if (queueLoading) return;
+    queueLoading = true;
+    try {
+      queueOrders = await store.queue();
+      $("#queueSummary").textContent =
+        store.mode === "database"
+          ? "The Olive Room · connected demo"
+          : "Device-only preview · saved in this browser";
+      const fingerprint =
+        JSON.stringify(queueOrders) + (store.state.receipt?.id || "");
+      const refreshed = `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })} · Demo payments only. No real kitchen dispatch.`;
+      if (fingerprint === queueFingerprint) {
+        $("#queueStatus").textContent = refreshed;
+        return;
+      }
+      queueFingerprint = fingerprint;
+      const attentionOpen = $("#failedOrders details")?.open;
+      $("#kitchenQueue").innerHTML = ["RECEIVED", "PREPARING", "READY"]
+        .map((status) => {
+          const rows = queueOrders.filter((r) => r.status === status);
+          return `<section class="queue-column"><h3><span class="queue-dot ${status.toLowerCase()}"></span>${statusLabel(status)} <span>${rows.length}</span></h3>${rows.length ? rows.map(ticketCard).join("") : '<div class="queue-empty">' + (status === "RECEIVED" ? "New orders appear here." : status === "PREPARING" ? "Start preparing a received order." : "Ready orders appear here.") + "</div>"}</section>`;
+        })
+        .join("");
+      const failed = queueOrders.filter((r) => r.status === "PAYMENT_FAILED");
+      $("#failedOrders").innerHTML = failed.length
+        ? `<details class="failed-orders" ${attentionOpen ? "open" : ""}><summary>Payment attention · ${failed.length}</summary><div class="failed-grid">${failed.map(ticketCard).join("")}</div></details>`
+        : "";
+      $("#queueStatus").textContent = refreshed;
+      if (store.state.receipt) {
+        const latest = queueOrders.find((r) => r.id === store.state.receipt.id);
+        if (latest) {
+          store.state.receipt = latest;
+          store.save();
+        }
+      }
+      $$("[data-order-next]").forEach((b) =>
+        b.addEventListener("click", async () => {
+          b.disabled = true;
+          try {
+            await store.update(b.dataset.orderId, b.dataset.orderNext);
+            await renderQueue();
+          } catch (e) {
+            $("#queueStatus").textContent = e.message;
+            b.disabled = false;
+          }
+        }),
+      );
+    } catch (e) {
+      $("#queueStatus").textContent =
+        e.message +
+        (queueOrders.length ? " Showing the last loaded queue." : "");
+    } finally {
+      queueLoading = false;
+    }
+  }
+  $("#refreshQueue").addEventListener("click", renderQueue);
+  $("#openPresenter").addEventListener("click", () => {
+    closeNavigation();
+    $("#presenterConnection").textContent =
+      store.mode === "database"
+        ? "Connected demo: database storage is active. No real payments."
+        : "Device-only preview: use the local server to demonstrate database persistence.";
+    $("#presenterDialog").showModal();
+  });
+  $("#closePresenter").addEventListener("click", () =>
+    $("#presenterDialog").close(),
+  );
+  $("#startPresentation").addEventListener("click", () => {
+    $("#presenterDialog").close();
+    show(0);
+  });
+  async function startOrders() {
+    try {
+      if (store.state.draft) order = restoreBasket(store.state.draft);
+      orderStep = store.state.receipt
+        ? 2
+        : store.state.pending || order.totals().count
+          ? 1
+          : 0;
+      await store.init(location.protocol === "file:");
+      if (store.state.receipt) orderStep = 2;
+      $("#connectionStatus").textContent =
+        store.mode === "database"
+          ? "Connected demo · orders saved in the database"
+          : "Device-only preview · orders saved in this browser";
+      $("#connectionHelp").hidden = true;
+    } catch (e) {
+      orderNotice = e.message;
+      $("#connectionStatus").textContent = e.message;
+      $("#connectionHelp").hidden = false;
+    }
+    renderPhone();
+    if (slide === 2) renderOps();
+  }
+  $("#reconnect").addEventListener("click", async (e) => {
+    e.currentTarget.disabled = true;
+    try {
+      await store.connect($("#operatorKey").value);
+      $("#operatorKey").value = "";
+      await startOrders();
+    } catch (error) {
+      $("#connectionStatus").textContent = error.message;
+    } finally {
+      e.currentTarget.disabled = false;
+    }
+  });
+  setInterval(async () => {
+    if (
+      document.hidden ||
+      store.busy ||
+      !["database", "preview"].includes(store.mode)
+    )
+      return;
+    if (slide === 2 && journey === "order") await renderQueue();
+    if (
+      slide === 1 &&
+      orderStep === 2 &&
+      journey === "order" &&
+      store.state.receipt
+    ) {
+      try {
+        const previous = store.state.receipt;
+        const current =
+          store.mode === "database"
+            ? await store.api("/api/orders/" + previous.id)
+            : (await store.queue()).find((r) => r.id === previous.id);
+        if (current && current.status !== previous.status) {
+          store.state.receipt = current;
+          store.save();
+          orderNotice = "";
+          renderPhone();
+        }
+      } catch (e) {
+        const status = $("#orderStatus");
+        if (status) status.textContent = e.message;
+      }
+    }
+  }, 5000);
   $("#readiness").addEventListener("click", () =>
     $("#readinessDialog").showModal(),
   );
   $("#closeDialog").addEventListener("click", () =>
     $("#readinessDialog").close(),
   );
+  startOrders();
   renderPhone();
-  renderOps();
   show(Math.max(0, ids.indexOf(location.hash.slice(1))));
 })();
 window.addEventListener("load", () =>

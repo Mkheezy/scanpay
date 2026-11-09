@@ -1,4 +1,4 @@
-// Browser-only demonstration. No POS or payment requests are made by this model.
+// Shared demo menu and pricing model. No POS or payment requests are made here.
 export const MENU = Object.freeze([
   Object.freeze({
     id: "burger",

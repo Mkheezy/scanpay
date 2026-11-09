@@ -1,46 +1,57 @@
 # Groundwork — Titanium Sequoia Master demo
 
-Stakeholder presentation using the Titanium Sequoia visual system. Five guided chapters: opportunity, interactive guest payment, restaurant operations, business hypothesis, and a controlled pilot funding conversation. Design-system source files are archived under `docs/design-reference/` and are excluded from the website. Old reference-page URLs redirect to the presentation.
+Five presentation chapters: opportunity, guest experience, restaurant operations, business hypothesis and pilot. The ordering journey now uses the backend when served locally; the static Vercel build remains a clearly labelled device-only preview. All payments and kitchen dispatch are simulated.
 
-## Deploy on Vercel
+## Run the connected demo
 
-1. Import this Git repository into Vercel.
-2. Select the `demo/titanium-sequoia-vercel` branch for the demo deployment (or make it the production branch).
-3. Keep Root Directory at this folder, Framework Preset **Other**, Build Command **npm run build**, and Output Directory **public**. These are also declared in vercel.json. If updating an existing project, remove any old `dist` override or set it to `public`.
-4. Deploy. No environment variables, database or payment credentials are needed for the visual demo.
+Use Node 22. From this folder:
 
-See [Vercel Git deployments](https://vercel.com/docs/git) and [project configuration](https://vercel.com/docs/project-configuration).
+```sh
+npm ci --prefix backend
+npm run demo
+```
 
-## Files
+Open http://127.0.0.1:4310. The hamburger menu shows the connection status and a five-minute presenter guide. An optional access key is entered through Reconnect restaurant in that menu when the backend requires it. For another port:
 
-- site/: presentation source and ordering interactions.
-- public/: generated deployable website (created by the build).
-- scripts/build-demo.mjs: dependency-free static build.
-- vercel.json: build settings and security headers.
-- backend/: complete TypeScript backend, operational console, source SCSS, tests, Docker configuration, and local launcher.
+```sh
+PORT=4311 APP_ORIGIN=http://127.0.0.1:4311 npm run demo
+```
 
-## Run and check
+Orders persist in backend/.data/groundwork by default (PGlite). Set DATABASE_URL for PostgreSQL or DATA_DIR for another persistent local directory. Do not run two PGlite processes against the same directory. The existing payment test console remains at /sandbox.html#demo.
 
-Use Node 22. Run `npm run check` and `npm run build`. The generated public directory is the complete deployable website.
+## What ordering does
 
-For the persistent payment sandbox: `cd backend`, `npm ci`, then `npm start`. Open http://127.0.0.1:4310 for the presentation, or http://127.0.0.1:4310/sandbox.html#demo for the payment test console. `npm run check` in backend checks TypeScript and runs the 18 backend tests.
+- The server validates menu items/modifiers/limits and calculates prices and tips from the shared menu model.
+- A request key is saved before submission. Duplicate clicks or a lost response replay the same request and recover the same order.
+- Orders, notes, totals and statuses persist in the database. Received → Preparing → Ready transitions are checked by the server.
+- A simulated declined payment is saved outside the kitchen workflow. A retry releases the same ticket once; it cannot regress a preparing or ready ticket.
+- The restaurant queue and visible guest receipt refresh every five seconds. The queue shows the latest 100 records. In-progress baskets and the current receipt pointer survive page refresh in session storage, separately per tab. Closing a tab can discard its draft; submitted database records remain in the restaurant queue.
+- The static preview stores its queue in this browser’s local storage, without shared server storage. It is labelled accordingly. A connected server outage never silently switches an order into preview mode.
 
-## Demo scope
+The ordering endpoints are demo-only, require a session, and are disabled when DEMO_MODE=false or a non-mock payment provider is selected. Restaurant actions require the merchant/demo-admin role and all reads are venue scoped. Public deployment still needs production authentication, a persistent database and operational controls. Demo orders use a separate table; they do not alter the existing payment ledger or claim actual provider settlement/POS posting.
 
-The Vercel deployment is an interactive visual presentation. Menu orders, Apple Pay buttons, receipt status, POS confirmation, table tokens and merchant totals are illustrative. It does not process payments, collect card details, or connect to restaurant tills. Original font and photograph URLs require internet access.
+## Deploy the presentation on Vercel
 
-The backend is included but is excluded from the static deployment. Its local PGlite storage and continuous worker are not configured as Vercel Functions. To publish its real sandbox separately, configure persistent PostgreSQL or a persistent local volume, the worker, APP_ORIGIN, and DEMO_ACCESS_KEY; see backend/docs and backend/.env.example. Do not upload .env, database contents or node_modules.
+Import the Git repository and select demo/titanium-sequoia-vercel. Root Directory must be **blank (repository root)**, Framework **Other**, Build Command **npm run build**, Output Directory **public**, Node **22.x**. vercel.json declares the build settings. Do not use backend as the project root: backend is excluded by .vercelignore.
 
-The presentation follows the supplied Titanium Sequoia visual system. Design specifications, theme values and internal currency types are confined to source documentation. The static build uses an explicit asset list; backend-home parity and payment-return routing have regression coverage.
+No credentials are needed for this static preview. The backend and worker are not Vercel Functions. Hosting the connected demo requires a separate backend deployment with persistent PostgreSQL or a persistent volume, APP_ORIGIN and DEMO_ACCESS_KEY; see backend/docs and backend/.env.example. Never commit .env, database files or node_modules.
 
-## Presenting to stakeholders
+## Present and validate
 
-Open the hamburger menu for chapters, guest journeys, appearance and fullscreen controls, or use the Next button. In Experience, choose Order & pay to browse three menu items, customise the burger, change quantities, add a kitchen note and tip, and simulate submitting the order. The restaurant view receives the same itemised demo ticket. Choose Pay existing bill to try the separate split-payment journey. Continue to the restaurant view and show the Till offline outcome. Finish with the pricing hypothesis and staged pilot ask. The readiness dialog distinguishes existing backend work from unvalidated integrations. No traction, investment amount or proven financial return is claimed.
+Read [the five-minute walkthrough](docs/FUNDER_WALKTHROUGH.md). Its timed guide is also available in the hamburger menu. Read [validation and limits](docs/ORDERING_VALIDATION.md) for the automated and browser checks.
 
-## Tests
+```sh
+npm run check
+npm run test:backend
+npm run build
+```
 
-`npm run check` validates JavaScript and runs 10 ordering tests and 3 presentation packaging checks. After `npm ci --prefix backend`, `npm run test:backend` runs the backend type check and its 18 tests. GitHub Actions runs both suites and the static build. See docs/ORDERING_VALIDATION.md for the browser verification and simulation limits.
+GitHub Actions runs both suites and the static build. `npm run sync:demo` copies the seven public assets from site/ to backend/public/; a parity test catches stale copies. `npm run demo` syncs automatically.
 
-The presentation now uses a single frosted navigation menu and shared translucent glass styling in `site/glass.css`. Native dialog behavior provides keyboard focus containment and Escape dismissal. The basket stays in memory while navigating or changing themes.
+For a standalone presentation file:
 
-To export one HTML file for local presenting, run `node scripts/export-presentation.mjs /path/to/Groundwork_Presentation.html`. After changing site source files, copy the six files listed in `scripts/demo-assets.mjs` into `backend/public/`; the parity check catches stale copies.
+```sh
+node scripts/export-presentation.mjs /path/to/Groundwork_Presentation.html
+```
+
+This single HTML file operates in device-only preview mode. Original Google font and photograph URLs require internet access. Design references remain under docs/design-reference and are not shipped to the website. Retired design-page URLs redirect to the presentation.

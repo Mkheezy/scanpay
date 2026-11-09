@@ -11,3 +11,20 @@ CREATE TABLE IF NOT EXISTS jobs(id TEXT PRIMARY KEY, payment_id TEXT NOT NULL RE
 CREATE TABLE IF NOT EXISTS audit(id TEXT PRIMARY KEY, venue_id TEXT NOT NULL, payment_id TEXT, event TEXT NOT NULL, detail TEXT NOT NULL, created_at BIGINT NOT NULL);
 CREATE TABLE IF NOT EXISTS refunds(id TEXT PRIMARY KEY, payment_id TEXT NOT NULL UNIQUE REFERENCES payments(id), venue_id TEXT NOT NULL, reason TEXT NOT NULL, state TEXT NOT NULL DEFAULT 'REQUESTED', created_at BIGINT NOT NULL);
 INSERT INTO schema_migrations(version,applied_at) VALUES(1,0) ON CONFLICT DO NOTHING;
+
+CREATE TABLE IF NOT EXISTS demo_orders (
+  id TEXT PRIMARY KEY,
+  venue_id TEXT NOT NULL REFERENCES venues(id),
+  check_id TEXT NOT NULL REFERENCES checks(id),
+  visit_id TEXT NOT NULL,
+  session_hash TEXT NOT NULL REFERENCES sessions(token_hash),
+  idempotency_key TEXT NOT NULL,
+  request_hash TEXT NOT NULL,
+  receipt JSONB NOT NULL,
+  status TEXT NOT NULL CHECK(status IN ('PAYMENT_FAILED','RECEIVED','PREPARING','READY')),
+  created_at BIGINT NOT NULL,
+  updated_at BIGINT NOT NULL,
+  UNIQUE(venue_id,idempotency_key)
+);
+CREATE INDEX IF NOT EXISTS demo_orders_venue_created ON demo_orders(venue_id,created_at DESC);
+INSERT INTO schema_migrations(version,applied_at) VALUES(2,0) ON CONFLICT DO NOTHING;

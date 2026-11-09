@@ -103,6 +103,20 @@
           </button>
         </div>
       </div>
+      <div class="sheet-section">
+        <button class="quiet" id="openPresenter">
+          Five-minute presenter guide ↗
+        </button>
+        <p class="subtle" id="connectionStatus" role="status">
+          Connecting to the restaurant…
+        </p>
+        <details id="connectionHelp" hidden>
+          <summary>Reconnect restaurant</summary>
+          <label for="operatorKey">Demo access key, if required</label>
+          <input id="operatorKey" type="password" autocomplete="off" />
+          <button class="quiet" id="reconnect">Reconnect</button>
+        </details>
+      </div>
       <div class="sheet-tools">
         <button id="theme" aria-label="Switch to dark mode">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -183,8 +197,8 @@
         <div class="bottom-note">
           <strong>The first customer</strong
           ><span
-            >Independent and small-group restaurants on one supported till system in
-            Gauteng.</span
+            >Independent and small-group restaurants on one supported till
+            system in Gauteng.</span
           >
         </div>
       </section>
@@ -267,7 +281,16 @@
             for it.
           </p>
         </div>
-        <div class="operator-layout">
+        <div id="orderOperations">
+          <div class="queue-toolbar">
+            <span id="queueSummary">Your restaurant queue</span
+            ><button class="quiet" id="refreshQueue">Refresh queue ↻</button>
+          </div>
+          <p id="queueStatus" class="subtle" role="status"></p>
+          <div id="kitchenQueue" class="kitchen-queue"></div>
+          <div id="failedOrders"></div>
+        </div>
+        <div class="operator-layout" id="paymentOperations">
           <div class="operator-board">
             <div class="board-header">
               <div>
@@ -458,9 +481,9 @@
       <div class="readiness-row">
         <b>Built and tested</b>
         <p>
-          Try ordering, splitting a bill and viewing a restaurant ticket.
-          A separate test system tracks payments and recovers when the till
-          is unavailable.
+          Orders can be saved in the connected demo database and moved through
+          Received, Preparing and Ready. The device-only preview saves locally.
+          A separate payment test console exercises till recovery.
         </p>
       </div>
       <div class="readiness-row">
@@ -478,8 +501,83 @@
         </p>
       </div>
       <p class="subtle">
-        This presentation uses sample data. Orders and payments are simulated.
+        Sample restaurant and menu. Connected orders are saved as demo records;
+        payments are simulated and no real kitchen receives an order.
       </p>
+    </dialog>
+    <dialog id="presenterDialog" aria-labelledby="presenterTitle">
+      <button
+        class="quiet close"
+        id="closePresenter"
+        aria-label="Close presenter guide"
+      >
+        ×
+      </button>
+      <p class="kicker">FIVE MINUTES · ONE CLEAR STORY</p>
+      <h2 id="presenterTitle">From table<br />to proof.</h2>
+      <p class="subtle" id="presenterConnection"></p>
+      <ol class="presenter-timeline">
+        <li>
+          <span>0:00–0:40</span>
+          <div>
+            <b>The waiting problem</b>
+            <p>
+              Guests wait to order or settle up. Groundwork gives them control
+              from their phone while staff keep visibility.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>0:40–2:00</span>
+          <div>
+            <b>Place an order</b>
+            <p>
+              Add a burger with double patty and two lemonades. Add “No onions”
+              and a 12% tip. The total is R369.60. Place the demo order, then
+              refresh: the confirmation remains.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>2:00–3:15</span>
+          <div>
+            <b>Show the restaurant</b>
+            <p>
+              Open the restaurant ticket. Move it from Received to Preparing to
+              Ready. The guest sees the same status. Connected mode saves this
+              in the database.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>3:15–4:00</span>
+          <div>
+            <b>Explain the business</b>
+            <p>
+              R349 per venue per month is a pricing hypothesis for QR pay.
+              Ordering is an expansion opportunity. Partner costs and margins
+              still need validation.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>4:00–5:00</span>
+          <div>
+            <b>Ask for a controlled pilot</b>
+            <p>
+              Back one till integration, one payment partner and two venues.
+              Agree the budget and success thresholds before launch. Measure
+              adoption, payment time and staff intervention.
+            </p>
+          </div>
+        </li>
+      </ol>
+      <p class="subtle">
+        Optional resilience proof: start another order, choose “Payment
+        declined” under Demo payment, then retry. It stays out of the kitchen
+        until the simulated payment succeeds.
+      </p>
+      <button class="cta" id="startPresentation">Start the story →</button>
     </dialog>
     <script type="module" src="/master.js"></script>
   </body>

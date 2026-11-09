@@ -2,6 +2,7 @@ import express from "express";
 import type { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 import QRCode from "qrcode";
+import { Orders } from "./orders.ts";
 import { fileURLToPath } from "node:url";
 import { Service, audit } from "./service.ts";
 import { one } from "./db.ts";
@@ -103,12 +104,10 @@ export function createApp(service: Service, config: Config) {
         (origin && origin !== config.origin) ||
         req.get("x-groundwork") !== "1"
       )
-        return res
-          .status(403)
-          .json({
-            code: "ORIGIN_DENIED",
-            message: "Use the same-origin application.",
-          });
+        return res.status(403).json({
+          code: "ORIGIN_DENIED",
+          message: "Use the same-origin application.",
+        });
     }
     next();
   });
@@ -219,6 +218,53 @@ export function createApp(service: Service, config: Config) {
     const { qr_code, ...bill } = b;
     res.json({ bill, role: s.role, provider: service.provider.name });
   });
+  const orders = new Orders(service.db);
+  // Durable demo orders never send money or kitchen/POS requests.
+  app.use(["/api/orders", "/api/merchant/orders"], (_req, _res, next) => {
+    requireThat(
+      config.demo && service.provider.name === "mock",
+      "DEMO_DISABLED",
+      "Demo ordering is disabled.",
+      403,
+    );
+    next();
+  });
+  app.post("/api/orders", async (req, res) =>
+    res
+      .status(201)
+      .json(
+        await orders.create(
+          await getSession(req),
+          req.get("idempotency-key") || "",
+          req.body,
+        ),
+      ),
+  );
+  app.get("/api/orders/:id", async (req, res) =>
+    res.json(await orders.get(await getSession(req), String(req.params.id))),
+  );
+  app.post("/api/orders/:id/retry-payment", async (req, res) =>
+    res.json(
+      await orders.transition(
+        await getSession(req),
+        String(req.params.id),
+        "RECEIVED",
+        true,
+      ),
+    ),
+  );
+  app.get("/api/merchant/orders", async (req, res) =>
+    res.json({ orders: await orders.list(await merchant(req)) }),
+  );
+  app.post("/api/merchant/orders/:id/status", async (req, res) =>
+    res.json(
+      await orders.transition(
+        await merchant(req),
+        String(req.params.id),
+        z.enum(["PREPARING", "READY"]).parse(req.body.status),
+      ),
+    ),
+  );
   app.post("/api/payments", async (req, res) =>
     res
       .status(201)
@@ -311,15 +357,13 @@ export function createApp(service: Service, config: Config) {
         [req.params.id, s.venue_id],
       );
     requireThat(c, "NOT_FOUND", "Table not found.", 404);
-    res
-      .type("image/svg+xml")
-      .send(
-        await QRCode.toString(config.origin + "/t/" + c.qr_code, {
-          type: "svg",
-          margin: 3,
-          errorCorrectionLevel: "M",
-        }),
-      );
+    res.type("image/svg+xml").send(
+      await QRCode.toString(config.origin + "/t/" + c.qr_code, {
+        type: "svg",
+        margin: 3,
+        errorCorrectionLevel: "M",
+      }),
+    );
   });
   app.post("/api/merchant/tables/:id/rotate", async (req, res) => {
     const s = await merchant(req);
@@ -451,13 +495,11 @@ export function createApp(service: Service, config: Config) {
   app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
     const correlationId = id();
     if (err instanceof z.ZodError)
-      return res
-        .status(400)
-        .json({
-          code: "INVALID_INPUT",
-          message: "Check the supplied fields.",
-          correlationId,
-        });
+      return res.status(400).json({
+        code: "INVALID_INPUT",
+        message: "Check the supplied fields.",
+        correlationId,
+      });
     if (err instanceof AppError)
       return res
         .status(err.status)
@@ -467,13 +509,11 @@ export function createApp(service: Service, config: Config) {
       correlationId,
       err instanceof Error ? err.name : "unknown",
     );
-    res
-      .status(500)
-      .json({
-        code: "INTERNAL_ERROR",
-        message: "Unable to complete this request.",
-        correlationId,
-      });
+    res.status(500).json({
+      code: "INTERNAL_ERROR",
+      message: "Unable to complete this request.",
+      correlationId,
+    });
   });
   return app;
 }

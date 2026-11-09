@@ -1,43 +1,39 @@
-# Ordering demo validation — 7 November 2026
+# Ordering validation — 9 November 2026
 
-The stakeholder demo now supports two journeys in Experience: Order & pay (default) and Pay existing bill. Ordering is a browser simulation, separate from the persistent payment backend. No kitchen order or payment is submitted to an external service.
+## Automated checks
 
-## Automated validation
+`npm run check`: 21 passing tests (10 menu/basket tests, 8 persistence/client recovery tests, 3 presentation packaging/parity checks).
 
-- 10 Node test-runner tests pass for the ordering model: integer-cent prices, modifier totals, quantity bounds, item removal, tip choices, invalid item/modifier rejection, duplicate configuration merging, immutable receipts, repeated-submission idempotency, kitchen note limits, and independent new orders.
-- Backend TypeScript checking passes.
-- All 17 existing backend integration/security tests pass.
-- Frontend JavaScript syntax and static build pass.
-- GitHub Actions runs the demo checks, backend checks and Vercel build on pushes and pull requests. Remote CI results must be checked separately from these local results.
+`npm run test:backend`: TypeScript passes; 27 passing backend tests (9 durable ordering tests and 18 existing payment/reconciliation tests).
+
+`npm run build`: creates the seven configured website assets in public/. A clean-checkout test verifies output and removes stale files on rebuild. Backend public assets match site/ exactly.
+
+Ordering coverage includes server-side prices, modifiers, quantities, note/tip validation, eight concurrent duplicate requests, changed-payload rejection, lost response followed by client reload, safe storage failure, per-tab basket isolation, failed-payment retries, tenant/session/merchant access boundaries, cross-origin rejection, invalid status transitions, demo-mode shutdown, and receipts/statuses surviving database close/reopen.
+
+The existing payment suite covers provider verification, duplicate webhooks, reservations, till outages, timeout after POS write, amount mismatches, stale checks, signatures, refunds and restart recovery. No live provider credentials were used.
 
 ## Browser verification
 
-Verified in the in-app browser at desktop size and 390px mobile width:
+Connected local demo tested at http://127.0.0.1:4311 with a separate persistent data directory (.data/ordering-demo):
 
-1. Empty basket cannot proceed.
-2. Burger + double patty is R260.00; adding two R35.00 lemonades gives R330.00.
-3. A 12% tip adds R39.60, for a total of R369.60.
-4. Kitchen note survives tip changes and appears on the simulated restaurant ticket.
-5. Confirmation and restaurant view carry the same R330.00 principal, R39.60 tip, quantities and modifiers.
-6. Pay existing bill remains usable after ordering.
-7. Removing the final basket item disables submission and basket review.
-8. Dark mobile layout has no horizontal page overflow (390px viewport and document width), and menu/basket content scrolls inside the phone.
-9. No browser console errors were observed in this run.
+- Burger with double patty (R260.00), two lemonades (R70.00), 12% tip (R39.60): R369.60 total. “No onions” note preserved.
+- Basket quantities, modifiers, note and tip survived refresh before submission.
+- Saved confirmation and unique reference survived refresh after submission.
+- Restaurant queue showed the same reference, items, modifiers, note and total.
+- Received → Preparing → Ready saved successfully. Guest confirmation reflected the updated state.
+- A separate lemonade order with a simulated decline appeared under Payment attention, outside all three kitchen columns. Reload and retry retained the same reference and released it into Received.
+- Desktop glass queue and dark presenter guide inspected visually. Mobile 390px static preview inspected with no horizontal overflow.
 
-The module stores only in-memory demo state; refreshing the page starts a fresh demo. The basket remains available when switching between journeys within the page. The original Gemini photography is retained.
+## Presentation boundaries
 
-## Navigation and glass revision — 7 November 2026
+The connected ordering demo uses actual PGlite/PostgreSQL storage, but its payment outcome is deliberately simulated. Demo orders are separate from the payment ledger and are never sent to a real POS or kitchen. Merchant/guest controls share the demo session for presenting; production identity and role management remain future work.
 
-Re-ran all 27 automated tests and backend TypeScript checking successfully. Verified the hamburger menu on desktop and at 390px in both appearances, navigation and journey selection, automatic menu dismissal, Escape closure with aria-expanded reset and focus returned to the menu button, and basket retention when changing appearance. The mobile document remained 390px wide. The glass treatment uses translucent backgrounds, backdrop blur, saturation and specular borders, with a reduced-transparency fallback.
+The static Vercel build has no backend. It displays Device-only preview, uses local storage for its restaurant queue, and session storage for per-tab drafts/receipt pointers. Closing a tab can discard its draft; submitted connected orders remain in the database. Clearing browser storage removes preview records. The queue presents the latest 100 database records, not a complete reporting/export facility.
 
-## Public UI audit — 7 November 2026
+Guest/restaurant updates poll every five seconds while visible. This is a demo workflow, not a production push-notification service. Order cancellation, stock availability, refunds for orders, production payment processing and real kitchen dispatch are not implemented.
 
-Removed the legacy design-system showcase and its script from the web root. The static build explicitly ships six presentation assets; old reference and information URLs redirect to the presentation. Both backend copies now serve the same stakeholder home page. Payment returns still reach the payment console and table QR paths remain intact.
+The separate Pay existing bill presentation remains illustrative. The existing backend payment console is at /sandbox.html#demo.
 
-All 30 automated tests pass: 10 ordering, 2 presentation packaging/parity and 18 backend tests. Backend TypeScript checking and static build pass. On desktop, reviewed all five chapters, navigation in both appearances and the plain-language readiness dialog. Completed a burger with double patty, two lemonades and a 12% tip: R330.00 + R39.60 = R369.60. The confirmation and kitchen ticket match, including the kitchen note. No design-spec labels appear in the public presentation.
+## Vercel configuration
 
-The freshly exported standalone HTML also rendered in a 390px-wide preview frame. Verified its menu and dark appearance; document width stayed at 390px. No console errors were observed in the desktop run.
-
-## Vercel output-directory fix — 9 November 2026
-
-The reported deployment built `dist/` but Vercel validated an empty `public/`. Source files now live in `site/`, and both the build and `vercel.json` select generated `public/`. The source files are never treated as build output. A new clean-checkout test runs the real build script without a backend, dependencies or existing output, verifies all six configured assets, and verifies that rebuilding removes stale files. Frontend tests now total 13.
+The project must use the repository root (blank Root Directory), Other framework, Node 22.x, npm run build, and public output. The prior backend root conflicted with .vercelignore and caused the empty-public failure. Settings were corrected. Redeployment is awaiting resolution of Vercel email verification; support has acknowledged the missing-code report.
