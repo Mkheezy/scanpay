@@ -205,7 +205,7 @@ for (const [method, path, summary, body, access] of routes) {
 const spec = {
   openapi: "3.1.0",
   info: {
-    title: "Groundwork QR Pay Sandbox API",
+    title: "Tavlo Sandbox API",
     version: "0.2.0",
     description:
       "Persistent QR Pay sandbox. Mock POS and payment providers by default. Paystack is test-only. Merchant endpoints require operator scope; mock controls are disabled for Paystack.",

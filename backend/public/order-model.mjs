@@ -2,7 +2,7 @@
 export const MENU = Object.freeze([
   Object.freeze({
     id: "burger",
-    name: "Groundwork Wagyu Burger",
+    name: "Wagyu Burger",
     description: "Wagyu patty, aged cheddar, brioche and skin-on fries.",
     cents: 18500,
     modifiers: Object.freeze(

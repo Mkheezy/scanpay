@@ -113,7 +113,7 @@ const stories = [
     b: ["BILL", "R425", "From the POS"],
   },
   {
-    who: "GROUNDWORK → THE BILL",
+    who: "TAVLO → THE BILL",
     title: "Choose a share. Keep every cent.",
     copy: "Pay the whole balance, split the remaining amount equally, or choose a custom amount. The backend reserves that share before starting checkout.",
     call: "If two guests try to pay the last amount, the database allows only the available balance.",
@@ -121,15 +121,15 @@ const stories = [
     b: ["RESERVED", "✓", "Held in database"],
   },
   {
-    who: "PAYMENT PROVIDER → GROUNDWORK",
+    who: "PAYMENT PROVIDER → TAVLO",
     title: "A redirect is not proof of payment.",
-    copy: "The provider hosts checkout. Groundwork checks the payment reference, amount and currency on the server before marking funds as verified.",
+    copy: "The provider hosts checkout. Tavlo checks the payment reference, amount and currency on the server before marking funds as verified.",
     call: "Delayed confirmation stays pending. Guests are told not to pay again.",
     a: ["CHECKOUT", "→", "Provider hosted"],
     b: ["VERIFIED", "✓", "Server checked"],
   },
   {
-    who: "GROUNDWORK → THE RESTAURANT POS",
+    who: "TAVLO → THE RESTAURANT POS",
     title: "The till gets the same payment.",
     copy: "A durable job posts the verified payment to the original check. If the POS is unavailable, the merchant sees an exception and the worker retries.",
     call: "A repeated callback never creates a second payment. A missing POS confirmation stays visible.",
@@ -565,7 +565,7 @@ async function renderQR() {
   const tables = await api("/merchant/tables"),
     t = tables.find((t) => t.id === tableId);
   $("#qr").innerHTML =
-    `<img src="/api/merchant/tables/${encodeURIComponent(tableId)}/qr.svg?v=${Date.now()}" alt="Working QR code for table ${esc(bill.table_label)}"><a href="/t/${encodeURIComponent(t.qr_code)}" target="_blank" rel="noreferrer">Open table ${esc(bill.table_label)} guest link ↗</a><a href="/api/merchant/tables/${encodeURIComponent(tableId)}/qr.svg" download="groundwork-table-${esc(bill.table_label)}.svg">Download QR ↓</a>`;
+    `<img src="/api/merchant/tables/${encodeURIComponent(tableId)}/qr.svg?v=${Date.now()}" alt="Working QR code for table ${esc(bill.table_label)}"><a href="/t/${encodeURIComponent(t.qr_code)}" target="_blank" rel="noreferrer">Open table ${esc(bill.table_label)} guest link ↗</a><a href="/api/merchant/tables/${encodeURIComponent(tableId)}/qr.svg" download="tavlo-table-${esc(bill.table_label)}.svg">Download QR ↓</a>`;
 }
 $("#refresh").onclick = () => refresh(true).catch((e) => toast(e.message));
 $("#newVisit").onclick = async () => {

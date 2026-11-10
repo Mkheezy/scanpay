@@ -12,5 +12,5 @@ export async function buildDemo(out = new URL('../public/', import.meta.url)) {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   await buildDemo();
-  console.log('Built Groundwork stakeholder demo into public/');
+  console.log('Built Tavlo stakeholder demo into public/');
 }
