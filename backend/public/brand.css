@@ -1,5 +1,5 @@
-/* Tavlo product identity; Groundwork is the holding company. */
-.tavlo-brand {
+/* Kelzi product identity; Groundwork is the holding company. */
+.kelzi-brand {
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -8,22 +8,22 @@
   flex-shrink: 0;
   letter-spacing: normal;
 }
-.tavlo-brand .tavlo-mark {
+.kelzi-brand .kelzi-mark {
   display: block;
   width: 32px;
   height: 40px;
   flex: 0 0 32px;
   background: currentColor;
-  -webkit-mask: url("/tavlo-mark.svg") center / contain no-repeat;
-  mask: url("/tavlo-mark.svg") center / contain no-repeat;
+  -webkit-mask: url("/kelzi-mark.svg") center / contain no-repeat;
+  mask: url("/kelzi-mark.svg") center / contain no-repeat;
 }
-.tavlo-brand .tavlo-wordmark {
+.kelzi-brand .kelzi-wordmark {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 3px;
 }
-.tavlo-brand .tavlo-wordmark strong {
+.kelzi-brand .kelzi-wordmark strong {
   font-family:
     -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
   font-size: 25px;
@@ -31,7 +31,7 @@
   font-weight: 550;
   letter-spacing: -1px;
 }
-.tavlo-brand .tavlo-wordmark small {
+.kelzi-brand .kelzi-wordmark small {
   display: block;
   font-family:
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
@@ -41,19 +41,19 @@
   letter-spacing: 0.2px;
   opacity: 0.65;
 }
-.pitch-header .tavlo-brand {
+.pitch-header .kelzi-brand {
   justify-self: start;
 }
 @media (max-width: 700px) {
-  .tavlo-brand .tavlo-wordmark strong {
+  .kelzi-brand .kelzi-wordmark strong {
     font-size: 22px;
   }
-  .tavlo-brand .tavlo-mark {
+  .kelzi-brand .kelzi-mark {
     width: 28px;
     height: 36px;
     flex-basis: 28px;
   }
-  .tavlo-brand {
+  .kelzi-brand {
     gap: 8px;
   }
 }

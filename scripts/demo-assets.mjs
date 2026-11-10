@@ -5,7 +5,7 @@ export const DEMO_ASSETS = Object.freeze([
   'pitch.css',
   'glass.css',
   'brand.css',
-  'tavlo-mark.svg',
+  'kelzi-mark.svg',
   'master.js',
   'order-model.mjs',
   'order-store.mjs',
